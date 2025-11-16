@@ -1,10 +1,11 @@
 # Hacker-stories. The Road to Learn React.
 
-Este repositorio contiene proyectos de práctica para aprender React de manera progresiva. 
+Este repositorio contiene proyectos de práctica para aprender React de manera progresiva.
 
 ## Proyecto principal
 
 ### The Road to React
+
 - **Descripción:** Aplicación basada en el API de Hacker News que permite buscar, filtrar y ordenar noticias. Se construye paso a paso para enseñar conceptos clave de React.
 - **Objetivos de aprendizaje:**
   - Componentes funcionales y composición

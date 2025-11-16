@@ -42,7 +42,7 @@ const App = () => {
 
   const searchedStories = stories.filter((story) =>
     //* Esto funciona correctamente mostrando todos los resultados si la cadena es vacía porque un "string",vacío o no, siempre incluye el caracter vacío ("").
-    format(story.title).includes(format(searchTerm))
+    format(story.title).includes(format(searchTerm)),
   );
 
   return (
@@ -61,27 +61,6 @@ const App = () => {
       <hr />
 
       <List list={searchedStories} />
-
-      <hr />
-
-      <Button
-        type="button"
-        disabled={false}
-        name="boton 1"
-        value="1"
-        onClick={() => console.log('Button clicked')}
-      >
-        Button
-      </Button>
-
-      <hr />
-      
-      
-      <Checkbox
-        label="My value"
-        value={true}
-        onChange={() => console.log('Checkbox clicked')}
-      ></Checkbox>
     </>
   );
 };
@@ -116,25 +95,6 @@ const Item = ({ url, title, author, num_comments, points }) => {
       <span>{num_comments} | </span>
       <span>{points} | </span>
     </li>
-  );
-};
-
-const Button = ({ type = 'button', onClick, children, ...rest }) => {
-  return (
-    <button type={type} onClick={onClick} {...rest}>
-      {children}
-    </button>
-  );
-};
-
-// TODO: terminar de coidifcar los componentes del ejercicio del último capítulo. 
-const Checkbox = ({ label, value, onChange }) => {
-  return (
-    <label>
-      {label}
-      &nbsp;
-      <input type="checkbox" checked={value} onChange={onChange}></input>
-    </label>
   );
 };
 
