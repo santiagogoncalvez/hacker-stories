@@ -1,38 +1,26 @@
-import { useState, useEffect } from 'react';
-
-const useStorageState = (key, initialState) => {
-  const [value, setValue] = useState(localStorage.getItem(key) ?? initialState);
-
-  useEffect(() => {
-    localStorage.setItem(key, value);
-  }, [value, key]);
-
-  return [value, setValue];
-};
+import { useEffect, useReducer, useState } from 'react';
+import { useStorageState } from './hooks/useStorageState';
+import { stories as initialStories } from './constants/stories';
+import InputWithLabel from './components/InputWithLabel.jsx';
+import List from './components/List.jsx';
+import { storiesReducer } from './reducers/storiesReducer.js';
+import { getAsyncStories } from './services/getAsyncStories.js';
 
 const App = () => {
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://react.dev/',
-      author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
-      author: 'Dan Abramov, Andrew Clark',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ];
-
   const [searchTerm, setSearchTerm] = useStorageState('search', 'React');
+  const [stories, dispatchStories] = useReducer(storiesReducer, initialStories);
+  const [isLoading, setIsloading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  const format = (text) => text.toLowerCase();
+  // Hacer petició de datos de historias
+  useEffect(() => {
+    getAsyncStories()
+      .then((result) => {
+        dispatchStories({ type: 'SET_STORIES', payload: result.data.stories });
+        setIsloading(false);
+      })
+      .catch(() => setIsError(true));
+  }, []);
 
   // A
   const handleSearch = (event) => {
@@ -40,9 +28,12 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
 
+  const handleRemoveStory = (item) => {
+    dispatchStories({ type: 'REMOVE_STORY', payload: item });
+  };
+
   const searchedStories = stories.filter((story) =>
-    //* Esto funciona correctamente mostrando todos los resultados si la cadena es vacía porque un "string",vacío o no, siempre incluye el caracter vacío ("").
-    format(story.title).includes(format(searchTerm)),
+    story.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -53,48 +44,22 @@ const App = () => {
       <InputWithLabel
         id="search"
         type="text"
-        label="Search:"
         value={searchTerm}
         onInputChange={handleSearch}
-      />
+      >
+        <strong>Search:</strong>
+      </InputWithLabel>
 
       <hr />
 
-      <List list={searchedStories} />
+      {isLoading ? (
+        <img src="/loading.gif" alt="Loading..." width="30" height="30" />
+      ) : (
+        <List list={searchedStories} removeItem={handleRemoveStory} />
+      )}
+
+      {isError && <p>Something went wrong...</p>}
     </>
-  );
-};
-
-const InputWithLabel = ({ id, label, type = 'text', value, onInputChange }) => {
-  return (
-    <>
-      <label htmlFor={id}>{label}</label>
-      &nbsp;
-      <input id={id} type={type} value={value} onChange={onInputChange} />
-    </>
-  );
-};
-
-const List = ({ list }) => {
-  return (
-    <ul>
-      {list.map(({ objectID, ...item }) => (
-        <Item key={objectID} {...item} />
-      ))}
-    </ul>
-  );
-};
-
-const Item = ({ url, title, author, num_comments, points }) => {
-  return (
-    <li>
-      <span>
-        <a href={url}>{title}</a> |
-      </span>
-      <span>{author} | </span>
-      <span>{num_comments} | </span>
-      <span>{points} | </span>
-    </li>
   );
 };
 

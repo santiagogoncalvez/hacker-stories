@@ -1,0 +1,4 @@
+export const REDUCER_TYPES = {
+    SET_STORIES: 'SET_STORIES',
+    REMOVE_STORY: 'REMOVE_STORY',
+}
