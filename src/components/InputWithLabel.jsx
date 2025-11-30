@@ -2,22 +2,23 @@ const InputWithLabel = ({
   id,
   type = 'text',
   value,
+  placeholder,
   isFocused = false,
   onInputChange,
   children,
 }) => {
   return (
-    <>
-      <label htmlFor={id}>{children}</label>
-      &nbsp;
+    <div>
+      {children && <label htmlFor={id}>{children}&nbsp;</label>}
       <input
         id={id}
         type={type}
         value={value}
+        placeholder={placeholder}
         autoFocus={isFocused}
         onChange={onInputChange}
       />
-    </>
+    </div>
   );
 };
 
