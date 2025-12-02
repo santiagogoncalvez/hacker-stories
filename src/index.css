@@ -1,3 +1,9 @@
+#root{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 :root {
   --primary: #1524d9;
   --light-primary: #2332ea;

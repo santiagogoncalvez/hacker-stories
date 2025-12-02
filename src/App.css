@@ -1,7 +1,9 @@
-.searchControls {
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
+.app {
+  width: 700px;
+}
+
+.app h1 {
+  margin-top: 16px;
 }
 
 .searchForm {
@@ -20,10 +22,7 @@
   height: 56.47px;
 }
 
-.searchControls .searchForm button {
-  /* height: fit-content;
-  padding: 0.94rem;
-  */
+.searchForm button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,8 +38,8 @@
 }
 
 /* --- Layout desktop --- */
-.story .storyLink {
-  padding: 16px 32px;
+.storyLink {
+  padding: 20px 40px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -52,43 +51,51 @@
   background: var(--white);
 }
 
-.story .storyLink:hover {
+.storyLink:hover {
   text-decoration: none;
 }
 
-.story .storyLink span {
+.storyLink span {
   color: var(--black);
 }
 
-.story .storyLink .storyLinkText {
+.removeButton {
+  padding:5px;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.removeButton {
+  background-color: var(--white);
+  color: var(--light-primary);
+}
+
+.removeButton:focus {
+  border: 2px solid black;
+}
+
+.removeButton:active {
+  border: 0px solid;
+}
+
+.storyLink .storyLinkText {
   color: var(--primary);
   font-size: 1.2rem;
   font-weight: 500;
 }
 
-.story .storyLink:hover:not(:has(button:hover)) .storyLinkText {
+.storyLink:hover:not(:has(button:hover)) .storyLinkText {
   text-decoration: underline;
 }
 
-.story button {
-  background-color: var(--white);
-  color: var(--primary);
-  transition: all 0.1s ease;
-  color: var(--light-primary);
-}
-
-.story button:focus{
-  border: 2px solid black;
-}
-
 .story button:hover {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: transparent;
+  transform: scale(1.1);
 }
-
-/* .story {
-  
-} */
 
 .storyLinkData {
   display: flex;
@@ -101,17 +108,16 @@
   gap: 16px;
 }
 
+.label {
+  color: var(--gray);
+}
 .story .storyLink .storyLinkInfo .label {
   color: var(--gray);
 }
 
+
 /* --- ✔ Responsive para pantallas verticales / móviles --- */
 @media (max-width: 600px) {
-  .searchControls {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
   .story {
     padding: 16px 20px;
   }
@@ -137,4 +143,8 @@
   .storyLinkInfo .label {
     font-size: 0.9rem;
   }
+}
+
+hr {
+  border-radius: 5px;
 }

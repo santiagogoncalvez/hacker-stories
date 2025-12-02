@@ -1,16 +1,29 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useStorageState } from './hooks/useStorageState';
-import List from './components/List.jsx';
-import SearchForm from './components/SearchForm.jsx';
+import List from './components/List.tsx';
+import SearchForm from './components/SearchForm.tsx';
 import { storiesReducer } from './reducers/storiesReducer.js';
 import { getAsyncStories } from './services/getAsyncStories.js';
 import './App.css';
 
-const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?tags=story&query=';
+
+const API_ENDPOINT_LAST_STORIES =
+  'http://hn.algolia.com/api/v1/search_by_date?tags=story';
+
+const getSumComments = (stories) => {
+  // console.log('C');
+  return stories.data.reduce((result, value) => result + value.numComments, 0);
+};
 
 const App = () => {
-  const [search, setSearch] = useStorageState('search', 'React');
-  const [url, setUrl] = useState(search ? `${API_ENDPOINT}${search}` : null);
+  // console.log('B:App');
+
+  const [search, setSearch] = useStorageState('search', '');
+
+  const [url, setUrl] = useState(
+    search ? `${API_ENDPOINT}${search}` : API_ENDPOINT_LAST_STORIES,
+  );
   const [stories, dispatchStories] = useReducer(storiesReducer, {
     data: [],
     isLoading: false,
@@ -41,14 +54,15 @@ const App = () => {
     setSearch(event.target.value);
   };
 
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
+  const searchAction = () => {
     setUrl(`${API_ENDPOINT}${search}`);
   };
 
   const handleRemoveStory = (item) => {
     dispatchStories({ type: 'REMOVE_STORY', payload: item });
   };
+
+  const sumComments = getSumComments(stories);
 
   return (
     <div className="app">
@@ -58,11 +72,16 @@ const App = () => {
         <SearchForm
           search={search}
           handleSearchInput={handleSearchInput}
-          onSubmit={handleSearchSubmit}
+          action={searchAction}
         />
       </div>
 
       <hr />
+      {!stories.isError && (
+        <p>
+          <span className="label">Total comments:</span> {sumComments}
+        </p>
+      )}
 
       {stories.isLoading ? (
         <img src="/loading.gif" alt="Loading..." width="30" height="30" />

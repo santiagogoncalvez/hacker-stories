@@ -1,3 +1,5 @@
+import RemoveIcon from '../../public/remove.svg?react';
+
 const Item = ({ item, removeItem }) => {
   const handleClick = (event) => {
     event.preventDefault();
@@ -25,7 +27,9 @@ const Item = ({ item, removeItem }) => {
           </div>
         </div>
 
-        <button onClick={handleClick}>Remove</button>
+        <button className="removeButton" onClick={handleClick}>
+          <RemoveIcon className="removeIcon" width={30} height={30} />
+        </button>
       </a>
     </li>
   );
