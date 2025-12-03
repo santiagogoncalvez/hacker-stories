@@ -1,16 +1,21 @@
-import RemoveIcon from '../../public/remove.svg?react';
+import {ItemProps } from '../types/types.ts';
+import RemoveIcon from '../assets/remove.svg?react';
 
-const Item = ({ item, removeItem }) => {
-  const handleClick = (event) => {
+
+
+const Item = ({ item, onRemoveItem }: ItemProps) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    removeItem(item);
+    onRemoveItem(item);
   };
 
   return (
     <li className="story">
-      <a href={item.url} target="_blank" className="storyLink">
+      <div className="storyLink">
         <div className="storyLinkData">
-          <span className="storyLinkText">{item.title}</span>
+          <a href={item.url} target="_blank" className="storyLink">
+            {item.title}
+          </a>
           <div className="storyLinkInfo">
             <div>
               <span className="label">Author: </span>
@@ -26,11 +31,10 @@ const Item = ({ item, removeItem }) => {
             </div>
           </div>
         </div>
-
-        <button className="removeButton" onClick={handleClick}>
-          <RemoveIcon className="removeIcon" width={30} height={30} />
-        </button>
-      </a>
+      </div>
+      <button className="removeButton" onClick={handleClick}>
+        <RemoveIcon className="removeIcon" width={30} height={30} />
+      </button>
     </li>
   );
 };

@@ -36,9 +36,7 @@
   flex-direction: column;
   gap: 16px;
 }
-
-/* --- Layout desktop --- */
-.storyLink {
+.story {
   padding: 20px 40px;
   display: flex;
   flex-direction: row;
@@ -51,13 +49,9 @@
   background: var(--white);
 }
 
-.storyLink:hover {
-  text-decoration: none;
-}
-
-.storyLink span {
+/* .storyLink span {
   color: var(--black);
-}
+} */
 
 .removeButton {
   padding:5px;
@@ -82,14 +76,16 @@
   border: 0px solid;
 }
 
-.storyLink .storyLinkText {
+.storyLinkData .storyLink {
   color: var(--primary);
   font-size: 1.2rem;
   font-weight: 500;
+  text-decoration: underline;
 }
 
-.storyLink:hover:not(:has(button:hover)) .storyLinkText {
-  text-decoration: underline;
+.storyLinkData .storyLink:hover {
+  text-decoration: none;
+  color: var(--light-primary);
 }
 
 .story button:hover {
@@ -128,7 +124,7 @@
     gap: 16px; /* mayor espacio táctil */
   }
 
-  .story .storyLinkText {
+  .story .storyLink {
     font-size: 1.15rem;
   }
 

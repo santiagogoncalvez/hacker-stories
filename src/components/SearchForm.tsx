@@ -1,10 +1,20 @@
 import InputWithLabel from './InputWithLabel';
 
-import SearchIcon from '../../public/search.svg?react';
+import SearchIcon from '../assets/search.svg?react';
 
-const SearchForm = ({ search, handleSearchInput, action }) => {
+type SearchFormProps = {
+  search: string;
+  handleSearchInput: (event: React.ChangeEvent<HTMLInputElement>) => void
+  searchAction: (formData: FormData) => void;
+};
+
+const SearchForm = ({
+  search,
+  handleSearchInput,
+  searchAction,
+}: SearchFormProps) => {
   return (
-    <form className="searchForm" action={action}>
+    <form className="searchForm" action={searchAction}>
       <InputWithLabel
         id="searchQuery"
         type="text"

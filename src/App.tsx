@@ -1,19 +1,23 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
-import { useStorageState } from './hooks/useStorageState';
+import { useStorageState } from './hooks/useStorageState.ts';
 import List from './components/List.tsx';
 import SearchForm from './components/SearchForm.tsx';
-import { storiesReducer } from './reducers/storiesReducer.js';
-import { getAsyncStories } from './services/getAsyncStories.js';
+import { storiesReducer } from './reducers/storiesReducer.ts';
+import { getAsyncStories } from './services/getAsyncStories.ts';
 import './App.css';
+import { Story, StoriesState } from './types/types.ts';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?tags=story&query=';
 
 const API_ENDPOINT_LAST_STORIES =
   'http://hn.algolia.com/api/v1/search_by_date?tags=story';
 
-const getSumComments = (stories) => {
+const getSumComments = (stories: StoriesState) => {
   // console.log('C');
-  return stories.data.reduce((result, value) => result + value.numComments, 0);
+  return stories.data.reduce(
+    (result: number, value: Story) => result + value.numComments,
+    0,
+  );
 };
 
 const App = () => {
@@ -30,7 +34,7 @@ const App = () => {
     isError: false,
   });
 
-  const getNews = useCallback(async ({ url }) => {
+  const getNews = useCallback(async ({ url }: { url: string }) => {
     if (!url) return;
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
@@ -50,7 +54,7 @@ const App = () => {
     getNews({ url });
   }, [url, getNews]);
 
-  const handleSearchInput = (event) => {
+  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
@@ -58,7 +62,7 @@ const App = () => {
     setUrl(`${API_ENDPOINT}${search}`);
   };
 
-  const handleRemoveStory = (item) => {
+  const handleRemoveStory = (item: Story) => {
     dispatchStories({ type: 'REMOVE_STORY', payload: item });
   };
 
@@ -72,7 +76,7 @@ const App = () => {
         <SearchForm
           search={search}
           handleSearchInput={handleSearchInput}
-          action={searchAction}
+          searchAction={searchAction}
         />
       </div>
 
@@ -86,7 +90,7 @@ const App = () => {
       {stories.isLoading ? (
         <img src="/loading.gif" alt="Loading..." width="30" height="30" />
       ) : (
-        <List list={stories.data} removeItem={handleRemoveStory} />
+        <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
 
       {stories.isError && <p>Something went wrong...</p>}

@@ -1,11 +1,12 @@
+import { HNApiStory } from '../types/types';
 import axios from 'axios';
 
-export const getAsyncStories = async ({ url }) => {
+export const getAsyncStories = async ({ url }: { url: string }) => {
   if (url === '') return null;
   try {
     const result = await axios.get(url);
 
-    return result.data.hits.map((story) => ({
+    return result.data.hits.map((story: HNApiStory) => ({
       title: story.title || story.story_title,
       url: story.url || story.story_url,
       author: story.author,

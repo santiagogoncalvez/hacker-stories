@@ -1,6 +1,6 @@
-import { REDUCER_TYPES } from '../constants/reducerTypes.js';
+import { StoriesState, StoriesAction } from '../types/types.ts';
 
-export const storiesReducer = (state, action) => {
+export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
   switch (action.type) {
     case 'STORIES_FETCH_INIT': {
       return { ...state, isLoading: true, isError: false };
@@ -20,10 +20,8 @@ export const storiesReducer = (state, action) => {
         isError: true,
       };
     }
-    case REDUCER_TYPES.SET_STORIES: {
-      return { ...state, data: action.payload };
-    }
-    case REDUCER_TYPES.REMOVE_STORY: {
+
+    case 'REMOVE_STORY': {
       return {
         ...state,
         data: state.data.filter(
