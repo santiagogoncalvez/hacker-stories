@@ -4,13 +4,13 @@ import SearchIcon from '../assets/search.svg?react';
 
 type SearchFormProps = {
   search: string;
-  handleSearchInput: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSearchInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchAction: (formData: FormData) => void;
 };
 
 const SearchForm = ({
   search,
-  handleSearchInput,
+  onSearchInput,
   searchAction,
 }: SearchFormProps) => {
   return (
@@ -20,7 +20,7 @@ const SearchForm = ({
         type="text"
         value={search}
         placeholder={'React, Angular, Vue...'}
-        onInputChange={handleSearchInput}
+        onInputChange={onSearchInput}
       >
         <strong>Search:</strong>
       </InputWithLabel>

@@ -75,7 +75,7 @@ const App = () => {
       <div className="searchControls">
         <SearchForm
           search={search}
-          handleSearchInput={handleSearchInput}
+          onSearchInput={handleSearchInput}
           searchAction={searchAction}
         />
       </div>
