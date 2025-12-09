@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useStorageState } from './hooks/useStorageState.ts';
-import List from './components/List.tsx';
+import { List } from './components/List.tsx';
 import SearchForm from './components/SearchForm.tsx';
 import { storiesReducer } from './reducers/storiesReducer.ts';
 import { getAsyncStories } from './services/getAsyncStories.ts';
@@ -23,7 +23,7 @@ const getSumComments = (stories: StoriesState) => {
 const App = () => {
   // console.log('B:App');
 
-  const [search, setSearch] = useStorageState('search', '');
+  const [search, setSearch] = useStorageState('search', 'React');
 
   const [url, setUrl] = useState(
     search ? `${API_ENDPOINT}${search}` : API_ENDPOINT_LAST_STORIES,

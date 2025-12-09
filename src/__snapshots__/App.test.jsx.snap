@@ -1,0 +1,293 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`InputWithLabel > renders snapshot 1`] = `
+<div>
+  <label
+    for="0"
+  >
+    Search:
+     
+  </label>
+  <input
+    id="0"
+    placeholder="React, Angular..."
+    type="text"
+    value="React"
+  />
+</div>
+`;
+
+exports[`Item > renders snapshot 1`] = `
+<li
+  class="story"
+>
+  <div
+    class="storyLink"
+  >
+    <div
+      class="storyLinkData"
+    >
+      <a
+        class="storyLink"
+        href="https://react.dev/"
+        target="_blank"
+      >
+        React
+      </a>
+      <div
+        class="storyLinkInfo"
+      >
+        <div>
+          <span
+            class="label"
+          >
+            Author: 
+          </span>
+          <span>
+            Jordan Walke
+          </span>
+        </div>
+        <div>
+          <span
+            class="label"
+          >
+            Comments: 
+          </span>
+          <span />
+        </div>
+        <div>
+          <span
+            class="label"
+          >
+            Points: 
+          </span>
+          <span>
+            4
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    aria-label="Remove item"
+    class="removeButton"
+  >
+    <svg
+      class="removeIcon"
+      fill="none"
+      height="30"
+      stroke="#616060"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      width="30"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+</li>
+`;
+
+exports[`List > renders snapshot 1`] = `
+<ul
+  class="news"
+>
+  <li
+    class="story"
+  >
+    <div
+      class="storyLink"
+    >
+      <div
+        class="storyLinkData"
+      >
+        <a
+          class="storyLink"
+          href="https://react.dev/"
+          target="_blank"
+        >
+          React
+        </a>
+        <div
+          class="storyLinkInfo"
+        >
+          <div>
+            <span
+              class="label"
+            >
+              Author: 
+            </span>
+            <span>
+              Jordan Walke
+            </span>
+          </div>
+          <div>
+            <span
+              class="label"
+            >
+              Comments: 
+            </span>
+            <span>
+              3
+            </span>
+          </div>
+          <div>
+            <span
+              class="label"
+            >
+              Points: 
+            </span>
+            <span>
+              4
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      aria-label="Remove item"
+      class="removeButton"
+    >
+      <svg
+        class="removeIcon"
+        fill="none"
+        height="30"
+        stroke="#616060"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="30"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </li>
+  <li
+    class="story"
+  >
+    <div
+      class="storyLink"
+    >
+      <div
+        class="storyLinkData"
+      >
+        <a
+          class="storyLink"
+          href="https://redux.js.org/"
+          target="_blank"
+        >
+          Redux
+        </a>
+        <div
+          class="storyLinkInfo"
+        >
+          <div>
+            <span
+              class="label"
+            >
+              Author: 
+            </span>
+            <span>
+              Dan Abramov, Andrew Clark
+            </span>
+          </div>
+          <div>
+            <span
+              class="label"
+            >
+              Comments: 
+            </span>
+            <span>
+              2
+            </span>
+          </div>
+          <div>
+            <span
+              class="label"
+            >
+              Points: 
+            </span>
+            <span>
+              5
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      aria-label="Remove item"
+      class="removeButton"
+    >
+      <svg
+        class="removeIcon"
+        fill="none"
+        height="30"
+        stroke="#616060"
+        stroke-width="1.5"
+        viewBox="0 0 24 24"
+        width="30"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </li>
+</ul>
+`;
+
+exports[`SearchForm > renders snapshot 1`] = `
+<form
+  action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
+  class="searchForm"
+>
+  <div>
+    <label
+      for="searchQuery"
+    >
+      <strong>
+        Search:
+      </strong>
+       
+    </label>
+    <input
+      id="searchQuery"
+      placeholder="React, Angular, Vue..."
+      type="text"
+      value="React"
+    />
+  </div>
+  <button
+    aria-label="Submit form"
+    type="submit"
+  >
+    <svg
+      class="size-6"
+      fill="none"
+      height="30px"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      width="30px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+</form>
+`;

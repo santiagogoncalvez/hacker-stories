@@ -24,7 +24,7 @@ const SearchForm = ({
       >
         <strong>Search:</strong>
       </InputWithLabel>
-      <button type="submit" disabled={!search}>
+      <button type="submit" disabled={!search} aria-label='Submit form'>
         <SearchIcon />
       </button>
     </form>
