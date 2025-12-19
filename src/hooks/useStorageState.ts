@@ -1,21 +1,46 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
-export const useStorageState = (
+function serialize(value: unknown) {
+  if (value instanceof Set) {
+    return { __type: 'Set', value: Array.from(value) };
+  }
+  return value;
+}
+
+function deserialize(value: unknown) {
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    '__type' in value &&
+    (value as any).__type === 'Set'
+  ) {
+    return new Set((value as any).value);
+  }
+  return value;
+}
+
+export function useStorageState<T>(
   key: string,
-  initialState: string,
-): [string, (newValue: string) => void] => {
-  const [value, setValue] = useState(localStorage.getItem(key) ?? initialState);
-  const isMounted = useRef(false);
+  initialState: T,
+): [T, (value: T) => void] {
+  const [state, setState] = useState<T>(() => {
+    try {
+      const stored = localStorage.getItem(key);
+      if (!stored) return initialState;
+
+      return deserialize(JSON.parse(stored)) as T;
+    } catch {
+      return initialState;
+    }
+  });
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      return;
+    try {
+      localStorage.setItem(key, JSON.stringify(serialize(state)));
+    } catch {
+      // manejo opcional
     }
+  }, [key, state]);
 
-    // console.log('useStorageState');
-    localStorage.setItem(key, value);
-  }, [value, key]);
-
-  return [value, setValue] as const;
-};
+  return [state, setState];
+}

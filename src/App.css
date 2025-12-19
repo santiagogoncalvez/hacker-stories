@@ -1,17 +1,28 @@
+:root {
+  --boder-radius-app: 6px;
+}
+
 .app {
   width: 700px;
 }
 
 .app h1 {
-  margin-top: 16px;
+  /* margin-top: 16px; */
+  margin-top: 0px;
+
 }
 
 .searchForm {
+  position: relative;
   width: fit-content;
   display: flex;
   flex-direction: row;
   align-items: end;
-  gap: 8px;
+  gap: 2px;
+}
+
+.searchForm input {
+  border-radius: var(--boder-radius-app) !important;
 }
 
 .searchForm .searchQuery {
@@ -22,7 +33,7 @@
   height: 56.47px;
 }
 
-.searchForm button {
+.searchControls-submitBt {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,21 +42,23 @@
 
 .news {
   padding: 0;
+  margin: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
+
 .story {
-  padding: 20px 40px;
+  padding: 20px 30px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   gap: 12px;
 
   border: 1px solid var(--light-gray);
-  border-radius: 8px;
+  border-radius: var(--boder-radius-app);
   background: var(--white);
 }
 
@@ -54,18 +67,15 @@
 } */
 
 .removeButton {
-  padding:5px;
+  padding: 6px;
   width: fit-content;
   height: fit-content;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-}
-
-.removeButton {
-  background-color: var(--white);
-  color: var(--light-primary);
 }
 
 .removeButton:focus {
@@ -80,17 +90,15 @@
   color: var(--primary);
   font-size: 1.2rem;
   font-weight: 500;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .storyLinkData .storyLink:hover {
-  text-decoration: none;
+  /* text-decoration: none; */
   color: var(--light-primary);
 }
-
-.story button:hover {
-  background-color: transparent;
-  transform: scale(1.1);
+.removeButton:hover {
+  background-color: var(--lighter-gray);
 }
 
 .storyLinkData {
@@ -101,26 +109,43 @@
 
 .story .storyLinkInfo {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--gray);
+}
+
+.storyLinkInfo div {
+  display: flex;
+  gap: 26px;
+}
+
+.storyLinkInfo div div {
+  display: flex;
+  gap: 6px;
 }
 
 .label {
   color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .story .storyLink .storyLinkInfo .label {
   color: var(--gray);
 }
 
-
 /* --- ✔ Responsive para pantallas verticales / móviles --- */
 @media (max-width: 600px) {
   .story {
     padding: 16px 20px;
+    flex-direction: column;
+    align-items: start;
   }
 
   .story .storyLink {
     flex-direction: column; /* de horizontal → vertical */
     align-items: flex-start; /* izquierda */
+    justify-content: start;
     gap: 16px; /* mayor espacio táctil */
   }
 
@@ -143,4 +168,326 @@
 
 hr {
   border-radius: 5px;
+}
+
+.searchControls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.searchControls button {
+  border-radius: var(--boder-radius-app);
+}
+
+.listControls {
+  display: flex;
+  height: fit-content;
+  justify-content: right;
+  gap: 16px;
+  align-items: center;
+}
+
+.sortProps {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: fit-content;
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+/* .sortProps div {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: fit-content;
+} */
+
+.display {
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid #e8e8e8;
+  background-color: rgb(250, 250, 250);
+  border-radius: var(--boder-radius-app);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.display button {
+  padding: 6px;
+  display: flex;
+  height: fit-content;
+  color: var(--dark-gray);
+  border-radius: var(--boder-radius-app);
+  background-color: transparent;
+}
+
+.display button:hover {
+  background-color: var(--lighter-gray);
+}
+
+.display button.active {
+  background-color: #e8e8e8;
+}
+
+/* .display svg {
+  width: 30px;
+  height: 30px;
+} */
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sortProps-label {
+  color: var(--gray);
+}
+
+.sortProps-sortType {
+  color: var(--secondary);
+}
+
+.sortProps-openButton {
+  background-color: rgb(250, 250, 250);
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  color: var(--black);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sortProps-openButton:hover {
+  background-color: var(--lighter-gray);
+}
+
+.sortProps-options {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  align-items: start;
+  top: 50px;
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  max-height: 300px;
+  overflow: auto;
+  box-shadow: 0px 0px 10px rgb(220, 220, 220);
+}
+
+.sortProps .sortProps-options .sortProps-option {
+  color: var(--black);
+  background-color: white !important;
+  width: 100%;
+  text-align: start;
+  border-radius: var(--boder-radius-app);
+  font-weight: 500;
+  padding: 25px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-weight: 400;
+}
+
+.sortProps-options .sortProps-option:hover {
+  background-color: var(--lighter-gray) !important;
+}
+
+.sortProps-options .sortProps-option.active {
+  background-color: #e8e8e8;
+}
+.listContainer table {
+  margin: 0;
+}
+
+.listContainer table a {
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3rem;
+}
+
+.listContainer table a:hover {
+  color: var(--light-primary);
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+
+.headTable button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.headTable .ACTIONS:hover {
+  cursor: initial;
+}
+
+.searchHistory {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 100%;
+  align-items: start;
+  top: 70px;
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  max-height: 300px;
+  overflow: auto;
+  box-shadow: 0px 0px 10px rgb(220, 220, 220);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+}
+
+.searchHistory-option {
+  width: 100%;
+}
+
+.searchHistory-button {
+  color: var(--black);
+  background-color: white !important;
+  width: 100%;
+  text-align: start;
+  border-radius: var(--boder-radius-app);
+  font-weight: 500;
+  padding: 25px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.searchHistory-button:hover {
+  background-color: var(--lighter-gray) !important;
+}
+
+.searchHistory-button.active {
+  background-color: #e8e8e8;
+}
+.search-container {
+  position: relative;
+}
+
+.moreButton-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.moreButton {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--light-primary);
+  border-radius: var(--boder-radius-app);
+  border: 1px solid var(--light-primary);
+  /* margin: 24px 0px; */
+
+  transition: transform 0.2s ease;
+}
+
+.moreButton:hover {
+  background-color: transparent;
+  transform: translateY(-4px);
+}
+
+
+
+.noResultsCard {
+  /* hereda la idea de .story */
+  padding: 30px 20px;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--boder-radius-app);
+  background: var(--white);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.noResultsContent {
+  max-width: 480px;
+}
+
+.noResultsTitle {
+  margin: 0 0 12px;
+  /* font-size: 1.4rem; */
+  font-weight: 600;
+  color: var(--black);
+}
+
+.noResultsDescription {
+  margin: 0 0 20px;
+  /* font-size: 0.95rem; */
+  color: var(--gray);
+}
+
+.noResultsQuery {
+  font-weight: 500;
+  color: var(--black);
+}
+
+.noResultsTips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.noResultsTips li {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+
+/* pequeño detalle visual tipo GitHub */
+.noResultsTips li::before {
+  content: '•';
+  margin-right: 8px;
+  color: var(--light-gray);
+}
+
+
+.popularStories {
+  margin-top: 32px;
+}
+
+.popularStoriesTitle {
+  margin-bottom: 16px;
+  /* font-size: 1.2rem; */
+  font-weight: 600;
+  color: var(--black);
+}
+
+.endContentElement{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
 }

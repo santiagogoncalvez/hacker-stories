@@ -7,7 +7,9 @@ type InputWithLabelProps = {
   placeholder: string;
   isFocused?: boolean;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  onFocus: () => void;
+  onBlur: () => void;
 };
 
 const InputWithLabel = ({
@@ -18,6 +20,8 @@ const InputWithLabel = ({
   isFocused = false,
   onInputChange,
   children,
+  onFocus,
+  onBlur,
 }: InputWithLabelProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,6 +38,8 @@ const InputWithLabel = ({
         value={value}
         placeholder={placeholder}
         onChange={onInputChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
     </div>
   );
