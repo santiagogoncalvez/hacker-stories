@@ -1,56 +1,15 @@
-import SearchForm from './components/SearchForm.tsx';
-import StatusPanel from './components/StatusPanle.tsx';
-import { ListWithObserver } from './components/List.tsx';
-import { useStories } from './hooks/useStories.ts';
-import { useSearch } from './hooks/useSearch.tsx';
-
-import './App.css';
-import EmptySearchState from './components/EmptySearchState.tsx';
+import { useState } from 'react';
+import Header from './components/Header';
+import Home from './pages/Home';
 
 const App = () => {
-  const { search, setSearch, handleSearchInput } = useSearch({ search: '' });
-
-  const {
-    stories,
-    handleSearch,
-    searchAction,
-    handleRemoveStory,
-    lastSearches,
-    handleMoreStories,
-  } = useStories({
-    search,
-  });
-
-  // console.log(stories);
-
-  const handleLastSearch = (search: string) => {
-    setSearch(search);
-    handleSearch(search, 0);
-  };
-
+  const [section, setSection] = useState<'news' | 'favourites'>('news');
+  
   return (
-    <div className="app">
-      <h1>Hacker Stories</h1>
+    <div className='app'>
+      <Header section={section} onChangeSection={setSection} />
 
-      <SearchForm
-        search={search}
-        lastSearches={lastSearches}
-        onSearchInput={handleSearchInput}
-        searchAction={searchAction}
-        handleLastSearch={handleLastSearch}
-      />
-
-      <hr />
-
-      {stories.isNoResults && !stories.isLoading && <EmptySearchState />}
-
-      <ListWithObserver
-        stories={stories}
-        onRemoveItem={handleRemoveStory}
-        handleMore={handleMoreStories}
-      />
-
-      <StatusPanel stories={stories} />
+      <Home />
     </div>
   );
 };

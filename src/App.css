@@ -9,7 +9,6 @@
 .app h1 {
   /* margin-top: 16px; */
   margin-top: 0px;
-
 }
 
 .searchForm {
@@ -304,6 +303,9 @@ hr {
 .sortProps-options .sortProps-option.active {
   background-color: #e8e8e8;
 }
+
+
+
 .listContainer table {
   margin: 0;
 }
@@ -325,7 +327,6 @@ hr {
   align-items: center;
   height: 100px;
 }
-
 
 .headTable button {
   display: flex;
@@ -416,8 +417,6 @@ hr {
   transform: translateY(-4px);
 }
 
-
-
 .noResultsCard {
   /* hereda la idea de .story */
   padding: 30px 20px;
@@ -472,7 +471,6 @@ hr {
   color: var(--light-gray);
 }
 
-
 .popularStories {
   margin-top: 32px;
 }
@@ -484,10 +482,292 @@ hr {
   color: var(--black);
 }
 
-.endContentElement{
+.endContentElement {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
   width: 100%;
+}
+
+.scrollToTopBtn {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+
+  width: 3rem;
+  height: 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.25rem;
+  font-weight: bold;
+
+  border: 2px solid #828181;
+  border-radius: var(--boder-radius-app);
+  background: var(--white);
+  color: inherit;
+
+  cursor: pointer;
+  opacity: 0.85;
+
+  padding: 0;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.scrollToTopBtn .arrowIcon {
+  width: 25px;
+  height: 25px;
+  color: #828181;
+  transform: rotate(-135deg);
+  transition: transform 0.2s ease;
+}
+
+.scrollToTopBtn:hover {
+  opacity: 1;
+  border: 2px solid var(--light-primary);
+  transform: translateY(-2px);
+  background-color: var(--white);
+}
+
+.scrollToTopBtn:hover .arrowIcon {
+  transform: rotate(-180deg);
+  color: var(--light-primary);
+}
+
+/* 
+  .scrollToTopBtn:active {
+    transform: translateY(0);
+  }
+
+  .scrollToTopBtn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  } */
+
+
+
+/* ======================================================
+   Skeleton base (animación tipo YouTube)
+====================================================== */
+.skeleton {
+
+  background: linear-gradient(
+    90deg,
+    #eeeeee 25%,
+    #f5f5f5 37%,
+    #eeeeee 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* ======================================================
+   Story skeleton container
+====================================================== */
+.news-skeleton{
+  width: 100%;
+}
+
+.story--skeleton {
+  pointer-events: none;
+}
+
+.story--skeleton .storyLinkData {
+  width: 100%;
+}
+
+/* ======================================================
+   Title skeleton
+====================================================== */
+.skeleton-title {
+  height: 32px;
+  width: 400px;
+}
+
+/* ======================================================
+   Info rows (Author / Comments / Points)
+====================================================== */
+.story--skeleton .storyLinkInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+}
+
+/* Fake label */
+.skeleton-label {
+  height: 14px;
+  width: 70px;
+}
+
+/* Fake value */
+.skeleton-value {
+  height: 14px;
+  width: 90px;
+}
+
+.skeleton-value.small {
+  width: 50px;
+}
+
+/* ======================================================
+   Remove button skeleton
+====================================================== */
+.skeleton-button {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--boder-radius-app);
+}
+
+/* ======================================================
+   Extra realism (variación de ancho)
+====================================================== */
+.row-2 .skeleton-label {
+  width: 200px;
+}
+
+
+
+
+
+/* ======================================================
+   Controls skeleton layout
+====================================================== */
+.listControlsSkeleton {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ======================================================
+   SortProps skeleton
+====================================================== */
+.sortProps--skeleton {
+  pointer-events: none;
+}
+
+.skeleton-sort-button {
+  width: 240px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-radius: var(--boder-radius-app);
+}
+
+/* Texto fake */
+.skeleton-sort-text {
+  height: 14px;
+  width: 150px;
+}
+
+/* Caret fake */
+.skeleton-caret {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* ======================================================
+   Display skeleton
+====================================================== */
+.display--skeleton {
+  gap: 6px;
+  pointer-events: none;
+}
+
+.skeleton-display-button {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--boder-radius-app);
+}
+
+.skeleton-container{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+
+/* ======================================================
+   Header
+====================================================== */
+.appHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 20px 30px;   */
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--light-gray);
+  background-color: var(--white);
+}
+
+/* ======================================================
+   Title
+====================================================== */
+.appTitle {
+  font-size: 1.4rem;
+  color: var(--black);
+}
+
+.appTitle strong {
+  color: var(--primary);
+  margin-right: 6px;
+}
+
+/* ======================================================
+   Navigation
+====================================================== */
+.appNav {
+  display: flex;
+  gap: 8px;
+}
+
+.appNav-item {
+  padding: 8px 14px;
+  border-radius: var(--boder-radius-app);
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--dark-gray);
+  font-weight: 500;
+}
+
+.appNav-item:hover {
+  background-color: var(--lighter-gray);
+}
+
+.appNav-item.active {
+  background-color: #e8e8e8;
+  color: var(--black);
+  border-color: #e8e8e8;
+}
+
+.home{
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

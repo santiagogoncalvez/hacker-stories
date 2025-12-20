@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { SortPropsProps, Field } from '../types/types';
 import Caret from '../assets/caret.svg?react';
-import { transform } from 'lodash';
 
 const fields: Array<Field> = [
   { key: 'POINTS_DESC', label: 'Most popular', value: 'POINTS' },

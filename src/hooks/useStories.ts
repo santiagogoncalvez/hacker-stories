@@ -20,7 +20,7 @@ export function useStories({ search }: { search: string }) {
   });
 
   const getNews = useCallback(async ({ urls }: { urls: string[] }) => {
-    console.log("getNews");
+    // console.log("getNews");
     if (!urls) return;
     if (urls[urls.length - 2] === urls[urls.length - 1]) return;
 

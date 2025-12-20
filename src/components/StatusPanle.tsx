@@ -1,10 +1,10 @@
 import { StoriesState } from '../types/types';
-import Loader from './Loader';
+// import Loader from './Loader';
 
 const StatusPanel = ({ stories }: { stories: StoriesState }) => {
   return (
     <>
-      {stories.isLoading && <Loader />}
+      {/* {stories.isLoading && <Loader />} */}
       {stories.isError && <p>Something went wrong...</p>}
     </>
   );

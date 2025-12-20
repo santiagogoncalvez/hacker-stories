@@ -23,6 +23,7 @@ import CaretUnfillIcon from '../assets/caret-unfill.svg?react';
 import CommentsIcon from '../assets/comments.svg?react';
 import CaretIcon from '../assets/caret.svg?react';
 import EndContentElement from './EndContentElement.tsx';
+import NewsSkeletonList from './NewsSkeletonList.tsx';
 
 const formatUpdatedDate = (prefix: string, timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -319,25 +320,14 @@ type ListWithObserverProps = {
 };
 
 const ListWithObserver = memo(
-  ({
-    stories,
-    onRemoveItem,
-    handleMore,
-  }: ListWithObserverProps) => {
+  ({ stories, onRemoveItem, handleMore }: ListWithObserverProps) => {
     const render = !stories.isNoResults && stories.data.hits.length > 0;
-    if (!render) return null;
+    if (!render) return <NewsSkeletonList />;
 
     return (
       <div>
-        {!stories.isLoading && (
-          <div>
-            <List list={stories.data.hits} onRemoveItem={onRemoveItem} />
-            <EndContentElement
-              stories={stories}
-              handleMore={handleMore}
-            />
-          </div>
-        )}
+        <List list={stories.data.hits} onRemoveItem={onRemoveItem} />
+        <EndContentElement stories={stories} handleMore={handleMore} />
       </div>
     );
   },
