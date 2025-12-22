@@ -1,67 +1,132 @@
-import { StoriesState, StoriesAction } from '../types/types.ts';
+import { StoriesAction, StoriesState } from '../types/types';
 
 export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
+  const { dataType } = action;
+
   switch (action.type) {
-    case 'STORIES_FETCH_INIT': {
-      return { ...state, isLoading: true, isError: false };
-    }
-    case 'STORIES_FETCH_MORE_INIT': {
-      return { ...state, isLoadingMore: true, isError: false };
-    }
-    case 'STORIES_FETCH_SUCCESS':
-      if (state.isLoadingMore) {
-        return {
-          ...state,
-          isLoading: false,
-          isLoadingMore: false,
-          data: {
-            hits: [...state.data.hits, ...action.payload.hits], // concatena
-            page: action.payload.page,
+    case 'RESET_LIST':
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            hits: [],
+            page: 0,
+            isLoading: false,
+            isLoadingMore: false,
+            isNoResults: false,
+            isError: false,
+            needsFetch: true,
           },
-        };
-      }
-      return {
-        ...state,
-        isLoading: false,
-        data: action.payload, // reemplaza solo si es fetch inicial
-      };
-
-    case 'STORIES_FETCH_FAILURE': {
-      return {
-        ...state,
-        isLoading: false,
-        isError: true,
-      };
-    }
-
-    case 'REMOVE_STORY': {
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          hits: state.data.hits.filter(
-            (story) => action.payload.objectId != story.objectId,
-          ),
         },
       };
-    }
 
-    case 'SEARCH_NO_RESULTS': {
+    case 'FETCH_INIT':
       return {
         ...state,
-        isNoResults: true,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            isLoading: true,
+            isError: false,
+          },
+        },
       };
-    }
 
-    case 'SEARCH_START_RESULTS': {
+    case 'FETCH_MORE_INIT':
       return {
         ...state,
-        isNoResults: false,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            isLoadingMore: true,
+            isError: false,
+          },
+        },
       };
-    }
 
-    default: {
-      throw new Error();
-    }
+    case 'FETCH_SUCCESS':
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            hits:
+              state.lists[dataType].page === 0
+                ? action.hits // fetch inicial o reset
+                : [...state.lists[dataType].hits, ...action.hits], // concatenar para "more"
+            page: action.page,
+            isLoading: false,
+            isLoadingMore: false,
+            isNoResults: action.hits.length === 0,
+            isError: false,
+            needsFetch: false,
+          },
+        },
+      };
+
+    case 'FETCH_FAILURE':
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            isLoading: false,
+            isLoadingMore: false,
+            isError: true,
+            needsFetch: false,
+          },
+        },
+      };
+
+    case 'INCREMENT_PAGE':
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            page: state.lists[dataType].page + 1,
+            needsFetch: true, // permite fetch de la siguiente página
+          },
+        },
+      };
+
+    case 'SET_SEARCH':
+      return {
+        ...state,
+        search: action.payload,
+        lists: {
+          story: { ...state.lists.story, hits: [], page: 0, needsFetch: true },
+          comment: {
+            ...state.lists.comment,
+            hits: [],
+            page: 0,
+            needsFetch: true,
+          },
+        },
+      };
+
+    case 'REMOVE_STORY':
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [dataType]: {
+            ...state.lists[dataType],
+            hits: state.lists[dataType].hits.filter(
+              (story) => story.objectId !== action.payload.objectId,
+            ),
+          },
+        },
+      };
+
+    default:
+      throw new Error('Unhandled action type');
   }
 };

@@ -1,89 +1,93 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
-import { storiesReducer } from '../reducers/storiesReducer.ts';
-import { getAsyncStories } from '../services/getAsyncStories.ts';
-import { getUrl } from '../constants/apiEndpoints.ts';
-import { extractPage, getLastSearches } from '../utils/searches.ts';
-import { Story } from '../types/types.ts';
-import { extractSearchTerm } from '../utils/searches.ts';
+import { useEffect, useReducer } from 'react';
+import { useLocation } from 'react-router-dom';
+import { storiesReducer } from '../reducers/storiesReducer';
+import { getAsyncStories } from '../services/getAsyncStories';
+import { getUrl } from '../constants/apiEndpoints';
+import { StoriesState, ListState, Story } from '../types/types';
+import { useStorageState } from './useStorageState';
 
-export function useStories({ search }: { search: string }) {
-  const [urls, setUrls] = useState([getUrl(search, 0)]);
-  const [stories, dispatchStories] = useReducer(storiesReducer, {
-    data: {
-      hits: [],
-      page: 0,
-    },
-    isLoading: false,
-    isLoadingMore: false,
-    isNoResults: false,
-    isError: false,
-  });
+const emptyList: ListState = {
+  hits: [],
+  page: 0,
+  isLoading: false,
+  isLoadingMore: false,
+  isNoResults: false,
+  isError: false,
+  needsFetch: true,
+  dataType: null,
+};
 
-  const getNews = useCallback(async ({ urls }: { urls: string[] }) => {
-    // console.log("getNews");
-    if (!urls) return;
-    if (urls[urls.length - 2] === urls[urls.length - 1]) return;
+const initialState: StoriesState = {
+  search: '',
+  lists: {
+    story: { ...emptyList, dataType: 'story' },
+    comment: { ...emptyList, dataType: 'comment' },
+  },
+};
 
-    const lastUrl = urls[urls.length - 1];
-    extractPage(lastUrl) === 0
-      ? dispatchStories({ type: 'STORIES_FETCH_INIT' })
-      : dispatchStories({ type: 'STORIES_FETCH_MORE_INIT' });
+export function useStories(initialSearch = '') {
+  const { pathname } = useLocation();
 
-    try {
-      let data = await getAsyncStories({ url: lastUrl });
+  const dataType =
+    pathname === '/' ? 'story' : pathname === '/comments' ? 'comment' : null;
 
-      // Esto funciona ya que la última url es la que no tiene resultados, entonces como no se actualiza la ultima url, siempre va a dar sin resultados hasta que cambie la búsqueda.
-      // Para mejorar esto
-      if (data?.hits.length === 0) {
-        dispatchStories({ type: 'SEARCH_NO_RESULTS' });
-      } else {
-        dispatchStories({ type: 'SEARCH_START_RESULTS' });
-      }
+  const [state, dispatch] = useReducer(storiesReducer, initialState, (s) => ({
+    ...s,
+    search: initialSearch,
+  }));
 
-      dispatchStories({
-        type: 'STORIES_FETCH_SUCCESS',
-        payload: data || {
-          hits: [],
-          page: 0,
-        },
-      });
-    } catch (e) {
-      dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
-    }
-  }, []);
+  const activeList = dataType ? state.lists[dataType] : null;
 
-  // Hacer petición de datos de historias
+  /* ================= Reset on route change ================= */
   useEffect(() => {
-    getNews({ urls });
-  }, [urls, getNews]);
+    if (!dataType) return;
+    dispatch({ type: 'RESET_LIST', dataType });
+  }, [dataType]);
 
-  const handleSearch = (searchTerm: string, page: number) => {
-    const newUrl = getUrl(searchTerm, page);
-    setUrls(urls.concat(newUrl));
+  /* ================= Fetch ================= */
+  useEffect(() => {
+    if (!dataType || !activeList) return;
+
+    if (!activeList.needsFetch) return;
+
+    dispatch({ type: 'FETCH_INIT', dataType });
+
+    getAsyncStories({
+      url: getUrl(state.search, activeList.page, dataType),
+    })
+      .then((res) => {
+        dispatch({
+          type: 'FETCH_SUCCESS',
+          dataType,
+          hits: res?.hits ?? [],
+          page: res?.page ?? 0,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: 'FETCH_FAILURE', dataType });
+      });
+  }, [dataType, state.search, activeList?.needsFetch]);
+
+  /* ================= Actions ================= */
+  const searchAction = (term: string) => {
+    dispatch({ type: 'SET_SEARCH', payload: term });
   };
-  const searchAction = () => {
-    handleSearch(search, 0);
-  };
-  const handleRemoveStory = (item: Story) => {
-    dispatchStories({ type: 'REMOVE_STORY', payload: item });
-  };
+
   const handleMoreStories = () => {
-    const lastUrl = urls[urls.length - 1];
-    const search = extractSearchTerm(lastUrl);
-    handleSearch(search, stories.data.page + 1);
+    if (!dataType) return;
+    dispatch({ type: 'INCREMENT_PAGE', dataType });
   };
 
-  const lastSearches = getLastSearches(urls);
+  const handleRemoveStory = (item: Story) => {
+    if (!dataType) return;
+    dispatch({ type: 'REMOVE_STORY', dataType, payload: item });
+  };
 
   return {
-    urls,
-    setUrls,
-    stories,
-    dispatchStories,
-    handleSearch,
+    stories: activeList,
+    search: state.search,
     searchAction,
-    handleRemoveStory,
     handleMoreStories,
-    lastSearches,
+    handleRemoveStory,
   };
 }

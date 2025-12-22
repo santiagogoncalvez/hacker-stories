@@ -1,34 +1,42 @@
-type Section = 'news' | 'favourites';
+import { Link, useLocation } from 'react-router-dom';
 
-type HeaderProps = {
-  section: Section;
-  onChangeSection: (section: Section) => void;
-};
+const getPath = () => useLocation().pathname;
 
-const Header = ({ section, onChangeSection }: HeaderProps) => {
+const Header = () => {
   return (
-    <header className="appHeader">
-      <div className="appHeader-left">
-        <span className="appTitle">
-          <strong>HS</strong>
-        </span>
+    <header className="appHeader-container">
+      <div className="appHeader">
+        <div className="appHeader-left">
+          <span className="appTitle">
+            <Link to="/" className="appTitleLink">
+              <h1>HS</h1>
+            </Link>
+          </span>
+        </div>
+
+        <nav className="appNav">
+          <Link
+            to="/"
+            className={`appNav-item ${getPath() === '/' ? 'active' : ''}`}
+          >
+            News
+          </Link>
+          <Link
+            to="/comments"
+            className={`appNav-item ${getPath() === '/comments' ? 'active' : ''}`}
+          >
+            Comments
+          </Link>
+
+          <Link
+            to="/favourites"
+            className={`appNav-item ${getPath() === '/favourites' ? 'active' : ''}`}
+          >
+            Favourites
+          </Link>
+        </nav>
       </div>
-
-      <nav className="appNav">
-        <button
-          className={`appNav-item ${section === 'news' ? 'active' : ''}`}
-          onClick={() => onChangeSection('news')}
-        >
-          News
-        </button>
-
-        <button
-          className={`appNav-item ${section === 'favourites' ? 'active' : ''}`}
-          onClick={() => onChangeSection('favourites')}
-        >
-          Favourites
-        </button>
-      </nav>
+      <hr />
     </header>
   );
 };

@@ -3,7 +3,10 @@
 }
 
 .app {
-  width: 700px;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .app h1 {
@@ -17,26 +20,36 @@
   display: flex;
   flex-direction: row;
   align-items: end;
-  gap: 2px;
+  /* gap: 2px; */
 }
 
-.searchForm input {
-  border-radius: var(--boder-radius-app) !important;
-}
-
-.searchForm .searchQuery {
+#searchQuery {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  height: 56.47px;
+  height: 2.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--boder-radius-app) !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+
 }
 
 .searchControls-submitBt {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.75rem 1rem;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: var(--boder-radius-app);
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+
+.searchControls-submitBt svg{
+  min-width: 1.2rem;
+  min-height: 1.2rem;
 }
 
 .news {
@@ -77,6 +90,13 @@
   justify-content: center;
 }
 
+
+.commentText{
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .removeButton:focus {
   border: 2px solid black;
 }
@@ -90,6 +110,7 @@
   font-size: 1.2rem;
   font-weight: 500;
   /* text-decoration: underline; */
+  max-width: 100%;
 }
 
 .storyLinkData .storyLink:hover {
@@ -104,6 +125,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;
 }
 
 .story .storyLinkInfo {
@@ -111,6 +133,8 @@
   flex-direction: column;
   gap: 8px;
   color: var(--gray);
+  max-width: 100%;
+  min-width: 0;
 }
 
 .storyLinkInfo div {
@@ -195,6 +219,8 @@ hr {
   width: fit-content;
   flex-wrap: wrap;
   z-index: 1;
+  width: 100%;
+  
 }
 
 /* .sortProps div {
@@ -258,10 +284,12 @@ hr {
   border-radius: var(--boder-radius-app);
   color: var(--black);
   font-weight: 500;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  width: 100%;
 }
 
 .sortProps-openButton:hover {
@@ -511,7 +539,6 @@ hr {
   color: inherit;
 
   cursor: pointer;
-  opacity: 0.85;
 
   padding: 0;
 
@@ -585,11 +612,11 @@ hr {
 }
 
 .story--skeleton {
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .story--skeleton .storyLinkData {
-  width: 100%;
+  max-width: 100%;
 }
 
 /* ======================================================
@@ -665,7 +692,7 @@ hr {
    SortProps skeleton
 ====================================================== */
 .sortProps--skeleton {
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .skeleton-sort-button {
@@ -696,7 +723,7 @@ hr {
 ====================================================== */
 .display--skeleton {
   gap: 6px;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .skeleton-display-button {
@@ -713,29 +740,45 @@ hr {
 
 
 /* ======================================================
-   Header
+   Header base
 ====================================================== */
+
+.appHeader-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.appHeader-container hr{
+  height: 1px !important;
+  margin: 0;
+  border-radius: var(--boder-radius-app);
+}
+
 .appHeader {
+  /* position: relative; */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  /* padding: 20px 30px;   */
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--light-gray);
+  /* justify-content: center; */
+  gap: 40px;
+  /* justify-content: space-between; */
+  /* padding: 20px 30px; */
+  padding-bottom: 16px;
+  /* border-bottom: 1px solid var(--light-gray); */
   background-color: var(--white);
 }
 
 /* ======================================================
    Title
 ====================================================== */
+
+/* .appHeader-left{
+  position: absolute;
+  left: 0;
+} */
 .appTitle {
   font-size: 1.4rem;
-  color: var(--black);
-}
-
-.appTitle strong {
+  font-weight: 600;
   color: var(--primary);
-  margin-right: 6px;
 }
 
 /* ======================================================
@@ -743,31 +786,145 @@ hr {
 ====================================================== */
 .appNav {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 24px;
+  position: relative;
 }
 
+/* ======================================================
+   Nav item (tab)
+====================================================== */
 .appNav-item {
-  padding: 8px 14px;
-  border-radius: var(--boder-radius-app);
-  background-color: transparent;
-  border: 1px solid transparent;
-  color: var(--dark-gray);
+  position: relative;
+  padding: 6px 0;
+  font-size: 0.95rem;
   font-weight: 500;
+  color: var(--dark-gray);
+  border: none;
+  cursor: pointer;
+  background-color: var(--white);
 }
 
+/* Hover text */
 .appNav-item:hover {
-  background-color: var(--lighter-gray);
+  color: var(--black);  
+  background-color: var(--white);
 }
 
-.appNav-item.active {
-  background-color: #e8e8e8;
-  color: var(--black);
-  border-color: #e8e8e8;
+/* Underline */
+.appNav-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  height: 2px;
+  width: 100%;
+  background-color: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  border-radius: var(--boder-radius-app);
+  border: 0px solid transparent;
 }
+
+/* Hover underline */
+.appNav-item:hover::after {
+  transform: scaleX(1);
+}
+
+/* Active tab */
+.appNav-item.active {
+  color: var(--black);
+}
+
+.appNav-item.active::after {
+  transform: scaleX(1);
+}
+
+/* ======================================================
+   Focus accessibility
+====================================================== */
+.appNav-item:focus-visible {
+  outline: none;
+}
+
+.appNav-item:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.appTitleLink:hover{
+text-decoration: none;
+}
+
+.appTitleLink h1{
+  font-size: 2rem;
+  margin: 0;
+}
+
 
 .home{
-  margin-top: 16px;
+  /* margin-top: 16px; */
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.storyTitle{
+  font-size: 1.2rem;
+}
+
+code {
+  white-space: pre-wrap !important;
+}
+
+/* --- Comment cell --- */
+.commentTextCell {
+  max-width: 420px;
+  vertical-align: top;
+}
+
+.commentTextWrapper {
+  position: relative;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* --- Expand / collapse --- */
+.commentExpandButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 4px;
+  padding: 0;
+  color: var(--secondary);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.commentCollapseButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+  color: var(--secondary);
+}
+
+/* --- Expanded row --- */
+.commentRowExpanded td {
+  vertical-align: top;
+}
+
+/* --- Full comment content --- */
+.commentFull {
+  white-space: normal;
+}
+
+.commentFull pre {
+  background: var(--light-primary);
+  padding: 8px;
+  overflow-x: auto;
+}
+
+.commentFull code {
+  font-family: monospace;
 }

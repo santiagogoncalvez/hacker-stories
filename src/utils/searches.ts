@@ -10,6 +10,12 @@ export const extractPage = (url: string) => {
   return Number(page);
 };
 
+export const extractTag = (url: string) => {
+  const formattedUrl = new URL(url);
+  const tag = formattedUrl.searchParams.get('tags') || '';
+  return tag;
+};
+
 export const getLastSearches = (urls: string[]) => {
   const formattedUrls = urls.map(extractSearchTerm);
   const map = new Map();

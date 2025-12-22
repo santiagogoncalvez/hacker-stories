@@ -21,3 +21,9 @@ export function sortList(list: Story[], sort: sort) {
   const action = sortActions[sort];
   return action ? action(list) : list;
 }
+
+export const sortActionList = (sort, list) => {
+  return sort.isReverse
+    ? sortList(list, sort.sortType).reverse()
+    : sortList(list, sort.sortType);
+};

@@ -2,6 +2,7 @@ import InputWithLabel from './InputWithLabel';
 import SearchIcon from '../assets/search.svg?react';
 import HistoryIcon from '../assets/history.svg?react';
 import { useState } from 'react';
+import { useStoriesContext } from '../hooks/useStoriesContext';
 
 type SearchFormProps = {
   search: string;
@@ -42,20 +43,29 @@ const SearchHistory = ({ lastSearches, onSelect }: SearchHistoryProps) => {
   );
 };
 
-const SearchForm = ({
-  search,
-  lastSearches,
-  onSearchInput,
-  searchAction,
-  handleLastSearch,
-}: SearchFormProps) => {
+
+const SearchForm = ({searchInit}) => {
+  const [search, setSearch] = useState(searchInit);
   const [open, setOpen] = useState(false);
+
+  const { searchAction, lastSearches } = useStoriesContext();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // if (!search) return;
+    if (!search.trim()) return;
 
     searchAction(search);
+    setOpen(false);
+  };
+
+  const onSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setOpen(true);
+  };
+
+  const handleLastSearch = (term: string) => {
+    setSearch(term);
+    searchAction(term);
     setOpen(false);
   };
 
@@ -70,16 +80,14 @@ const SearchForm = ({
             placeholder="Search hacker news..."
             onInputChange={onSearchInput}
             onFocus={() => setOpen(true)}
-            onBlur={() => {
-              // setOpen(false);
-            }}
+            onBlur={() =>{}}
           />
         </div>
 
         <button
           type="submit"
           className="searchControls-submitBt"
-          // disabled={!search}
+          disabled={!search.trim()}
           aria-label="Submit form"
         >
           <SearchIcon />
@@ -88,10 +96,7 @@ const SearchForm = ({
         {open && lastSearches.length > 0 && (
           <SearchHistory
             lastSearches={lastSearches}
-            onSelect={(search: string) => {
-              setOpen(false);
-              handleLastSearch(search);
-            }}
+            onSelect={handleLastSearch}
           />
         )}
       </form>

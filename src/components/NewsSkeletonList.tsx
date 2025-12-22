@@ -79,7 +79,7 @@ const SkeletonList = ({ items = 6 }: Props) => {
 
 const NewsSkeletonList = ({ items = 6 }: Props) => (
   <div className="listContainer">
-    <ListControlsSkeleton />
+    {/* <ListControlsSkeleton /> */}
     <SkeletonList items={items} />
   </div>
 );

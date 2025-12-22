@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { SortPropsProps, Field } from '../types/types';
 import Caret from '../assets/caret.svg?react';
 
@@ -13,13 +14,23 @@ const fields: Array<Field> = [
   { key: 'AUTHOR_DESC', label: 'Author (Z-A)', value: 'AUTHOR' },
 ];
 
+const COMMENT_DISABLED_VALUES = ['POINTS', 'COMMENTS'] as const;
+
 const SortProps = ({ sort, label, onClick }: SortPropsProps) => {
   const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  const isCommentsRoute = pathname.startsWith('/comments');
+
+  // 🔹 fields visibles según ruta
+  const visibleFields = isCommentsRoute
+    ? fields.filter((f) => !COMMENT_DISABLED_VALUES.includes(f.value))
+    : fields;
 
   // 🔹 valor derivado (NO state)
   const direction = sort.isReverse ? 'DESC' : 'ASC';
 
-  const currentOption = fields.find(
+  const currentOption = visibleFields.find(
     (f) => f.value === sort.sortType && f.key.endsWith(`_${direction}`),
   );
 
@@ -32,8 +43,11 @@ const SortProps = ({ sort, label, onClick }: SortPropsProps) => {
       >
         <div>
           <span className="sortProps-label">{label}</span>:{' '}
-          <span className="sortProps-sortType">{currentOption?.label}</span>
+          <span className="sortProps-sortType">
+            {currentOption?.label ?? 'Default'}
+          </span>
         </div>
+
         <Caret
           width={13}
           height={13}
@@ -46,7 +60,7 @@ const SortProps = ({ sort, label, onClick }: SortPropsProps) => {
 
       {open && (
         <div className="sortProps-options">
-          {fields.map((field) => {
+          {visibleFields.map((field) => {
             const isActive =
               field.value === sort.sortType &&
               field.key.endsWith(`_${direction}`);

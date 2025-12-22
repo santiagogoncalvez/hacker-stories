@@ -1,27 +1,31 @@
 import { useStories } from '../hooks/useStories';
-import { ListWithObserver } from './List';
+import { sortActionList } from '../utils/sortActions';
+import { DisplayList } from './List';
 import NoSearchResults from './NoSearchResults';
 
-const EmptySearchState = () => {
-  const { stories, handleRemoveStory, handleMoreStories } = useStories({
-    search: '',
-  });
+const EmptySearchState = ({ sort, setSort, display }) => {
+  const { stories, handleRemoveStory, handleMoreStories } = useStories('');
+
+
+  const sortedList = sortActionList(sort, stories.story.data.hits);
 
   return (
     <>
       <NoSearchResults />
+      <h2 className="popularStoriesTitle">Popular stories</h2>
 
-      <section className="popularStories">
-        <h3 className="popularStoriesTitle">Popular stories</h3>
-
-        <ListWithObserver
-          stories={stories}
-          onRemoveItem={handleRemoveStory}
-          handleMore={handleMoreStories}
-        />
-      </section>
+      <DisplayList
+        stories={stories}
+        sort={sort}
+        setSort={setSort}
+        display={display}
+        sortedList={sortedList}
+        onRemoveItem={handleRemoveStory}
+        handleMoreStories={handleMoreStories}
+      />
     </>
   );
 };
+
 
 export default EmptySearchState;
