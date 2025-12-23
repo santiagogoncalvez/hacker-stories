@@ -1,33 +1,109 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { SortPropsProps, Field } from '../types/types';
+import { useState } from "react";
+import { Field, SortPropsProps } from "../types/types";
 import Caret from '../assets/caret.svg?react';
 
-const fields: Array<Field> = [
-  { key: 'POINTS_DESC', label: 'Most popular', value: 'POINTS' },
-  { key: 'POINTS_ASC', label: 'Least popular', value: 'POINTS' },
-  { key: 'COMMENTS_DESC', label: 'Most comments', value: 'COMMENTS' },
-  { key: 'COMMENTS_ASC', label: 'Fewest comments', value: 'COMMENTS' },
-  { key: 'TITLE_ASC', label: 'Title (A-Z)', value: 'TITLE' },
-  { key: 'TITLE_DESC', label: 'Title (Z-A)', value: 'TITLE' },
-  { key: 'AUTHOR_ASC', label: 'Author (A-Z)', value: 'AUTHOR' },
-  { key: 'AUTHOR_DESC', label: 'Author (Z-A)', value: 'AUTHOR' },
-];
 
-const COMMENT_DISABLED_VALUES = ['POINTS', 'COMMENTS'] as const;
+const ALL_FIELDS: Record<string, Field> = {
+  // STORY
+  TITLE_ASC: { key: 'TITLE_ASC', label: 'Title (A-Z)', value: 'TITLE' },
+  TITLE_DESC: { key: 'TITLE_DESC', label: 'Title (Z-A)', value: 'TITLE' },
 
-const SortProps = ({ sort, label, onClick }: SortPropsProps) => {
+  AUTHOR_ASC: { key: 'AUTHOR_ASC', label: 'Author (A-Z)', value: 'AUTHOR' },
+  AUTHOR_DESC: { key: 'AUTHOR_DESC', label: 'Author (Z-A)', value: 'AUTHOR' },
+
+  COMMENTS_DESC: {
+    key: 'COMMENTS_DESC',
+    label: 'Most comments',
+    value: 'COMMENTS',
+  },
+  COMMENTS_ASC: {
+    key: 'COMMENTS_ASC',
+    label: 'Fewest comments',
+    value: 'COMMENTS',
+  },
+
+  POINTS_DESC: {
+    key: 'POINTS_DESC',
+    label: 'Most points',
+    value: 'POINTS',
+  },
+  POINTS_ASC: {
+    key: 'POINTS_ASC',
+    label: 'Least points',
+    value: 'POINTS',
+  },
+
+  // COMMENT
+  COMMENT_ASC: {
+    key: 'COMMENT_ASC',
+    label: 'Comment (A-Z)',
+    value: 'COMMENT_TEXT',
+  },
+  COMMENT_DESC: {
+    key: 'COMMENT_DESC',
+    label: 'Comment (Z-A)',
+    value: 'COMMENT_TEXT',
+  },
+
+  DATE_DESC: {
+    key: 'DATE_DESC',
+    label: 'Newest',
+    value: 'CREATED_AT',
+  },
+  DATE_ASC: {
+    key: 'DATE_ASC',
+    label: 'Oldest',
+    value: 'CREATED_AT',
+  },
+
+  STORY_ASC: {
+    key: 'STORY_ASC',
+    label: 'Story title (A-Z)',
+    value: 'STORY_TITLE',
+  },
+  STORY_DESC: {
+    key: 'STORY_DESC',
+    label: 'Story title (Z-A)',
+    value: 'STORY_TITLE',
+  },
+};
+
+
+const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
+  story: [
+    ALL_FIELDS.POINTS_DESC,
+    ALL_FIELDS.POINTS_ASC,
+    ALL_FIELDS.COMMENTS_DESC,
+    ALL_FIELDS.COMMENTS_ASC,
+    ALL_FIELDS.TITLE_ASC,
+    ALL_FIELDS.TITLE_DESC,
+    ALL_FIELDS.AUTHOR_ASC,
+    ALL_FIELDS.AUTHOR_DESC,
+  ],
+
+  comment: [
+    ALL_FIELDS.COMMENT_ASC,
+    ALL_FIELDS.COMMENT_DESC,
+    ALL_FIELDS.AUTHOR_ASC,
+    ALL_FIELDS.AUTHOR_DESC,
+    ALL_FIELDS.DATE_DESC,
+    ALL_FIELDS.DATE_ASC,
+    ALL_FIELDS.STORY_ASC,
+    ALL_FIELDS.STORY_DESC,
+  ],
+};
+
+
+const SortProps = ({
+  sort,
+  label,
+  type = 'story',
+  onClick,
+}: SortPropsProps) => {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
 
-  const isCommentsRoute = pathname.startsWith('/comments');
+  const visibleFields = FIELDS_BY_TYPE[type];
 
-  // 🔹 fields visibles según ruta
-  const visibleFields = isCommentsRoute
-    ? fields.filter((f) => !COMMENT_DISABLED_VALUES.includes(f.value))
-    : fields;
-
-  // 🔹 valor derivado (NO state)
   const direction = sort.isReverse ? 'DESC' : 'ASC';
 
   const currentOption = visibleFields.find(
@@ -82,7 +158,7 @@ const SortProps = ({ sort, label, onClick }: SortPropsProps) => {
                     : 'var(--light-primary)',
                 }}
               >
-                <span>{field.label}</span>
+                {field.label}
               </button>
             );
           })}

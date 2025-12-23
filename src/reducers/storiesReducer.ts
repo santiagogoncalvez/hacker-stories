@@ -7,6 +7,7 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
     case 'RESET_LIST':
       return {
         ...state,
+        search: '',
         lists: {
           ...state.lists,
           [dataType]: {

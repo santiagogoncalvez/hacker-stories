@@ -10,34 +10,26 @@ import {
   DisplayProps,
   SortState,
   CommonListProps,
-  StoriesState,
 } from '../types/types.ts';
 import ListIcon from '../assets/list.svg?react';
-import { memo, useEffect, useState } from 'react';
-import { sortActionList, sortList } from '../utils/sortActions.ts';
+import { useEffect, useState } from 'react';
+import { sortActionList } from '../utils/sortActions.ts';
 import SortProps from './SortProps.tsx';
 import RemoveIcon from '../assets/remove.svg?react';
 import SquaresIcon from '../assets/squares.svg?react';
 import ProfileIcon from '../assets/author.svg?react';
 import CaretUnfillIcon from '../assets/caret-unfill.svg?react';
+import StarIcon from '../assets/star.svg?react';
+
 import CommentsIcon from '../assets/comments.svg?react';
 import CaretIcon from '../assets/caret.svg?react';
 import EndContentElement from './EndContentElement.tsx';
 import NewsSkeletonList from './NewsSkeletonList.tsx';
 import SearchForm from './SearchForm.tsx';
-import NoSearchResults from './NoSearchResults.tsx';
-import { useStoriesContext } from '../hooks/useStoriesContext.tsx';
-import EmptySearchState from './EmptySearchState.tsx';
-import { useSortList } from '../hooks/useSortLIst.tsx';
-import DOMPurify from 'dompurify';
-import { useLocation } from 'react-router-dom';
-import { set } from 'lodash';
 
-const stripHtml = (html = ''): string => {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return div.textContent || div.innerText || '';
-};
+import EmptySearchState from './EmptySearchState.tsx';
+import { useLocation } from 'react-router-dom';
+import { useFavoritesContext } from '../context/favorites.tsx';
 
 const formatUpdatedDate = (prefix: string, timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -116,17 +108,45 @@ const RemoveButton = ({ onClick }: { onClick: () => void }) => (
     aria-label="Remove item"
     onClick={onClick}
     title="Remove New"
+    type="button"
   >
     <RemoveIcon className="removeIcon" width={22} height={22} />
   </button>
 );
 
-const CommentInfo = ({ item }: StoryInfoProps) => {
-  const cleanCommentText = DOMPurify.sanitize(item.commentText, {
-    ALLOWED_TAGS: ['p', 'pre', 'code', 'em', 'strong', 'a', 'ul', 'li'],
-    ALLOWED_ATTR: ['href', 'rel', 'target'],
-  });
+const AddFavouriteButton = ({
+  item,
+  onClick,
+}: {
+  item: Story;
+  onClick: () => void;
+}) => {
+  const { toggleFavorite, isFavorite } = useFavoritesContext();
 
+  return (
+    <button
+      className="removeButton"
+      aria-label="Remove item"
+      onClick={() => {
+        toggleFavorite(item);
+      }}
+      title={
+        isFavorite(item.objectId) ? 'Remove to favourites' : 'Add to favourites'
+      }
+      type="button"
+    >
+      <StarIcon
+        className="removeIcon"
+        width={22}
+        height={22}
+        // TODO: agregar acá estilo toggle si esa historia está agregada a favoritos
+        style={{ fill: isFavorite(item.objectId) ? '#343334' : 'none' }}
+      />
+    </button>
+  );
+};
+
+const CommentInfo = ({ item }: StoryInfoProps) => {
   return (
     <dl className="storyLinkInfo">
       {/* HEADER: autor + fecha */}
@@ -141,10 +161,7 @@ const CommentInfo = ({ item }: StoryInfoProps) => {
       </div>
 
       {/* CONTENIDO: comentario */}
-      <p
-        className="storyLinkInfo commentText"
-        dangerouslySetInnerHTML={{ __html: cleanCommentText }}
-      />
+      <p className="storyLinkInfo commentText">{item.commentText}</p>
 
       {/* CONTEXTO: link a la story */}
       {item.url ? (
@@ -185,161 +202,91 @@ const Item = ({ item, onRemoveItem, type }: ItemProps) => {
         </div>
       </div>
 
-      <RemoveButton onClick={handleClick} />
-    </li>
-  );
-
-  return (
-    <li className="story">
-      <div className="storyLink">
-        <div className="storyLinkData">
-          {type === 'story' && (
-            <>
-              {item.url ? (
-                <a href={item.url} target="_blank" className="storyLink">
-                  {item.title}
-                </a>
-              ) : (
-                <p className="storyTitle">{item.title}</p>
-              )}
-              <StoryInfo item={item} />
-            </>
-          )}
-
-          {type === 'comment' && <CommentInfo item={item} />}
-        </div>
-      </div>
-
-      <RemoveButton onClick={handleClick} />
+      {/* <RemoveButton onClick={handleClick} /> */}
+      <AddFavouriteButton item={item} onClick={handleClick} />
     </li>
   );
 };
 
-const fields: Fields = [
-  {
-    key: 'TITLE',
-    label: 'Title',
-    value: 'TITLE',
-    width: '60%',
-  },
-  {
-    key: 'AUTHOR',
-    label: 'Author',
-    value: 'AUTHOR',
-    width: '10%',
-  },
-  {
-    key: 'numComments',
-    label: 'Comments',
-    value: 'COMMENTS',
-    width: '10%',
-  },
-  {
-    key: 'POINTS',
-    label: 'Points',
-    value: 'POINTS',
-    width: '10%',
-  },
+const COMMENT_PREVIEW_LENGTH = 120;
 
-  //! Parche: arreglar el estilo del head 'actions
-  {
-    key: 'ACTIONS',
-    label: 'Actions',
-    value: 'NONE',
-    width: '10%',
-  },
-];
+type TableType = 'story' | 'comment';
 
-const COMMENT_DISABLED_VALUES = ['POINTS', 'COMMENTS'] as const;
+const TABLE_FIELDS: Record<TableType, Fields> = {
+  story: [
+    { key: 'TITLE', label: 'Title', value: 'TITLE', width: '40%' },
+    { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '20%' },
+    { key: 'COMMENTS', label: 'Comments', value: 'COMMENTS', width: '10%' },
+    { key: 'POINTS', label: 'Points', value: 'POINTS', width: '10%' },
+    { key: 'ACTION', label: 'Action', value: '', width: '5%' },
+  ],
 
-const STORY_FIELDS = [
-  { key: 'TITLE', label: 'Title', value: 'TITLE', width: '40%' },
-  { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '20%' },
-  { key: 'COMMENTS', label: 'Comments', value: 'COMMENTS', width: '10%' },
-  { key: 'POINTS', label: 'Points', value: 'POINTS', width: '10%' },
-];
-
-const COMMENT_FIELDS = [
-  {
-    key: 'COMMENT_TEXT',
-    label: 'Comment',
-    value: 'COMMENT_TEXT',
-    width: '50% ',
-  },
-  {
-    key: 'AUTHOR',
-    label: 'Author',
-    value: 'AUTHOR',
-    width: '15%',
-  },
-  {
-    key: 'CREATED_AT',
-    label: 'Date',
-    value: 'CREATED_AT',
-    width: '10%',
-  },
-  {
-    key: 'STORY_TITLE',
-    label: 'Story',
-    value: 'STORY_TITLE',
-    width: '5%',
-  },
-
-  {
-    key: 'ACTION',
-    label: 'Action',
-    value: '',
-    width: '5%',
-  },
-];
+  comment: [
+    {
+      key: 'COMMENT_TEXT',
+      label: 'Comment',
+      value: 'COMMENT_TEXT',
+      width: '50%',
+    },
+    { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '15%' },
+    { key: 'CREATED_AT', label: 'Date', value: 'CREATED_AT', width: '10%' },
+    { key: 'STORY_TITLE', label: 'Story', value: 'TITLE', width: '10%' },
+    { key: 'ACTION', label: 'Action', value: '', width: '5%' },
+  ],
+};
 
 const TableHead = ({
   sort,
   onClick,
+  type,
 }: {
   sort: SortState;
   onClick: (sort: sort) => void;
+  type: 'story' | 'comment';
 }) => {
-  const { pathname } = useLocation();
-  const isCommentsRoute = pathname.startsWith('/comments');
-
-  const visibleFields = isCommentsRoute ? COMMENT_FIELDS : STORY_FIELDS;
+  const fields = TABLE_FIELDS[type];
 
   return (
     <thead className="headTable">
       <tr>
-        {visibleFields.map((field) => {
-          if (field.key === 'ACTION')
+        {fields.map((field) => {
+          if (field.key === 'ACTION') {
             return (
-              <th>
-                <button
+              <th key={field.key}>
+                <span
                   style={{
-                    color: 'var(--black)',
-                    backgroundColor: 'transparent',
-                    padding: 0,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    gap: '6px',
+                    height: '2.5rem',
                   }}
                 >
                   {field.label}
-                </button>
+                  <div style={{ width: 18, height: 18 }} />
+                </span>
               </th>
             );
+          }
+
           return (
             <th key={field.key} scope="col" style={{ width: field.width }}>
               <button
+                type="button"
                 onClick={() => onClick(field.value)}
-                className={field.key}
                 style={{
+                  background: 'transparent',
+                  padding: 0,
                   color:
                     sort.sortType === field.value
                       ? 'var(--secondary)'
                       : 'var(--black)',
-                  backgroundColor: 'transparent',
-                  padding: 0,
                 }}
               >
                 {field.label}
 
-                {sort.sortType === field.value ? (
+                {sort.sortType === field.value && (
                   <CaretIcon
                     width={13}
                     height={13}
@@ -349,8 +296,6 @@ const TableHead = ({
                         : 'rotate(-180deg)',
                     }}
                   />
-                ) : (
-                  <div style={{ width: 18, height: 18 }} />
                 )}
               </button>
             </th>
@@ -361,104 +306,81 @@ const TableHead = ({
   );
 };
 
-const COMMENT_PREVIEW_LENGTH = 120;
+type TableListProps = {
+  list: Story[];
+  sort: SortState;
+  sortAction: (sort: sort) => void;
+  onRemoveItem: (item: Story) => void;
+  type: 'story' | 'comment';
+};
 
 const TableList = ({
   list,
   sort,
-  onRemoveItem,
   sortAction,
+  onRemoveItem,
+  type = 'story',
 }: TableListProps) => {
-  const { pathname } = useLocation();
-  const isCommentsRoute = pathname.startsWith('/comments');
-
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
     <table>
-      <TableHead sort={sort} onClick={sortAction} />
+      <TableHead sort={sort} onClick={sortAction} type={type} />
 
       <tbody>
-        {list.map((item: Story) => {
+        {list.map((item) => {
           const isExpanded = expandedId === item.objectId;
-          const plainText = stripHtml(item.commentText || '');
 
           return (
-            <tr
-              key={item.objectId}
-              className={isExpanded ? 'commentRowExpanded' : undefined}
-            >
-              {isCommentsRoute ? (
+            <tr key={item.objectId}>
+              {type === 'comment' ? (
                 <>
-                  {/* COMMENT TEXT */}
-                  <td className="commentTextCell">
-                    <div className="commentTextWrapper">
-                      {isExpanded ? (
-                        <div
-                          className="commentFull"
-                          dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(item.commentText),
-                          }}
-                        />
-                      ) : (
-                        <span>
-                          {plainText.slice(0, COMMENT_PREVIEW_LENGTH)}
-                          {/* {plainText.length > COMMENT_PREVIEW_LENGTH && '…'} */}
-                        </span>
-                      )}
-
-                      {plainText.length > COMMENT_PREVIEW_LENGTH && (
-                        <button
-                          type="button"
-                          className="commentExpandButton"
-                          onClick={() =>
-                            setExpandedId(isExpanded ? null : item.objectId)
-                          }
-                        >
-                          {isExpanded ? 'Collapse' : '...More'}
-                        </button>
-                      )}
-                    </div>
+                  {/* COMMENT */}
+                  <td>
+                    {isExpanded
+                      ? item.commentText
+                      : item.commentText.slice(0, 120)}
+                    {item.commentText.length > 120 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedId(isExpanded ? null : item.objectId)
+                        }
+                      >
+                        {isExpanded ? 'Collapse' : '...More'}
+                      </button>
+                    )}
                   </td>
 
-                  {/* AUTHOR */}
                   <td>{item.author}</td>
+                  <td>{formatUpdatedDate('', item.createdAtI)}</td>
 
+                  <td>
+                    <a href={item.url} target="_blank" rel="noreferrer">
+                      {item.title}
+                    </a>
+                  </td>
+                </>
+              ) : (
+                <>
                   {/* STORY */}
                   <td>
                     <a href={item.url} target="_blank" rel="noreferrer">
                       {item.title}
                     </a>
                   </td>
-
-                  {/* DATE */}
-                  <td>{formatUpdatedDate('', item.createdAtI)}</td>
-                </>
-              ) : (
-                <>
-                  <th>
-                    <a href={item.url} target="_blank" rel="noreferrer">
-                      {item.title}
-                    </a>
-                  </th>
                   <td>{item.author}</td>
                   <td>{item.numComments}</td>
                   <td>{item.points}</td>
                 </>
               )}
 
-              {/* ACTIONS */}
+              {/* ACTION */}
               <td>
-                {/* {isCommentsRoute && isExpanded && (
-                  <button
-                    type="button"
-                    className="commentCollapseButton"
-                    onClick={() => setExpandedId(null)}
-                  >
-                    Collapse
-                  </button>
-                )} */}
-                <RemoveButton onClick={() => onRemoveItem(item)} />
+                <AddFavouriteButton
+                  item={item}
+                  onClick={() => onRemoveItem(item)}
+                />
               </td>
             </tr>
           );
@@ -525,10 +447,6 @@ const DisplayList = ({
     return null;
   }
 
-  const { pathname } = useLocation();
-  const dataType = pathname === '/' ? 'story' : 'comment';
-  console.log(stories);
-
   return (
     <>
       {stories.hits.length > 0 && display === 'CARD' && (
@@ -563,29 +481,37 @@ const DisplayList = ({
   );
 };
 
+type ListType = 'story' | 'comment';
+
+const getListTypeFromPath = (pathname: string): ListType => {
+  return pathname.startsWith('/comments') ? 'comment' : 'story';
+};
+
 const List = ({
   stories,
   search,
   handleMoreStories,
   onRemoveItem,
 }: ListProps) => {
-  const [sort, setSort] = useState<SortState>({
-    sortType: 'POINTS',
-    isReverse: true,
-  });
-
   const { pathname } = useLocation();
 
+  // 🔹 tipo derivado UNA sola vez
+  const type = getListTypeFromPath(pathname);
+
+  const [sort, setSort] = useState<SortState>(() => ({
+    sortType: type === 'story' ? 'POINTS' : 'COMMENT_TEXT',
+    isReverse: type === 'story',
+  }));
+
+  // 🔹 cuando cambia el tipo, reseteamos sort coherentemente
   useEffect(() => {
-    const newSort = pathname === '/' ? 'POINTS' : 'TITLE';
     setSort({
-      sortType: newSort,
-      isReverse: true,
+      sortType: type === 'story' ? 'POINTS' : 'COMMENT_TEXT',
+      isReverse: type === 'story',
     });
-  }, [pathname]);
+  }, [type]);
 
   const sortedList = sortActionList(sort, stories.hits);
-
   const [display, setDisplay] = useState<DisplayType>('CARD');
 
   return (
@@ -594,6 +520,7 @@ const List = ({
         <SearchForm searchInit={search} />
 
         <SortProps
+          type={type}
           sort={sort}
           label="Sort by"
           onClick={(sortType, isReverse) => {
@@ -608,9 +535,15 @@ const List = ({
       {stories.isLoading ? (
         <NewsSkeletonList />
       ) : stories.isNoResults && stories.hits.length === 0 ? (
-        <EmptySearchState sort={sort} setSort={setSort} display={display} />
+        <EmptySearchState
+          type={type}
+          sort={sort}
+          setSort={setSort}
+          display={display}
+        />
       ) : (
         <DisplayList
+          type={type}
           stories={stories}
           sort={sort}
           setSort={setSort}
@@ -624,4 +557,4 @@ const List = ({
   );
 };
 
-export { List, CommonList, DisplayList };
+export { List, CommonList, DisplayList, Display, TableList };

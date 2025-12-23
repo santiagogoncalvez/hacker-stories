@@ -1,13 +1,12 @@
 import { useStories } from '../hooks/useStories';
 import { sortActionList } from '../utils/sortActions';
 import { DisplayList } from './List';
-import NoSearchResults from './NoSearchResults';
+import {NoSearchResults} from './NoSearchResults';
 
 const EmptySearchState = ({ sort, setSort, display }) => {
   const { stories, handleRemoveStory, handleMoreStories } = useStories('');
 
-
-  const sortedList = sortActionList(sort, stories.story.data.hits);
+  const sortedList = sortActionList(sort, stories.hits);
 
   return (
     <>

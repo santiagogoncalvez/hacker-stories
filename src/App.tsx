@@ -1,27 +1,34 @@
 import Header from './components/Header';
 import News from './pages/News';
 import { StoriesProvider } from './context/stories';
+import { FavoritesProvider } from './context/favorites';
 import { Route, Routes } from 'react-router-dom';
 import { useScrollToTopOnRouteChange } from './hooks/useScrollToTopOnRouteChange';
+import Comments from './pages/Comments';
+import "./App.css";
+import Favorites from './pages/Favorites';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 const App = () => {
   useScrollToTopOnRouteChange();
 
-
   return (
-    <StoriesProvider>
-      <div className="app">
-        <Header />
+    <FavoritesProvider>
+      <StoriesProvider>
+        <div className="app">
+          <Header />
+          <ScrollToTopButton />
 
-        <Routes>
-          <Route path="/" Component={News} />
-          <Route path="/comments" Component={News} />
-          <Route path="/favourites" Component={() => <h1>Favourites</h1>} />
+          <Routes>
+            <Route path="/" Component={News} />
+            <Route path="/comments" Component={Comments} />
+            <Route path="/favourites" Component={Favorites} />
 
-          <Route path="*" Component={() => <h1>404</h1>} />
-        </Routes>
-      </div>
-    </StoriesProvider>
+            <Route path="*" Component={() => <h1>404</h1>} />
+          </Routes>
+        </div>
+      </StoriesProvider>
+    </FavoritesProvider>
   );
 };
 

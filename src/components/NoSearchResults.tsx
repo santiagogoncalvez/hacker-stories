@@ -29,4 +29,42 @@ const NoSearchResults = ({ query }: NoSearchResultsProps) => {
   );
 };
 
-export default NoSearchResults;
+type NoFavoritesResultsProps = {
+  filter?: 'story' | 'comment';
+  query?: string;
+};
+
+const NoFavoritesResults = ({
+  filter = 'story',
+  query,
+}: NoFavoritesResultsProps) => {
+  const label = filter === 'comment' ? 'comments' : 'news';
+
+  return (
+    <div className="noResultsCard" role="status" aria-live="polite">
+      <div className="noResultsContent">
+        <h2 className="noResultsTitle">No favourites found</h2>
+
+        {query ? (
+          <p className="noResultsDescription">
+            We couldn’t find any favourite {label} matching{' '}
+            <span className="noResultsQuery">"{query}"</span>.
+          </p>
+        ) : (
+          <p className="noResultsDescription">
+            You don’t have any favourite {label} for this view.
+          </p>
+        )}
+
+        <ul className="noResultsTips">
+          <li>Try switching between News and Comments</li>
+          <li>Remove or change filters</li>
+          <li>Add favourites from the main list</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+
+export  {NoSearchResults, NoFavoritesResults};

@@ -4,7 +4,6 @@ import { storiesReducer } from '../reducers/storiesReducer';
 import { getAsyncStories } from '../services/getAsyncStories';
 import { getUrl } from '../constants/apiEndpoints';
 import { StoriesState, ListState, Story } from '../types/types';
-import { useStorageState } from './useStorageState';
 
 const emptyList: ListState = {
   hits: [],
@@ -19,17 +18,24 @@ const emptyList: ListState = {
 
 const initialState: StoriesState = {
   search: '',
+  lastSearches: [],
   lists: {
     story: { ...emptyList, dataType: 'story' },
     comment: { ...emptyList, dataType: 'comment' },
+    fallback: { ...emptyList, dataType: 'fallback' },
   },
+};
+
+const getDataType = (path) => {
+  if (path === '/') return 'story';
+  if (path === '/comments') return 'comment';
+  return null;
 };
 
 export function useStories(initialSearch = '') {
   const { pathname } = useLocation();
 
-  const dataType =
-    pathname === '/' ? 'story' : pathname === '/comments' ? 'comment' : null;
+  const dataType = getDataType(pathname);
 
   const [state, dispatch] = useReducer(storiesReducer, initialState, (s) => ({
     ...s,
@@ -50,7 +56,13 @@ export function useStories(initialSearch = '') {
 
     if (!activeList.needsFetch) return;
 
-    dispatch({ type: 'FETCH_INIT', dataType });
+    const { page } = activeList;
+
+    if (page === 0) {
+      dispatch({ type: 'FETCH_INIT', dataType });
+    } else {
+      dispatch({ type: 'FETCH_MORE_INIT', dataType });
+    }
 
     getAsyncStories({
       url: getUrl(state.search, activeList.page, dataType),

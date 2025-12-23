@@ -1,18 +1,9 @@
 import InputWithLabel from './InputWithLabel';
 import SearchIcon from '../assets/search.svg?react';
 import HistoryIcon from '../assets/history.svg?react';
-import { useState } from 'react';
-import { useStoriesContext } from '../hooks/useStoriesContext';
+import { useEffect, useState } from 'react';
 
-type SearchFormProps = {
-  search: string;
-  lastSearches: string[];
-  onSearchInput: (
-    event: React.ChangeEvent<HTMLInputElement> | { target: { value: string } },
-  ) => void;
-  searchAction: (value: string) => void;
-  handleLastSearch: (search: string) => void;
-};
+type SubmitMode = 'submit' | 'filter';
 
 type SearchHistoryProps = {
   lastSearches: string[];
@@ -22,50 +13,74 @@ type SearchHistoryProps = {
 const SearchHistory = ({ lastSearches, onSelect }: SearchHistoryProps) => {
   return (
     <ul className="searchHistory">
-      {lastSearches.map((search) => {
-        // if (!search) return;
-        return (
-          <li key={search} className="searchHistory-option">
-            <button
-              type="button"
-              className="searchHistory-button"
-              onClick={() => {
-                onSelect(search);
-              }}
-            >
-              <HistoryIcon width={18} height={18} />
-              <span>{search}</span>
-            </button>
-          </li>
-        );
-      })}
+      {lastSearches.map((search) => (
+        <li key={search} className="searchHistory-option">
+          <button
+            type="button"
+            className="searchHistory-button"
+            onClick={() => onSelect(search)}
+          >
+            <HistoryIcon width={18} height={18} />
+            <span>{search}</span>
+          </button>
+        </li>
+      ))}
     </ul>
   );
 };
 
+type SearchFormProps = {
+  searchInit?: string;
+  searchAction: (value: string) => void;
+  lastSearches?: string[];
+  placeholder?: string;
+  submitMode?: SubmitMode; // 👈 NUEVO
+};
 
-const SearchForm = ({searchInit}) => {
+const SearchForm = ({
+  searchInit = '',
+  searchAction,
+  lastSearches = [],
+  placeholder = 'Search hacker news...',
+  submitMode = 'submit', // 👈 default seguro
+}: SearchFormProps) => {
   const [search, setSearch] = useState(searchInit);
   const [open, setOpen] = useState(false);
 
-  const { searchAction, lastSearches } = useStoriesContext();
+  useEffect(() => {
+    setSearch(searchInit);
+  }, [searchInit]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!search.trim()) return;
 
-    searchAction(search);
+    const value = search.trim();
+    if (!value) return;
+
+    if (submitMode === 'submit') {
+      searchAction(value);
+    }
+
+    // en ambos casos cerramos UI
     setOpen(false);
   };
 
-  const onSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setOpen(true);
+  const onSearchInput = (
+    value: string | React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const nextValue = typeof value === 'string' ? value : value.target.value;
+
+    setSearch(nextValue);
+
+    // 🔥 filter live
+    if (submitMode === 'filter') {
+      searchAction(nextValue);
+    }
   };
 
-  const handleLastSearch = (term: string) => {
-    setSearch(term);
-    searchAction(term);
+  const handleLastSearch = (value: string) => {
+    setSearch(value);
+    searchAction(value);
     setOpen(false);
   };
 
@@ -77,10 +92,12 @@ const SearchForm = ({searchInit}) => {
             id="searchQuery"
             type="text"
             value={search}
-            placeholder="Search hacker news..."
+            placeholder={placeholder}
             onInputChange={onSearchInput}
             onFocus={() => setOpen(true)}
-            onBlur={() =>{}}
+            onBlur={() => {
+              setTimeout(() => setOpen(false), 150);
+            }}
           />
         </div>
 

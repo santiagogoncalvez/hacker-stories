@@ -15,6 +15,9 @@ const sortActions: SortActions = {
     sortBy(list, (item) => item.author?.toLowerCase() ?? ''),
   COMMENTS: (list: Story[]) => sortBy(list, 'numComments'),
   POINTS: (list: Story[]) => sortBy(list, 'points'),
+  COMMENT_TEXT: (list: Story[]) =>
+    sortBy(list, (item) => item.commentText?.toLowerCase() ?? ''),
+  CREATED_AT: (list: Story[]) => sortBy(list, 'createdAtI'),
 };
 
 export function sortList(list: Story[], sort: sort) {
