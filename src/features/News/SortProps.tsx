@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Field, SortPropsProps } from '../../types/types';
 import Caret from '../../assets/caret.svg?react';
 
@@ -91,6 +91,7 @@ const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
   ],
 };
 
+
 const SortProps = ({
   sort,
   label,
@@ -99,16 +100,41 @@ const SortProps = ({
 }: SortPropsProps) => {
   const [open, setOpen] = useState(false);
 
-  const visibleFields = FIELDS_BY_TYPE[type];
+  // 2. Creamos una referencia para el contenedor principal
+  const sortRef = useRef<HTMLDivElement>(null);
 
+  const visibleFields = FIELDS_BY_TYPE[type];
   const direction = sort.isReverse ? 'DESC' : 'ASC';
 
   const currentOption = visibleFields.find(
     (f) => f.value === sort.sortType && f.key.endsWith(`_${direction}`),
   );
 
+  // 3. Efecto para detectar clics fuera del componente
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Si el menú está abierto y el clic NO fue dentro de sortRef, cerramos
+      if (
+        open &&
+        sortRef.current &&
+        !sortRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    // Escuchamos el evento mousedown (más rápido que click)
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Limpiamos el evento al desmontar el componente
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open]); // Se vuelve a ejecutar cuando 'open' cambia
+
   return (
-    <div className="sortProps">
+    // 4. Asignamos la ref al div principal
+    <div className="sortProps" ref={sortRef}>
       <button
         className="sortProps-openButton"
         type="button"
@@ -127,6 +153,7 @@ const SortProps = ({
           style={{
             color: 'var(--dark-gray)',
             transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s ease', // Opcional: suaviza el giro
           }}
         />
       </button>
@@ -146,7 +173,6 @@ const SortProps = ({
                 onClick={() => {
                   setOpen(false);
                   if (isActive) return;
-
                   onClick(field.value, field.key.endsWith('_DESC'));
                 }}
                 style={{
