@@ -78,6 +78,10 @@
   padding: 0.5rem 0.5rem;
 }
 
+.close-button:hover {
+  background-color: transparent;
+}
+
 /* search clear button */
 .searchClearButton {
   position: absolute;
@@ -414,6 +418,10 @@
   gap: 25px;
 }
 
+.listContainer__cellInner {
+  padding: 0.5rem;
+}
+
 /* keep any existing table margin rule */
 .listContainer table {
   margin: 0;
@@ -501,11 +509,11 @@
 
 /* ensure links inside the inner wrapper don't break layout */
 .listContainer__cellInner a {
-  display: inline-block;
+  /* display: inline-block; */
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
 }
 
 /* ======================================================
@@ -733,12 +741,13 @@
   vertical-align: middle;
 }
 
-/* accessible focus styles */
+a:focus-visible,
 button:focus-visible,
-a:focus-visible {
-  /* outline: 2px solid rgba(0, 0, 0, 0.06); */
-  outline: var(--outline-focus-visible);
-  /* outline: 0px solid; */
+/* input:focus-visible, */
+textarea:focus-visible,
+select:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: var(--outline-focus-visible) !important;
   outline-offset: 2px;
 }
 
@@ -993,10 +1002,6 @@ button {
 .scrollToTopBtn:hover .arrowIcon {
   transform: rotate(-180deg);
   color: var(--light-primary);
-}
-
-button:active {
-  /* border-color: transparent; */
 }
 
 .searchMeta {
