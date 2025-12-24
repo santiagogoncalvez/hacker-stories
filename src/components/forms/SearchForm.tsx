@@ -1,9 +1,9 @@
 import InputWithLabel from '../ui/InputWithLabel';
 import SearchIcon from '../../assets/search.svg?react';
 import HistoryIcon from '../../assets/history.svg?react';
-import CrossIcon from '../../assets/cross.svg?react';
 
 import { useEffect, useState } from 'react';
+import CloseButton from '../ui/CloseButton';
 
 type SubmitMode = 'submit' | 'filter';
 
@@ -12,7 +12,13 @@ type SearchHistoryProps = {
   onSelect: (value: string) => void;
 };
 
-const SearchHistory = ({ lastSearches, onSelect }: SearchHistoryProps) => {
+
+
+const SearchHistory = ({
+  lastSearches,
+  handleRemoveLastSearch,
+  onSelect,
+}: SearchHistoryProps) => {
   return (
     <ul className="searchHistory">
       {lastSearches.map((search) => (
@@ -20,16 +26,33 @@ const SearchHistory = ({ lastSearches, onSelect }: SearchHistoryProps) => {
           <button
             type="button"
             className="searchHistory-button"
-            onClick={() => onSelect(search)}
+            // Cambiamos a onMouseDown para ganar la carrera contra el onBlur
+            onMouseDown={(e) => {
+              e.preventDefault(); // Evita que el input pierda el foco
+              onSelect(search);
+            }}
           >
             <HistoryIcon width={18} height={18} />
             <span>{search}</span>
           </button>
+
+          <CloseButton
+            // Cambiamos a onMouseDown aquí también
+            onMouseDown={(e) => {
+              e.preventDefault(); // IMPORTANTE: evita que el input dispare el onBlur
+              e.stopPropagation();
+              handleRemoveLastSearch(search);
+            }}
+            className="searchHistory-remove"
+            size={18}
+          />
         </li>
       ))}
     </ul>
   );
 };
+
+
 
 type SearchFormProps = {
   searchInit?: string;
@@ -45,6 +68,7 @@ const SearchForm = ({
   lastSearches = [],
   placeholder = 'Search hacker news...',
   submitMode = 'submit',
+  handleRemoveLastSearch,
 }: SearchFormProps) => {
   // local input state so user's typing is immediate and not clobbered
   const [search, setSearch] = useState(searchInit);
@@ -126,14 +150,11 @@ const SearchForm = ({
 
           {/* Clear button */}
           {search && (
-            <button
-              type="button"
-              className="searchClearButton"
+            <CloseButton
               onClick={handleClear}
-              aria-label="Clear search"
-            >
-              <CrossIcon widtgh={22} height={22} style={{ strokeWidth: '2' }} />
-            </button>
+              className="searchClearButton"
+              size={22}
+            />
           )}
         </div>
 
@@ -148,6 +169,7 @@ const SearchForm = ({
         {open && filteredLastSearches.length > 0 && (
           <SearchHistory
             lastSearches={filteredLastSearches}
+            handleRemoveLastSearch={handleRemoveLastSearch}
             onSelect={handleLastSearch}
           />
         )}

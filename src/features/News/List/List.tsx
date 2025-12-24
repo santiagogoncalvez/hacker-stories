@@ -20,7 +20,8 @@ const List = ({
   onRemoveItem,
   searchAction,
   lastSearches,
-}: ListProps) => {
+  handleRemoveLastSearch,
+}: ListProps) => {  
   const { pathname } = useLocation();
   const type = getListTypeFromPath(pathname);
 
@@ -46,6 +47,7 @@ const List = ({
           searchInit={search}
           searchAction={searchAction}
           lastSearches={lastSearches}
+          handleRemoveLastSearch={handleRemoveLastSearch}
         />
 
         <SortProps

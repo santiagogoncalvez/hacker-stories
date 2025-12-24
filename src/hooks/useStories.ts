@@ -131,7 +131,7 @@ export function useStories(initialSearch = '') {
     searchByType: initialSearchByType,
     lastSearches: initialLastSearches,
   } as StoriesState);
-  console.log(state);
+  // console.log(state);
 
   const activeList = dataType ? state.lists[dataType] : null;
   const prevDataTypeRef = useRef<string | null>(null);
@@ -311,8 +311,6 @@ export function useStories(initialSearch = '') {
     }
   };
 
-
-
   const handleMoreStories = () => {
     if (!dataType || !activeList) return;
 
@@ -341,10 +339,18 @@ export function useStories(initialSearch = '') {
     });
   };
 
-
   const handleRemoveStory = (item: Story) => {
     if (!dataType) return;
     dispatch({ type: 'REMOVE_STORY', dataType, payload: item });
+  };
+
+  // NUEVA FUNCIÓN: Eliminar una búsqueda del historial
+  const handleRemoveLastSearch = (term: string) => {
+    const filteredSearches = state.lastSearches.filter((s) => s !== term);
+    dispatch({
+      type: 'SET_LAST_SEARCHES',
+      payload: filteredSearches,
+    });
   };
 
   return {
@@ -355,5 +361,6 @@ export function useStories(initialSearch = '') {
     searchAction,
     handleMoreStories,
     handleRemoveStory,
+    handleRemoveLastSearch,
   };
 }

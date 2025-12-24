@@ -69,6 +69,10 @@
   align-items: center;
 }
 
+.close-button{
+  padding: 0.5rem 0.5rem;
+}
+
 /* search clear button */
 .searchClearButton {
   position: absolute;
@@ -636,7 +640,7 @@ button {
   position: absolute;
   display: flex;
   flex-direction: column;
-  height: fit-content;
+  /* height: fit-content; */
   width: 100%;
   align-items: start;
   /* top: 70px; */
@@ -644,7 +648,7 @@ button {
 
   border: 1px solid #e8e8e8;
   border-radius: var(--boder-radius-app);
-  max-height: 300px;
+  /* max-height: 300px; */
   overflow: auto;
   box-shadow: 0px 0px 10px rgb(220, 220, 220);
   list-style: none;
@@ -653,32 +657,83 @@ button {
   z-index: 2;
 }
 
+
 .searchHistory-option {
+  display: flex;
+  align-items: flex-start; /* 👈 Cambiado de 'center' para que la X no flote en medio si hay mucho texto */
+  justify-content: space-between;
   width: 100%;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--white);
+  position: relative;
 }
 
+
+/* El botón principal de la búsqueda */
 .searchHistory-button {
-  color: var(--black);
-  background-color: white !important;
-  width: 100%;
-  text-align: start;
-  border-radius: var(--boder-radius-app);
-  font-weight: 500;
-  padding: 25px 25px;
   display: flex;
-  align-items: center;
-  justify-content: start;
+  /* 👈 Alinea el icono de reloj con la primera línea de texto */
+  /* align-items: flex-start;  */
+  align-items: center; 
+  
   gap: 10px;
+  flex: 1;
+  background-color: var(--white);
+  border: none;
+  padding: 10px 15px;
+  padding-right: 3rem; /* 👈 Espacio suficiente para que el texto no se solape con la X */
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
   font-weight: 400;
+  min-width: 0; /* 👈 Permite que el flex-item respete el contenedor */
+  
+  /* CLAVE para el crecimiento vertical: */
+  white-space: normal;  /* 👈 Permite que el texto salte de línea */
+  word-break: break-word; /* 👈 Rompe palabras muy largas si es necesario */
+  height: fit-content;
 }
+
+.searchHistory-button svg{
+  min-height: 18px;
+  min-width: 18px;
+}
+
 
 .searchHistory-button:hover {
-  background-color: var(--lighter-gray) !important;
+  background-color: var(--lighter-gray);
+}
+
+
+/* Estilos para el botón de la X */
+.searchHistory-remove {
+  position: absolute;
+  right: 0;
+  top: 0; /* 👈 Lo fijamos arriba para que siempre esté accesible */
+  height: 40px; /* 👈 Ajusta según el alto de tu primera línea */
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  transition: opacity 0.2s, color 0.2s;
+  z-index: 1;
+}
+
+.searchHistory-remove:hover {
+  color: var(--black);
 }
 
 .searchHistory-button.active {
   background-color: #e8e8e8;
 }
+
+
+
 .search-container {
   position: relative;
 }
@@ -688,8 +743,8 @@ button {
   bottom: 1rem;
   right: 1rem;
 
-  width: 3rem;
-  height: 3rem;
+  width: 2.8rem;
+  height: 2.8rem;
 
   display: flex;
   align-items: center;

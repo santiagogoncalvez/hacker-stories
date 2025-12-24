@@ -12,6 +12,7 @@ export const StoriesProvider = ({ children }: { children: any }) => {
     searchAction,
     handleMoreStories,
     handleRemoveStory,
+    handleRemoveLastSearch,
   } = useStories('');
 
   return (
@@ -24,6 +25,7 @@ export const StoriesProvider = ({ children }: { children: any }) => {
         searchAction,
         handleMoreStories,
         handleRemoveStory,
+        handleRemoveLastSearch,
       }}
     >
       {children}
