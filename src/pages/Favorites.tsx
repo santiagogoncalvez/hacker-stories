@@ -3,13 +3,14 @@ import { Story } from '../types/types';
 import CommonList from '../features/News/List/CommonList';
 import Display from '../features/News/List/DisplayToggle';
 
-import  TableList  from '../features/News/List/TableList';
+import TableList from '../features/News/List/TableList';
 import SortProps from '../features/News/SortProps';
 import SearchForm from '../components/forms/SearchForm';
 import EmptyFavoritesState from '../features/Favorites/EmptyFavoritesState';
 import { sortActionList } from '../utils/sortActions';
 import { useFavoritesContext } from '../context/favorites';
 import { NoFavoritesResults } from '../features/News/NoSearchResults';
+import { TABLE_FIELDS } from '../constants/tableFields';
 
 type FavouriteFilter = 'story' | 'comment';
 
@@ -151,6 +152,7 @@ const Favourites = () => {
               }}
               onRemoveItem={handleRemoveItem}
               type={filter}
+              fields={TABLE_FIELDS[filter]}
             />
           )}
         </>
