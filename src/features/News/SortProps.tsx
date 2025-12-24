@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { Field, SortPropsProps } from "../types/types";
-import Caret from '../assets/caret.svg?react';
-
+import { useState } from 'react';
+import { Field, SortPropsProps } from '../../types/types';
+import Caret from '../../assets/caret.svg?react';
 
 const ALL_FIELDS: Record<string, Field> = {
   // STORY
@@ -68,7 +67,6 @@ const ALL_FIELDS: Record<string, Field> = {
   },
 };
 
-
 const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
   story: [
     ALL_FIELDS.POINTS_DESC,
@@ -92,7 +90,6 @@ const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
     ALL_FIELDS.STORY_DESC,
   ],
 };
-
 
 const SortProps = ({
   sort,

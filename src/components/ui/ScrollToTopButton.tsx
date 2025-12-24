@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ArrowIcon from '../assets/arrow.svg?react';
+import ArrowIcon from '../../assets/arrow.svg?react';
 
 type ScrollTarget = React.RefObject<HTMLElement | null> | 'body';
 

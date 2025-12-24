@@ -1,8 +1,7 @@
-import SharedStories from "../components/SharedStories";
-
+import SharedStories from '../components/shared/SharedStories';
 
 const News = () => {
-  return <SharedStories />
+  return <SharedStories />;
 };
 
 export default News;

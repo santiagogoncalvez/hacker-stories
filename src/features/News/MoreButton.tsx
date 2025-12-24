@@ -1,4 +1,4 @@
-import ArrowIcon from '../assets/arrow.svg?react';
+import ArrowIcon from '../../assets/arrow.svg?react';
 
 const MoreButton = ({ onClick }: { onClick: () => void }) => {
   return (

@@ -1,0 +1,734 @@
+
+/* ======================================================
+   Global
+====================================================== */
+* {
+  box-sizing: border-box;
+}
+:root {
+  --boder-radius-app: 6px;
+}
+
+/* ======================================================
+   App container
+====================================================== */
+.app {
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.app h1 {
+  margin-top: 0px;
+}
+
+/* ======================================================
+   Search / Header / Controls
+====================================================== */
+.searchForm {
+  position: relative;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+}
+
+#searchQuery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  height: 2.5rem;
+  padding: 0.5rem 3rem 0.5rem  1.25rem;
+  border-radius: var(--boder-radius-app) !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.searchControls-submitBt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: var(--boder-radius-app);
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+
+.searchControls-submitBt svg {
+  min-width: 1.2rem;
+  min-height: 1.2rem;
+}
+
+/* search-container (single definition) */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* search clear button */
+.searchClearButton {
+  position: absolute;
+  right: 0px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--gray);
+}
+.searchClearButton:hover {
+  color: var(--dark-gray);
+}
+
+/* Header / navigation */
+.appHeader-container {
+  display: flex;
+  flex-direction: column;
+}
+.appHeader-container hr {
+  height: 1px !important;
+  margin: 0;
+  border-radius: var(--boder-radius-app);
+}
+
+.appHeader {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-bottom: 16px;
+  background-color: var(--white);
+}
+
+.appTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.appTitleLink h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+/* Navigation */
+.appNav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+}
+
+.appNav-item {
+  padding: 6px 0 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--dark-gray);
+  cursor: pointer;
+  /* border-radius: var(--boder-radius-app); */
+  background-color: var(--white);
+  background-image: linear-gradient(var(--primary), var(--primary));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 2px;
+  transition:
+    color 0.2s ease,
+    background-size 0.25s ease;
+}
+.appNav-item:hover,
+.appNav-item.active,
+.appNav-item:focus-visible {
+  color: var(--black);
+  background-size: 100% 2px;
+}
+
+/* ======================================================
+   Story list / cards
+====================================================== */
+.news {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.story {
+  padding: 25px 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--boder-radius-app);
+  background: var(--white);
+}
+
+.removeButton {
+  padding: 6px;
+  width: fit-content;
+  height: fit-content;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.removeButton:hover {
+  background-color: var(--lighter-gray);
+}
+.removeButton:focus { /* kept but empty for future customization */ }
+.removeButton:active { /* kept but empty for future customization */ }
+
+.storyLinkData .storyLink {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 500;
+  max-width: 100%;
+}
+.storyLinkData .storyLink:hover {
+  color: var(--light-primary);
+}
+
+.storyLinkData {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0; /* allow shrinking inside flex layout */
+}
+
+.story .storyLinkInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--gray);
+  max-width: 100%;
+  min-width: 0;
+}
+
+.storyLinkInfo div {
+  display: flex;
+  gap: 26px;
+}
+.storyLinkInfo div div {
+  display: flex;
+  gap: 6px;
+}
+
+.label {
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.story .storyLink .storyLinkInfo .label {
+  color: var(--gray);
+}
+
+/* card comment text */
+.commentText {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* storyTitle (kept) */
+.storyTitle {
+  font-size: 1.2rem;
+}
+
+/* ======================================================
+   Controls: sort, display, listControls
+====================================================== */
+.searchControls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.searchControls button {
+  border-radius: var(--boder-radius-app);
+}
+
+.listControls {
+  display: flex;
+  height: fit-content;
+  justify-content: right;
+  gap: 16px;
+  align-items: center;
+}
+
+/* sortProps */
+.sortProps {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: fit-content;
+  flex-wrap: wrap;
+  z-index: 1;
+  width: 100%;
+}
+
+/* sortProps interactive elements & options */
+.sortProps-openButton {
+  background-color: rgb(250, 250, 250);
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  color: var(--black);
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+.sortProps-openButton:hover {
+  background-color: var(--lighter-gray);
+}
+
+.sortProps-options {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  align-items: start;
+  top: 50px;
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  max-height: 300px;
+  overflow: auto;
+  box-shadow: 0px 0px 10px rgb(220, 220, 220);
+}
+.sortProps .sortProps-options .sortProps-option {
+  color: var(--black);
+  background-color: white !important;
+  width: 100%;
+  text-align: start;
+  border-radius: var(--boder-radius-app);
+  padding: 25px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-weight: 400;
+}
+.sortProps-options .sortProps-option:hover {
+  background-color: var(--lighter-gray) !important;
+}
+.sortProps-options .sortProps-option.active {
+  background-color: #e8e8e8;
+}
+
+.sortProps-label {
+  color: var(--gray);
+}
+.sortProps-sortType {
+  color: var(--secondary);
+}
+
+/* display toggle (kept) */
+.display {
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid #e8e8e8;
+  background-color: rgb(250, 250, 250);
+  border-radius: var(--boder-radius-app);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  height: 2.5rem;
+}
+.display button {
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+  color: var(--dark-gray);
+  border-radius: var(--boder-radius-app);
+  background-color: transparent;
+  height: 2rem;
+  width: 2rem;
+  aspect-ratio: 1/1;
+}
+
+.display button:hover {
+  background-color: var(--lighter-gray);
+}
+.display button.active {
+  background-color: #e8e8e8;
+}
+
+/* ======================================================
+   Table styles (scoped to .listContainer)
+   - ensure columns remain columns (no stacking)
+   - add wrapper for horizontal scrolling on small screens
+====================================================== */
+
+.listContainer{
+  display: flex;
+  flex-direction: column;
+    gap: 28px;
+
+}
+
+/* keep any existing table margin rule */
+.listContainer table {
+  margin: 0;
+}
+
+/* table links */
+.listContainer table a {
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3rem;
+}
+.listContainer table a:hover {
+  color: var(--light-primary);
+}
+
+/* head table controls */
+.headTable button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 6px;
+}
+.headTable .ACTIONS:hover {
+  cursor: initial !important;
+}
+
+/* wrapper allowing horizontal scroll to avoid breaking layout */
+.listContainer__tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+/* responsive table with fixed layout so th widths are respected */
+.listContainer__responsiveTable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+/* celdas base: keep td as table-cells */
+.listContainer__responsiveTable th,
+.listContainer__responsiveTable td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: middle;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* internal element for truncation, but do not change td display */
+.listContainer__cellInner {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* expanded state to allow wrapping */
+.listContainer__expanded {
+  white-space: normal;
+  overflow: visible;
+}
+
+/* align top when expanded row shows multi-line content */
+.listContainer__rowExpanded td {
+  vertical-align: top;
+}
+
+/* small expand/collapse button inside table */
+.listContainer__responsiveTable .commentExpandButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+  padding: 0;
+  color: var(--secondary);
+  font-size: 0.95rem;
+}
+
+/* ensure links inside the inner wrapper don't break layout */
+.listContainer__cellInner a {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ======================================================
+   Loader / end content / more button / no results
+====================================================== */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.moreButton-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+.moreButton {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--light-primary);
+  border-radius: var(--boder-radius-app);
+  border: 1px solid var(--light-primary);
+  transition: transform 0.2s ease;
+}
+.moreButton:hover {
+  background-color: transparent;
+  transform: translateY(-4px);
+}
+
+.noResultsCard {
+  padding: 30px 20px;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--boder-radius-app);
+  background: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.noResultsContent { max-width: 480px; }
+.noResultsTitle { margin: 0 0 12px; font-weight: 600; color: var(--black); }
+.noResultsDescription { margin: 0 0 20px; color: var(--gray); }
+.noResultsQuery { font-weight: 500; color: var(--black); }
+.noResultsTips { list-style: none; padding: 0; margin: 0; }
+.noResultsTips li { font-size: 0.9rem; color: var(--gray); margin-bottom: 6px; }
+.noResultsTips li::before { content: '•'; margin-right: 8px; color: var(--light-gray); }
+
+/* ======================================================
+   Skeleton styles (kept)
+====================================================== */
+.skeleton {
+  background: linear-gradient(90deg, #eeeeee 25%, #f5f5f5 37%, #eeeeee 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: 6px;
+}
+@keyframes skeleton-loading {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* skeleton helpers (kept names) */
+.news-skeleton { width: 100%; }
+.story--skeleton { /* pointer-events: none; */ }
+.story--skeleton .storyLinkData { max-width: 100%; }
+.skeleton-title { height: 32px; width: 400px; }
+.story--skeleton .storyLinkInfo { display: flex; flex-direction: column; gap: 10px; }
+.skeleton-row { display: flex; align-items: center; gap: 8px; height: 32px; }
+.skeleton-label { height: 14px; width: 70px; }
+.skeleton-value { height: 14px; width: 90px; }
+.skeleton-value.small { width: 50px; }
+.skeleton-button { width: 42px; height: 42px; border-radius: var(--boder-radius-app); }
+
+/* ======================================================
+   Comment specific (kept)
+====================================================== */
+.commentTextCell { max-width: 420px; vertical-align: top; }
+.commentTextWrapper { position: relative; line-height: 1.45; word-break: break-word; }
+.commentExpandButton { background: none; border: none; cursor: pointer; margin-left: 4px; padding: 0; color: var(--secondary); font-size: 18px; line-height: 1; }
+.commentCollapseButton { background: none; border: none; cursor: pointer; margin-right: 8px; color: var(--secondary); }
+.commentRowExpanded td { vertical-align: top; }
+.commentFull { white-space: normal; }
+.commentFull pre { background: var(--light-primary); padding: 8px; overflow-x: auto; }
+.commentFull code { font-family: monospace; }
+
+/* ======================================================
+   Footer / misc (kept)
+====================================================== */
+.emptyFavoritesTitle { text-align: center; }
+.favouritesFilter--segmented { display: flex; gap: 6px; background-color: rgb(250, 250, 250); border-radius: var(--boder-radius-app); width: fit-content; }
+.favouritesFilter--segmented button { padding: 6px 12px; border-radius: var(--boder-radius-app); background: transparent; border: none; font-size: 0.9rem; font-weight: 500; color: var(--dark-gray); }
+.favouritesFilter--segmented button:hover { background-color: var(--lighter-gray); }
+.favouritesFilter--segmented button.active { background-color: #e8e8e8; color: var(--black); }
+
+.inlineIcon { display: inline-flex; align-items: center; vertical-align: middle; }
+
+/* accessible focus styles */
+button:focus,
+a:focus {
+  outline: 3px solid rgba(0, 0, 0, 0.06);
+  outline-offset: 2px;
+}
+
+/* ======================================================
+   Responsive adjustments
+====================================================== */
+/* medium / tablets */
+@media (max-width: 900px) {
+  .app { /* keep fixed width but add small padding if needed */ }
+  /* .story { padding: 16px; } */
+  .searchHistory-button { padding: 16px 18px; }
+  .listContainer__responsiveTable th,
+  .listContainer__responsiveTable td { padding: 0.45rem 0.6rem; }
+}
+
+/* phones */
+@media (max-width: 640px) {
+  .app { width: 100%; padding: 12px; box-sizing: border-box; }
+  .story { 
+    /* padding: 16px 12px;  */
+    flex-direction: column; align-items: start; }
+  .story .storyLink { flex-direction: column; align-items: flex-start; justify-content: start; gap: 16px; font-size: 1.15rem; }
+  .storyLinkInfo { width: 100%; display: flex; flex-wrap: wrap; gap: 10px; font-size: 0.95rem; }
+  .storyLinkInfo .label { font-size: 0.9rem; }
+
+  .listControls { justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .searchForm { width: 100%; justify-content: space-between; }
+  #searchQuery { width: 100%; min-width: 0; }
+
+  .sortProps { width: 100%; }
+  .sortProps-openButton { width: 100%; }
+
+  /* Tables on mobile: keep columns but allow horizontal scroll;
+     reduce paddings and font-size */
+  .listContainer__responsiveTable th,
+  .listContainer__responsiveTable td { padding: 0.35rem 0.5rem; font-size: 0.95rem; }
+  .listContainer__cellInner { font-size: 0.95rem; }
+}
+
+/* very small phones */
+@media (max-width: 420px) {
+  .app { padding: 8px; }
+  .story { 
+    /* padding: 10px; */
+     gap: 8px; }
+  .listContainer__responsiveTable th,
+  .listContainer__responsiveTable td { padding: 0.25rem 0.4rem; font-size: 0.9rem; }
+  .display button { padding: 4px; }
+}
+
+button {
+  cursor: pointer;
+}
+
+.searchHistory {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  width: 100%;
+  align-items: start;
+  /* top: 70px; */
+  top: 2.8rem;
+
+  border: 1px solid #e8e8e8;
+  border-radius: var(--boder-radius-app);
+  max-height: 300px;
+  overflow: auto;
+  box-shadow: 0px 0px 10px rgb(220, 220, 220);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+}
+
+.searchHistory-option {
+  width: 100%;
+}
+
+.searchHistory-button {
+  color: var(--black);
+  background-color: white !important;
+  width: 100%;
+  text-align: start;
+  border-radius: var(--boder-radius-app);
+  font-weight: 500;
+  padding: 25px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.searchHistory-button:hover {
+  background-color: var(--lighter-gray) !important;
+}
+
+.searchHistory-button.active {
+  background-color: #e8e8e8;
+}
+.search-container {
+  position: relative;
+}
+
+.scrollToTopBtn {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+
+  width: 3rem;
+  height: 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.25rem;
+  font-weight: bold;
+
+  border: 1px solid #828181;
+  border-radius: var(--boder-radius-app);
+  background: var(--white);
+  color: inherit;
+
+  /* cursor: pointer; */
+
+  padding: 0;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.scrollToTopBtn .arrowIcon {
+  width: 25px;
+  height: 25px;
+  color: #828181;
+  transform: rotate(-135deg);
+  transition: transform 0.2s ease;
+  stroke-width: 1.5;
+}
+
+.scrollToTopBtn:hover {
+  opacity: 1;
+  border: 1px solid var(--light-primary);
+  transform: translateY(-2px);
+  background-color: var(--white);
+}
+
+.scrollToTopBtn:hover .arrowIcon {
+  transform: rotate(-180deg);
+  color: var(--light-primary);
+}

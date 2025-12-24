@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { StoriesState } from '../types/types';
-import Loader from './Loader';
+import { StoriesState } from '../../types/types';
+import Loader from '../../components/ui/Loader';
 import MoreButton from './MoreButton';
 
 const EndContentElement = memo(

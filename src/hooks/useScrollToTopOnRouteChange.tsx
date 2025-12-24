@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export function useScrollToTopOnRouteChange() {
-  const { pathname, search, hash } = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    // Scroll instantáneo al top
+    // Solo se ejecutará cuando el pathname cambie (ej: de / a /comments)
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'auto', // 👈 instantáneo
+      behavior: 'auto',
     });
-  }, [pathname, search, hash]);
+  }, [pathname]); // 👈 Eliminamos 'search' y 'hash'
 }

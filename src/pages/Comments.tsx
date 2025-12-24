@@ -1,4 +1,4 @@
-import SharedStories from '../components/SharedStories';
+import SharedStories from '../components/shared/SharedStories';
 
 const Comments = () => {
   return <SharedStories />;

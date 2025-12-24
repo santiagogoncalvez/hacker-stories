@@ -1,13 +1,15 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Story } from '../types/types';
-import { CommonList, Display } from '../components/List';
-import { TableList } from '../components/List';
-import SortProps from '../components/SortProps';
-import SearchForm from '../components/SearchForm';
-import EmptyFavoritesState from '../components/EmptyFavoritesState';
+import CommonList from '../features/News/List/CommonList';
+import Display from '../features/News/List/DisplayToggle';
+
+import  TableList  from '../features/News/List/TableList';
+import SortProps from '../features/News/SortProps';
+import SearchForm from '../components/forms/SearchForm';
+import EmptyFavoritesState from '../features/Favorites/EmptyFavoritesState';
 import { sortActionList } from '../utils/sortActions';
 import { useFavoritesContext } from '../context/favorites';
-import { NoFavoritesResults } from '../components/NoSearchResults';
+import { NoFavoritesResults } from '../features/News/NoSearchResults';
 
 type FavouriteFilter = 'story' | 'comment';
 

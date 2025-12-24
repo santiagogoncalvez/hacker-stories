@@ -1,4 +1,4 @@
-import StarIcon from '../assets/star.svg?react';
+import StarIcon from '../../assets/star.svg?react';
 
 type EmptyFavoritesStateProps = {
   type?: 'story' | 'comment';

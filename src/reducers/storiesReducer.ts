@@ -5,16 +5,16 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
 
   switch (action.type) {
     case 'RESET_LIST':
+      // No vaciamos hits para evitar parpadeos: marcamos la lista para re-fetch
       return {
         ...state,
-        search: '',
         lists: {
           ...state.lists,
           [dataType]: {
             ...state.lists[dataType],
-            hits: [],
+            // mantenemos hits hasta que llegue FETCH_SUCCESS
             page: 0,
-            isLoading: false,
+            isLoading: true,
             isLoadingMore: false,
             isNoResults: false,
             isError: false,
@@ -32,6 +32,7 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
             ...state.lists[dataType],
             isLoading: true,
             isError: false,
+            // don't clear hits here to avoid flicker
           },
         },
       };
@@ -58,8 +59,8 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
             ...state.lists[dataType],
             hits:
               state.lists[dataType].page === 0
-                ? action.hits // fetch inicial o reset
-                : [...state.lists[dataType].hits, ...action.hits], // concatenar para "more"
+                ? action.hits // replace on page 0
+                : [...state.lists[dataType].hits, ...action.hits], // concat for more
             page: action.page,
             isLoading: false,
             isLoadingMore: false,
@@ -93,23 +94,63 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
           [dataType]: {
             ...state.lists[dataType],
             page: state.lists[dataType].page + 1,
-            needsFetch: true, // permite fetch de la siguiente página
+            needsFetch: true,
           },
         },
       };
 
     case 'SET_SEARCH':
+      // If dataType provided, update only that dataType and do NOT clear hits
+      if (dataType) {
+        return {
+          ...state,
+          searchByType: {
+            ...state.searchByType,
+            [dataType]: action.payload,
+          },
+          search: action.payload,
+          lists: {
+            ...state.lists,
+            [dataType]: {
+              ...state.lists[dataType],
+              page: 0,
+              needsFetch: true,
+              isLoading: true,
+              // keep hits until FETCH_SUCCESS
+            },
+          },
+        };
+      }
+
+      // fallback: set global search and mark both main lists for fetch, but don't immediately wipe hits
       return {
         ...state,
         search: action.payload,
+        searchByType: Object.keys(state.searchByType).reduce((acc, k) => {
+          // @ts-ignore
+          acc[k] = action.payload;
+          return acc;
+        }, {} as any),
         lists: {
-          story: { ...state.lists.story, hits: [], page: 0, needsFetch: true },
-          comment: {
-            ...state.lists.comment,
-            hits: [],
+          story: {
+            ...state.lists.story,
             page: 0,
             needsFetch: true,
+            isLoading: true,
           },
+          comment: {
+            ...state.lists.comment,
+            page: 0,
+            needsFetch: true,
+            isLoading: true,
+          },
+          ...Object.keys(state.lists)
+            .filter((k) => k !== 'story' && k !== 'comment')
+            .reduce((acc, key) => {
+              // @ts-ignore
+              acc[key] = state.lists[key];
+              return acc;
+            }, {} as any),
         },
       };
 
@@ -125,6 +166,12 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
             ),
           },
         },
+      };
+
+    case 'SET_LAST_SEARCHES':
+      return {
+        ...state,
+        lastSearches: action.payload,
       };
 
     default:
