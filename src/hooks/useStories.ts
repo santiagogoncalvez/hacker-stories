@@ -45,6 +45,8 @@ const emptyList: ListProps = {
   isError: false,
   needsFetch: true,
   dataType: null,
+  nbHits: 0,
+  processingTimeMs: 0,
 };
 
 const initialState: StoriesState = {
@@ -131,7 +133,7 @@ export function useStories(initialSearch = '') {
     searchByType: initialSearchByType,
     lastSearches: initialLastSearches,
   } as StoriesState);
-  // console.log(state);
+  console.log(state.lists);
 
   const activeList = dataType ? state.lists[dataType] : null;
   const prevDataTypeRef = useRef<string | null>(null);
@@ -248,6 +250,8 @@ export function useStories(initialSearch = '') {
           dataType,
           hits: res?.hits ?? [],
           page: res?.page ?? 0,
+          nbHits: res?.nbHits ?? 0,
+          processingTimeMs: res?.processingTimeMs ?? 0,
         });
       })
       .catch(() => {

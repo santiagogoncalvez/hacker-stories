@@ -8,6 +8,7 @@ import NewsSkeletonList from '../NewsSkeletonList';
 import DisplayList from './DisplayList';
 import DisplayToggle from './DisplayToggle';
 import { ListProps, SortState, DisplayType } from '../../../types/types';
+import SearchMeta from './SearchMeta';
 
 type ListType = 'story' | 'comment';
 const getListTypeFromPath = (pathname: string): ListType =>
@@ -21,7 +22,7 @@ const List = ({
   searchAction,
   lastSearches,
   handleRemoveLastSearch,
-}: ListProps) => {  
+}: ListProps) => {
   const { pathname } = useLocation();
   const type = getListTypeFromPath(pathname);
 
@@ -60,6 +61,12 @@ const List = ({
         <DisplayToggle display={display} onClick={(d) => setDisplay(d)} />
       </div>
 
+      <SearchMeta
+        nbHits={stories.nbHits}
+        processingTimeMs={stories.processingTimeMs}
+        isLoading={stories.isLoading}
+      />
+      
       {stories.isLoading ? (
         <NewsSkeletonList />
       ) : stories.isNoResults && stories.hits.length === 0 ? (
@@ -70,16 +77,18 @@ const List = ({
           display={display}
         />
       ) : (
-        <DisplayList
-          type={type}
-          stories={stories}
-          sort={sort}
-          setSort={setSort}
-          display={display}
-          sortedList={sortedList}
-          onRemoveItem={onRemoveItem}
-          handleMoreStories={handleMoreStories}
-        />
+        <>
+          <DisplayList
+            type={type}
+            stories={stories}
+            sort={sort}
+            setSort={setSort}
+            display={display}
+            sortedList={sortedList}
+            onRemoveItem={onRemoveItem}
+            handleMoreStories={handleMoreStories}
+          />
+        </>
       )}
     </section>
   );

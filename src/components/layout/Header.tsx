@@ -6,13 +6,9 @@ const Header = () => {
   return (
     <header className="appHeader-container">
       <div className="appHeader">
-        <div className="appHeader-left">
-          <span className="appTitle">
-            <Link to="/" className="appTitleLink">
-              <h1>HS</h1>
-            </Link>
-          </span>
-        </div>
+        <Link to="/" className="appTitleLink">
+          <h1>HS</h1>
+        </Link>
 
         <nav className="appNav">
           <Link

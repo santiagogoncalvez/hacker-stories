@@ -51,6 +51,7 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
       };
 
     case 'FETCH_SUCCESS':
+      console.log(action);
       return {
         ...state,
         lists: {
@@ -67,6 +68,8 @@ export const storiesReducer = (state: StoriesState, action: StoriesAction) => {
             isNoResults: action.hits.length === 0,
             isError: false,
             needsFetch: false,
+            nbHits: action.nbHits,
+            processingTimeMs: action.processingTimeMs,
           },
         },
       };

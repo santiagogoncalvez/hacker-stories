@@ -25,6 +25,8 @@ const mapData = (data, dataType: string) => {
         tags: story._tags,
       })),
       page: data.page,
+      nbHits: data.nbHits,
+      processingTimeMs: data.processingTimeMS,
     };
 
   if (dataType === 'comment')
@@ -39,6 +41,8 @@ const mapData = (data, dataType: string) => {
         tags: story._tags,
       })),
       page: data.page,
+      nbHits: data.nbHits,
+      processingTimeMs: data.processingTimeMS,
     };
 };
 
