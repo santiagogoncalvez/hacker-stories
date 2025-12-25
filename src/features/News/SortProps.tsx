@@ -1,15 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import Select, {
+  components,
+  ValueContainerProps,
+  StylesConfig,
+} from 'react-select';
 import { Field, SortPropsProps } from '../../types/types';
 import Caret from '../../assets/caret.svg?react';
 
 const ALL_FIELDS: Record<string, Field> = {
-  // STORY
   TITLE_ASC: { key: 'TITLE_ASC', label: 'Title (A-Z)', value: 'TITLE' },
   TITLE_DESC: { key: 'TITLE_DESC', label: 'Title (Z-A)', value: 'TITLE' },
-
   AUTHOR_ASC: { key: 'AUTHOR_ASC', label: 'Author (A-Z)', value: 'AUTHOR' },
   AUTHOR_DESC: { key: 'AUTHOR_DESC', label: 'Author (Z-A)', value: 'AUTHOR' },
-
   COMMENTS_DESC: {
     key: 'COMMENTS_DESC',
     label: 'Most comments',
@@ -20,19 +22,8 @@ const ALL_FIELDS: Record<string, Field> = {
     label: 'Fewest comments',
     value: 'COMMENTS',
   },
-
-  POINTS_DESC: {
-    key: 'POINTS_DESC',
-    label: 'Most points',
-    value: 'POINTS',
-  },
-  POINTS_ASC: {
-    key: 'POINTS_ASC',
-    label: 'Least points',
-    value: 'POINTS',
-  },
-
-  // COMMENT
+  POINTS_DESC: { key: 'POINTS_DESC', label: 'Most points', value: 'POINTS' },
+  POINTS_ASC: { key: 'POINTS_ASC', label: 'Least points', value: 'POINTS' },
   COMMENT_ASC: {
     key: 'COMMENT_ASC',
     label: 'Comment (A-Z)',
@@ -43,18 +34,8 @@ const ALL_FIELDS: Record<string, Field> = {
     label: 'Comment (Z-A)',
     value: 'COMMENT_TEXT',
   },
-
-  DATE_DESC: {
-    key: 'DATE_DESC',
-    label: 'Newest',
-    value: 'CREATED_AT',
-  },
-  DATE_ASC: {
-    key: 'DATE_ASC',
-    label: 'Oldest',
-    value: 'CREATED_AT',
-  },
-
+  DATE_DESC: { key: 'DATE_DESC', label: 'Newest', value: 'CREATED_AT' },
+  DATE_ASC: { key: 'DATE_ASC', label: 'Oldest', value: 'CREATED_AT' },
   STORY_ASC: {
     key: 'STORY_ASC',
     label: 'Story title (A-Z)',
@@ -78,7 +59,6 @@ const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
     ALL_FIELDS.AUTHOR_ASC,
     ALL_FIELDS.AUTHOR_DESC,
   ],
-
   comment: [
     ALL_FIELDS.COMMENT_ASC,
     ALL_FIELDS.COMMENT_DESC,
@@ -91,6 +71,35 @@ const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
   ],
 };
 
+const CustomValueContainer = ({
+  children,
+  ...props
+}: ValueContainerProps<Field>) => (
+  <components.ValueContainer {...props}>
+    <div
+      style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
+    >
+      <span className="sortProps-label">{props.selectProps.placeholder}:</span>
+      {children}
+    </div>
+  </components.ValueContainer>
+);
+
+const CustomDropdownIndicator = (props: any) => (
+  <components.DropdownIndicator {...props}>
+    <Caret
+      width={12}
+      height={12}
+      style={{
+        color: 'var(--dark-gray)',
+        transform: props.selectProps.menuIsOpen
+          ? 'rotate(180deg)'
+          : 'rotate(0deg)',
+        transition: 'transform 0.2s ease',
+      }}
+    />
+  </components.DropdownIndicator>
+);
 
 const SortProps = ({
   sort,
@@ -98,95 +107,94 @@ const SortProps = ({
   type = 'story',
   onClick,
 }: SortPropsProps) => {
-  const [open, setOpen] = useState(false);
-
-  // 2. Creamos una referencia para el contenedor principal
-  const sortRef = useRef<HTMLDivElement>(null);
-
-  const visibleFields = FIELDS_BY_TYPE[type];
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const options = FIELDS_BY_TYPE[type];
   const direction = sort.isReverse ? 'DESC' : 'ASC';
 
-  const currentOption = visibleFields.find(
+  const currentValue = options.find(
     (f) => f.value === sort.sortType && f.key.endsWith(`_${direction}`),
   );
 
-  // 3. Efecto para detectar clics fuera del componente
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // Si el menú está abierto y el clic NO fue dentro de sortRef, cerramos
-      if (
-        open &&
-        sortRef.current &&
-        !sortRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
+  const isOptionSelected = (option: Field) => {
+    return (
+      option.value === sort.sortType && option.key.endsWith(`_${direction}`)
+    );
+  };
 
-    // Escuchamos el evento mousedown (más rápido que click)
-    document.addEventListener('mousedown', handleClickOutside);
-
-    // Limpiamos el evento al desmontar el componente
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [open]); // Se vuelve a ejecutar cuando 'open' cambia
+  const styles: StylesConfig<Field> = {
+    control: (base, state) => ({
+      ...base,
+      border: 'none',
+      boxShadow: 'none',
+      background: 'transparent',
+      height: '2.5rem',
+      minHeight: '2.5rem',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      flexWrap: 'nowrap',
+      outline: state.isFocused ? '2px solid #616060' : 'none',
+      outlineOffset: '2px',
+      borderRadius: 'var(--boder-radius-app)',
+    }),
+    valueContainer: (base) => ({
+      ...base,
+      padding: '0 12px',
+      display: 'flex',
+      alignItems: 'center',
+      height: '2.5rem',
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: 'var(--secondary)',
+      fontWeight: 500,
+      margin: '0 0 0 10px',
+      position: 'static',
+      transform: 'none',
+      display: 'flex',
+      alignItems: 'center',
+    }),
+    input: (base) => ({ ...base, margin: 0, padding: 0 }),
+    indicatorSeparator: () => ({ display: 'none' }),
+    indicatorsContainer: (base) => ({
+      ...base,
+      height: '2.5rem',
+    }),
+    menu: (base) => ({ ...base, margin: 0, zIndex: 9999 }),
+  };
 
   return (
-    // 4. Asignamos la ref al div principal
-    <div className="sortProps" ref={sortRef}>
-      <button
-        className="sortProps-openButton"
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        <div>
-          <span className="sortProps-label">{label}</span>:{' '}
-          <span className="sortProps-sortType">
-            {currentOption?.label ?? 'Default'}
-          </span>
-        </div>
-
-        <Caret
-          width={13}
-          height={13}
-          style={{
-            color: 'var(--dark-gray)',
-            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s ease', // Opcional: suaviza el giro
-          }}
-        />
-      </button>
-
-      {open && (
-        <div className="sortProps-options">
-          {visibleFields.map((field) => {
-            const isActive =
-              field.value === sort.sortType &&
-              field.key.endsWith(`_${direction}`);
-
-            return (
-              <button
-                key={field.key}
-                className="sortProps-option"
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  if (isActive) return;
-                  onClick(field.value, field.key.endsWith('_DESC'));
-                }}
-                style={{
-                  backgroundColor: isActive
-                    ? 'var(--secondary)'
-                    : 'var(--light-primary)',
-                }}
-              >
-                {field.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
+    <div className="sortProps">
+      <Select
+        instanceId="sort-select-id"
+        options={options}
+        value={currentValue}
+        menuIsOpen={menuIsOpen}
+        onMenuOpen={() => setMenuIsOpen(true)}
+        onMenuClose={() => setMenuIsOpen(false)}
+        isOptionSelected={isOptionSelected}
+        onChange={(opt) => {
+          if (opt) {
+            onClick(opt.value, opt.key.endsWith('_DESC'));
+            setMenuIsOpen(false);
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !menuIsOpen) {
+            setMenuIsOpen(true);
+            e.preventDefault();
+          }
+        }}
+        placeholder={label}
+        className="sortProps-select-container"
+        classNamePrefix="sortProps"
+        isSearchable={false}
+        styles={styles}
+        components={{
+          ValueContainer: CustomValueContainer,
+          DropdownIndicator: CustomDropdownIndicator,
+        }}
+      />
     </div>
   );
 };
