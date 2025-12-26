@@ -1,4 +1,3 @@
-
 import * as Ariakit from '@ariakit/react';
 import { useEffect, useRef, useState } from 'react';
 import SearchIcon from '../../assets/search.svg?react';
@@ -6,13 +5,23 @@ import CloseButton from '../ui/CloseButton';
 
 const MAX_LAST_SEARCHES = 5;
 
+type SearchFormProps = {
+  searchInit?: string;
+  searchAction: (value: string) => void;
+  handleRemoveLastSearch: (value: string) => void;
+  lastSearches?: string[];
+  placeholder?: string;
+  mode?: 'button' | 'live';
+};
+
 export default function SearchForm({
   searchInit = '',
   searchAction,
   handleRemoveLastSearch,
   lastSearches = [],
   placeholder = 'Search...',
-}) {
+  mode = 'button',
+}: SearchFormProps) {
   const items = lastSearches
     .filter((s) => typeof s === 'string' && s.trim() !== '')
     .slice(0, MAX_LAST_SEARCHES);
@@ -20,9 +29,9 @@ export default function SearchForm({
   const [draft, setDraft] = useState(searchInit);
   const userDraftRef = useRef(searchInit);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const lastSearchRef = useRef<string>(searchInit); // Para evitar búsquedas duplicadas
+  const lastSearchRef = useRef<string>(searchInit);
 
-  // Sync desde routing
+  // Sincronización con cambios externos (ej. navegación o reset del store)
   useEffect(() => {
     setDraft(searchInit);
     userDraftRef.current = searchInit;
@@ -42,34 +51,40 @@ export default function SearchForm({
 
   const executeSearch = (value: string) => {
     const trimmed = value.trim();
-    if (trimmed === '') return; // opcional: evitar búsqueda vacía
-    if (trimmed === lastSearchRef.current) return; // no repetir última búsqueda
+    // Evita disparar la misma búsqueda si no ha cambiado el texto
+    if (trimmed === lastSearchRef.current) return;
 
     lastSearchRef.current = trimmed;
     searchAction(trimmed);
   };
 
+  // Modo LIVE: Ejecuta la acción inmediatamente al cambiar el draft
+  // Solo se dispara si no estamos navegando por el historial (activeIndex === null)
+  useEffect(() => {
+    if (mode === 'live' && activeIndex === null) {
+      executeSearch(draft);
+    }
+  }, [draft, mode, activeIndex]);
+
   const moveDown = () => {
     if (items.length === 0) return;
-
     if (activeIndex === null) {
-      setActiveIndex(0); // siempre seleccionar primer item
+      setActiveIndex(0);
     } else if (activeIndex < items.length - 1) {
       setActiveIndex(activeIndex + 1);
     } else {
-      setActiveIndex(null); // volver al draft
+      setActiveIndex(null);
     }
   };
 
   const moveUp = () => {
     if (items.length === 0) return;
-
     if (activeIndex === null) {
-      setActiveIndex(items.length - 1); // seleccionar último item
+      setActiveIndex(items.length - 1);
     } else if (activeIndex > 0) {
       setActiveIndex(activeIndex - 1);
     } else {
-      setActiveIndex(null); // volver al draft
+      setActiveIndex(null);
     }
   };
 
@@ -80,6 +95,7 @@ export default function SearchForm({
 
   const commitSearch = (value: string) => {
     userDraftRef.current = value;
+    setDraft(value);
     setActiveIndex(null);
     executeSearch(value);
     store.setOpen(false);
@@ -104,8 +120,9 @@ export default function SearchForm({
           placeholder={placeholder}
           value={displayedDraft}
           onChange={(e) => {
-            setDraft(e.target.value);
-            userDraftRef.current = e.target.value;
+            const val = e.target.value;
+            setDraft(val);
+            userDraftRef.current = val;
             setActiveIndex(null);
           }}
           onKeyDown={(e) => {
@@ -167,8 +184,12 @@ export default function SearchForm({
             >
               <div className="searchHistory-button">{item}</div>
               <CloseButton
-                onClick={() => {}}
-                onMouseDown={() => handleRemoveLastSearch(item)}
+                onMouseDown={(e) => {
+                  // Prevenir que el click en la X seleccione el item o cierre el popover
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleRemoveLastSearch(item);
+                }}
                 size={18}
                 className="searchHistory-remove"
               />

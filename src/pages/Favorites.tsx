@@ -116,7 +116,7 @@ const Favourites = () => {
               searchAction={setSearch}
               lastSearches={[]}
               placeholder="Filter favorites..."
-              submitMode="filter"
+              mode='live'
             />
 
             <SortProps
