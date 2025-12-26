@@ -8,7 +8,7 @@
   --boder-radius-app: 6px;
   --outline-focus-visible: 2px solid var(--gray);
 }
-body{
+body {
   margin-top: 0px !important;
 }
 
@@ -521,6 +521,7 @@ body{
   z-index: 10; /* Asegura que el menú quede por encima de otros elementos */
   width: 100%;
   max-width: 15rem;
+  width: 100%;
 }
 
 .sortProps-select-container {
@@ -555,8 +556,13 @@ body{
   align-items: center !important;
   justify-content: center;
   height: 2.5rem !important;
-  padding: 0 12px !important;
+  /* padding: 0 0 0 12px !important; */
 }
+
+.sortProps__value-container input{
+  display: none !important;
+}
+
 
 .sortProps__value-container div {
   height: 2.5rem;
@@ -1058,10 +1064,10 @@ select:focus-visible,
     font-size: 0.95rem;
   }
 
-  .storyLinkInfo div{
+  .storyLinkInfo div {
     flex-direction: column;
   }
-  .storyLinkInfo div div{
+  .storyLinkInfo div div {
     flex-direction: row;
   }
 
@@ -1074,10 +1080,6 @@ select:focus-visible,
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
-  }
-
-  .sortProps {
-    width: 100%;
   }
   .sortProps-openButton {
     width: 100%;
