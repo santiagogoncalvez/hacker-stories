@@ -49,6 +49,7 @@ const List = ({
           searchAction={searchAction}
           lastSearches={lastSearches}
           handleRemoveLastSearch={handleRemoveLastSearch}
+          placeholder={type === 'story'? "Search stories...": "Search comments..."}
         />
 
         <SortProps
@@ -66,7 +67,7 @@ const List = ({
         processingTimeMs={stories.processingTimeMs}
         isLoading={stories.isLoading}
       />
-      
+
       {stories.isLoading ? (
         <NewsSkeletonList />
       ) : stories.isNoResults && stories.hits.length === 0 ? (

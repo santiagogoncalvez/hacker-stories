@@ -9,7 +9,7 @@ import { getAsyncStories } from '../services/getAsyncStories';
 import { getUrl } from '../constants/apiEndpoints';
 import { StoriesState, ListProps, Story } from '../types/types';
 
-const MAX_LAST_SEARCHES = 5;
+const MAX_LAST_SEARCHES = 6; // Porque una búsqueda puede ser vacía y tienen que estar.
 const LAST_SEARCHES_KEY = 'hn:lastSearches';
 
 const SUPPORTED_DATA_TYPES = ['story', 'comment'] as const;
@@ -133,7 +133,7 @@ export function useStories(initialSearch = '') {
     searchByType: initialSearchByType,
     lastSearches: initialLastSearches,
   } as StoriesState);
-  console.log(state.lists);
+  // console.log(state.lists);
 
   const activeList = dataType ? state.lists[dataType] : null;
   const prevDataTypeRef = useRef<string | null>(null);

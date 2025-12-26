@@ -1,181 +1,181 @@
-import InputWithLabel from '../ui/InputWithLabel';
-import SearchIcon from '../../assets/search.svg?react';
-import HistoryIcon from '../../assets/history.svg?react';
 
-import { useEffect, useState } from 'react';
+import * as Ariakit from '@ariakit/react';
+import { useEffect, useRef, useState } from 'react';
+import SearchIcon from '../../assets/search.svg?react';
 import CloseButton from '../ui/CloseButton';
 
-type SubmitMode = 'submit' | 'filter';
+const MAX_LAST_SEARCHES = 5;
 
-type SearchHistoryProps = {
-  lastSearches: string[];
-  onSelect: (value: string) => void;
-};
-
-
-
-const SearchHistory = ({
-  lastSearches,
-  handleRemoveLastSearch,
-  onSelect,
-}: SearchHistoryProps) => {
-  return (
-    <ul className="searchHistory">
-      {lastSearches.map((search) => (
-        <li key={search} className="searchHistory-option">
-          <button
-            type="button"
-            className="searchHistory-button"
-            // Cambiamos a onMouseDown para ganar la carrera contra el onBlur
-            onMouseDown={(e) => {
-              e.preventDefault(); // Evita que el input pierda el foco
-              onSelect(search);
-            }}
-          >
-            <HistoryIcon width={18} height={18} />
-            <span>{search}</span>
-          </button>
-
-          <CloseButton
-            // Cambiamos a onMouseDown aquí también
-            onMouseDown={(e) => {
-              e.preventDefault(); // IMPORTANTE: evita que el input dispare el onBlur
-              e.stopPropagation();
-              handleRemoveLastSearch(search);
-            }}
-            className="searchHistory-remove"
-            size={18}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-
-
-type SearchFormProps = {
-  searchInit?: string;
-  searchAction: (value: string) => void;
-  lastSearches?: string[];
-  placeholder?: string;
-  submitMode?: SubmitMode;
-};
-
-const SearchForm = ({
+export default function SearchForm({
   searchInit = '',
   searchAction,
-  lastSearches = [],
-  placeholder = 'Search hacker news...',
-  submitMode = 'submit',
   handleRemoveLastSearch,
-}: SearchFormProps) => {
-  // local input state so user's typing is immediate and not clobbered
-  const [search, setSearch] = useState(searchInit);
-  const [open, setOpen] = useState(false);
+  lastSearches = [],
+  placeholder = 'Search...',
+}) {
+  const items = lastSearches
+    .filter((s) => typeof s === 'string' && s.trim() !== '')
+    .slice(0, MAX_LAST_SEARCHES);
 
-  // Only apply external searchInit to local input when input is NOT focused/open.
-  // This prevents flashes when navigation/pop occurs while user is interacting.
+  const [draft, setDraft] = useState(searchInit);
+  const userDraftRef = useRef(searchInit);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const lastSearchRef = useRef<string>(searchInit); // Para evitar búsquedas duplicadas
+
+  // Sync desde routing
   useEffect(() => {
-    if (!open) {
-      // Only update if different
-      if (search !== searchInit) {
-        setSearch(searchInit);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchInit, open]);
+    setDraft(searchInit);
+    userDraftRef.current = searchInit;
+    setActiveIndex(null);
+    lastSearchRef.current = searchInit;
+  }, [searchInit]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const store = Ariakit.useComboboxStore({
+    value: draft,
+    setValue: (value) => {
+      setDraft(value);
+      userDraftRef.current = value;
+      setActiveIndex(null);
+    },
+    autoSelect: false,
+  });
 
-    const value = search.trim();
+  const executeSearch = (value: string) => {
+    const trimmed = value.trim();
+    if (trimmed === '') return; // opcional: evitar búsqueda vacía
+    if (trimmed === lastSearchRef.current) return; // no repetir última búsqueda
 
-    // Evitar búsqueda duplicada comparando con searchInit (estado actual)
-    if (value === searchInit) return;
-
-    if (submitMode === 'submit') {
-      searchAction(value);
-    }
-
-    setOpen(false);
+    lastSearchRef.current = trimmed;
+    searchAction(trimmed);
   };
 
-  const onSearchInput = (
-    value: string | React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const nextValue = typeof value === 'string' ? value : value.target.value;
-    setSearch(nextValue);
+  const moveDown = () => {
+    if (items.length === 0) return;
 
-    if (submitMode === 'filter') {
-      searchAction(nextValue);
-    }
-  };
-
-  const handleLastSearch = (value: string) => {
-    setSearch(value);
-    searchAction(value);
-    setOpen(false);
-  };
-
-  const handleClear = () => {
-    setSearch('');
-
-    if (submitMode === 'filter') {
-      searchAction('');
+    if (activeIndex === null) {
+      setActiveIndex(0); // siempre seleccionar primer item
+    } else if (activeIndex < items.length - 1) {
+      setActiveIndex(activeIndex + 1);
     } else {
-      // If submit mode is submit, user cleared input but didn't submit.
-      // Optionally we could call searchAction('') to trigger empty search.
+      setActiveIndex(null); // volver al draft
     }
   };
 
-  // Filter last searches (non-empty) for the dropdown
-  const filteredLastSearches = lastSearches.filter(Boolean);
+  const moveUp = () => {
+    if (items.length === 0) return;
+
+    if (activeIndex === null) {
+      setActiveIndex(items.length - 1); // seleccionar último item
+    } else if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+    } else {
+      setActiveIndex(null); // volver al draft
+    }
+  };
+
+  const resetToUserDraft = () => {
+    setActiveIndex(null);
+    setDraft(userDraftRef.current);
+  };
+
+  const commitSearch = (value: string) => {
+    userDraftRef.current = value;
+    setActiveIndex(null);
+    executeSearch(value);
+    store.setOpen(false);
+  };
+
+  const displayedDraft =
+    activeIndex === null ? userDraftRef.current : items[activeIndex];
 
   return (
-    <div className="searchControls">
-      <form className="searchForm" onSubmit={handleSubmit}>
-        <div className="search-container">
-          <InputWithLabel
-            id="searchQuery"
-            type="text"
-            value={search}
-            placeholder={placeholder}
-            onInputChange={onSearchInput}
-            onFocus={() => setOpen(true)}
-            onBlur={() => {
-              setTimeout(() => setOpen(false), 150);
-            }}
-          />
+    <form
+      className="searchForm"
+      onSubmit={(e) => {
+        e.preventDefault();
+        commitSearch(displayedDraft);
+      }}
+      style={{ position: 'relative' }}
+    >
+      <div className="search-container">
+        <Ariakit.Combobox
+          store={store}
+          id="searchQuery"
+          placeholder={placeholder}
+          value={displayedDraft}
+          onChange={(e) => {
+            setDraft(e.target.value);
+            userDraftRef.current = e.target.value;
+            setActiveIndex(null);
+          }}
+          onKeyDown={(e) => {
+            const isOpen = store.getState().open;
 
-          {/* Clear button */}
-          {search && (
-            <CloseButton
-              onClick={handleClear}
-              className="searchClearButton"
-              size={22}
-            />
-          )}
-        </div>
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (!isOpen) {
+                store.setOpen(true);
+                return;
+              }
+              moveDown();
+            }
 
-        <button
-          type="submit"
-          className="searchControls-submitBt"
-          aria-label="Submit form"
+            if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              if (!isOpen) {
+                store.setOpen(true);
+                return;
+              }
+              moveUp();
+            }
+
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              resetToUserDraft();
+              store.setOpen(false);
+            }
+
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              commitSearch(displayedDraft);
+            }
+          }}
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="searchControls-submitBt"
+        aria-label="Search"
+      >
+        <SearchIcon width={18} height={18} />
+      </button>
+
+      {items.length > 0 && (
+        <Ariakit.ComboboxPopover
+          store={store}
+          portal={false}
+          className="searchHistory"
         >
-          <SearchIcon />
-        </button>
-
-        {open && filteredLastSearches.length > 0 && (
-          <SearchHistory
-            lastSearches={filteredLastSearches}
-            handleRemoveLastSearch={handleRemoveLastSearch}
-            onSelect={handleLastSearch}
-          />
-        )}
-      </form>
-    </div>
+          {items.map((item, index) => (
+            <Ariakit.ComboboxItem
+              key={item}
+              value={item}
+              className="searchHistory-option"
+              data-active-item={activeIndex === index || undefined}
+              onClick={() => commitSearch(item)}
+            >
+              <div className="searchHistory-button">{item}</div>
+              <CloseButton
+                onClick={() => {}}
+                onMouseDown={() => handleRemoveLastSearch(item)}
+                size={18}
+                className="searchHistory-remove"
+              />
+            </Ariakit.ComboboxItem>
+          ))}
+        </Ariakit.ComboboxPopover>
+      )}
+    </form>
   );
-};
-
-export default SearchForm;
+}
