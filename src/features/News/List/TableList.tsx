@@ -52,7 +52,6 @@ const TableList = ({
                     className="listContainer__cell"
                     data-col={field.key}
                   >
-                    {console.log(item, field.key)}
                     {/* ===== TITLE ===== */}
                     {field.key === 'TITLE' && type === 'story' && (
                       <a href={item.url} target="_blank" rel="noreferrer">

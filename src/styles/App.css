@@ -8,6 +8,9 @@
   --boder-radius-app: 6px;
   --outline-focus-visible: 2px solid var(--gray);
 }
+body{
+  margin-top: 0px !important;
+}
 
 /* ======================================================
    App container
@@ -16,7 +19,7 @@
   width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 25px;
 }
 
 .app h1 {
@@ -226,10 +229,14 @@
   background-color: #e8e8e8;
 }
 
-/* Header / navigation */
+/* =========================
+   Header / Navigation
+========================= */
+
 .appHeader-container {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .appHeader-container a:hover {
@@ -245,10 +252,15 @@
 .appHeader {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 40px;
-  padding-bottom: 16px;
+  padding: 16px 0px;
   background-color: var(--white);
 }
+
+/* =========================
+   Title
+========================= */
 
 .appTitle {
   font-size: 1.4rem;
@@ -265,7 +277,10 @@
   outline: var(--outline-focus-visible) !important;
 }
 
-/* Navigation */
+/* =========================
+   Navigation (Desktop)
+========================= */
+
 .appNav {
   display: flex;
   align-items: center;
@@ -279,7 +294,6 @@
   font-weight: 500;
   color: var(--dark-gray);
   cursor: pointer;
-  /* border-radius: var(--boder-radius-app); */
   background-color: var(--white);
   background-image: linear-gradient(var(--primary), var(--primary));
   background-repeat: no-repeat;
@@ -289,11 +303,90 @@
     color 0.2s ease,
     background-size 0.25s ease;
 }
+
 .appNav-item:hover,
 .appNav-item.active,
 .appNav-item:focus-visible {
   color: var(--dark);
   background-size: 100% 2px;
+}
+
+/* =========================
+   Mobile menu button
+========================= */
+
+.menuToggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--dark);
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.menuToggle:hover {
+  background-color: transparent;
+}
+
+.menuToggle:focus-visible {
+  outline: var(--outline-focus-visible);
+}
+
+.menuToggle .menuToggleIcon {
+  display: flex;
+  min-width: 25px;
+  min-height: 25px;
+  color: var(--dark-gray);
+}
+
+/* =========================
+   Mobile styles
+========================= */
+
+@media (max-width: 768px) {
+  .menuToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Panel desplegable */
+  .appNav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+
+    background-color: var(--white);
+
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+    z-index: 100;
+  }
+
+  .appNav.open {
+    max-height: 300px;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 1px solid var(--light-gray);
+  }
+
+  .appNav-item {
+    width: 100%;
+    padding: 16px 0px;
+    background-size: 0% 2px;
+  }
+
+  .appNav-item:hover,
+  .appNav-item.active {
+    background-size: 100% 2px;
+  }
 }
 
 /* ======================================================
@@ -371,10 +464,12 @@
 
 .storyLinkInfo div {
   display: flex;
+  align-items: start;
   gap: 26px;
 }
 .storyLinkInfo div div {
   display: flex;
+  align-items: center;
   gap: 6px;
 }
 
@@ -425,6 +520,7 @@
   position: relative;
   z-index: 10; /* Asegura que el menú quede por encima de otros elementos */
   width: 100%;
+  max-width: 15rem;
 }
 
 .sortProps-select-container {
@@ -961,12 +1057,20 @@ select:focus-visible,
     gap: 10px;
     font-size: 0.95rem;
   }
+
+  .storyLinkInfo div{
+    flex-direction: column;
+  }
+  .storyLinkInfo div div{
+    flex-direction: row;
+  }
+
   .storyLinkInfo .label {
     font-size: 0.9rem;
   }
 
   .listControls {
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
@@ -1134,8 +1238,6 @@ button {
   }
 }
 
-
-
 @media (max-width: 640px) {
   /* ===============================
      RESET
@@ -1148,10 +1250,8 @@ button {
   /* ===============================
      STORY – columna principal
      =============================== */
-  .listContainer__responsiveTable[data-type='story']
-    th[data-col='TITLE'],
-  .listContainer__responsiveTable[data-type='story']
-    td[data-col='TITLE'] {
+  .listContainer__responsiveTable[data-type='story'] th[data-col='TITLE'],
+  .listContainer__responsiveTable[data-type='story'] td[data-col='TITLE'] {
     display: table-cell;
   }
 
@@ -1172,17 +1272,14 @@ button {
     th[data-col='AUTHOR'],
   .listContainer__responsiveTable[data-type='story'][data-active-sort='AUTHOR']
     td[data-col='AUTHOR'],
-
   .listContainer__responsiveTable[data-type='story'][data-active-sort='POINTS']
     th[data-col='POINTS'],
   .listContainer__responsiveTable[data-type='story'][data-active-sort='POINTS']
     td[data-col='POINTS'],
-
   .listContainer__responsiveTable[data-type='story'][data-active-sort='COMMENTS']
     th[data-col='COMMENTS'],
   .listContainer__responsiveTable[data-type='story'][data-active-sort='COMMENTS']
     td[data-col='COMMENTS'],
-
   .listContainer__responsiveTable[data-type='story'][data-active-sort='CREATED_AT']
     th[data-col='CREATED_AT'],
   .listContainer__responsiveTable[data-type='story'][data-active-sort='CREATED_AT']
@@ -1197,12 +1294,10 @@ button {
     th[data-col='AUTHOR'],
   .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
     td[data-col='AUTHOR'],
-
   .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
     th[data-col='CREATED_AT'],
   .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
     td[data-col='CREATED_AT'],
-
   .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
     th[data-col='TITLE'],
   .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
