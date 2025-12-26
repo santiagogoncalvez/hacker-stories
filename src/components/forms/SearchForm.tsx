@@ -31,7 +31,9 @@ export default function SearchForm({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const lastSearchRef = useRef<string>(searchInit);
 
-  // Sincronización con cambios externos (ej. navegación o reset del store)
+  // Referencia para manipular el foco del input manualmente si es necesario
+  const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     setDraft(searchInit);
     userDraftRef.current = searchInit;
@@ -51,20 +53,37 @@ export default function SearchForm({
 
   const executeSearch = (value: string) => {
     const trimmed = value.trim();
-    // Evita disparar la misma búsqueda si no ha cambiado el texto
     if (trimmed === lastSearchRef.current) return;
-
     lastSearchRef.current = trimmed;
     searchAction(trimmed);
   };
 
-  // Modo LIVE: Ejecuta la acción inmediatamente al cambiar el draft
-  // Solo se dispara si no estamos navegando por el historial (activeIndex === null)
   useEffect(() => {
     if (mode === 'live' && activeIndex === null) {
       executeSearch(draft);
     }
   }, [draft, mode, activeIndex]);
+
+  // --- LÓGICA DE LIMPIEZA CORREGIDA ---
+  const handleClearInput = () => {
+    // 1. Limpiar estados locales
+    setDraft('');
+    userDraftRef.current = '';
+    setActiveIndex(null);
+
+    // 2. Limpiar store de Ariakit
+    store.setValue('');
+
+    // 3. Forzar apertura del popup (para mostrar historial)
+    store.setOpen(true);
+
+    // 4. Asegurar foco (por si acaso)
+    inputRef.current?.focus();
+
+    if (mode === 'live') {
+      executeSearch('');
+    }
+  };
 
   const moveDown = () => {
     if (items.length === 0) return;
@@ -113,8 +132,17 @@ export default function SearchForm({
       }}
       style={{ position: 'relative' }}
     >
-      <div className="search-container">
+      <div
+        className="search-container"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+          width: '100%',
+        }}
+      >
         <Ariakit.Combobox
+          ref={inputRef} // Vinculamos la ref
           store={store}
           id="searchQuery"
           placeholder={placeholder}
@@ -127,7 +155,6 @@ export default function SearchForm({
           }}
           onKeyDown={(e) => {
             const isOpen = store.getState().open;
-
             if (e.key === 'ArrowDown') {
               e.preventDefault();
               if (!isOpen) {
@@ -136,7 +163,6 @@ export default function SearchForm({
               }
               moveDown();
             }
-
             if (e.key === 'ArrowUp') {
               e.preventDefault();
               if (!isOpen) {
@@ -145,19 +171,32 @@ export default function SearchForm({
               }
               moveUp();
             }
-
             if (e.key === 'Escape') {
               e.preventDefault();
               resetToUserDraft();
               store.setOpen(false);
             }
-
             if (e.key === 'Enter') {
               e.preventDefault();
               commitSearch(displayedDraft);
             }
           }}
+          style={{ width: '100%', paddingRight: draft ? '40px' : '10px' }}
         />
+
+        {/* Botón de cruz para limpiar */}
+        {draft && (
+          <CloseButton
+            // Usamos onMouseDown con preventDefault para evitar perder el foco del input
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleClearInput();
+            }}
+            size={18}
+            className="searchHistory-remove"
+          />
+        )}
       </div>
 
       <button
@@ -185,7 +224,6 @@ export default function SearchForm({
               <div className="searchHistory-button">{item}</div>
               <CloseButton
                 onMouseDown={(e) => {
-                  // Prevenir que el click en la X seleccione el item o cierre el popover
                   e.preventDefault();
                   e.stopPropagation();
                   handleRemoveLastSearch(item);
