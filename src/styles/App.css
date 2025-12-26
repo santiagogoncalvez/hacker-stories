@@ -587,9 +587,33 @@
   align-items: center;
   flex-direction: row;
   gap: 6px;
+  background-color: transparent;
+  color: var(--dark-gray);
+  padding: 0;
+}
+
+.headTable button:hover {
+  background-color: transparent;
+}
+
+.headTable button.active {
+  color: var(--secondary);
+}
+
+.headTable button .caretIcon {
+  color: var(--secondary);
 }
 .headTable .ACTIONS:hover {
   cursor: initial !important;
+}
+
+.actionHead {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 6px;
+  height: 2.5rem;
 }
 
 /* wrapper allowing horizontal scroll to avoid breaking layout */
@@ -1107,5 +1131,142 @@ button {
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
+  }
+}
+
+
+
+@media (max-width: 640px) {
+  /* ===============================
+     RESET
+     =============================== */
+  .listContainer__responsiveTable th,
+  .listContainer__responsiveTable td {
+    display: none;
+  }
+
+  /* ===============================
+     STORY – columna principal
+     =============================== */
+  .listContainer__responsiveTable[data-type='story']
+    th[data-col='TITLE'],
+  .listContainer__responsiveTable[data-type='story']
+    td[data-col='TITLE'] {
+    display: table-cell;
+  }
+
+  /* ===============================
+     COMMENT – columna principal
+     =============================== */
+  .listContainer__responsiveTable[data-type='comment']
+    th[data-col='COMMENT_TEXT'],
+  .listContainer__responsiveTable[data-type='comment']
+    td[data-col='COMMENT_TEXT'] {
+    display: table-cell;
+  }
+
+  /* ===============================
+     STORY – columna del sort activo
+     =============================== */
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='AUTHOR']
+    th[data-col='AUTHOR'],
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='AUTHOR']
+    td[data-col='AUTHOR'],
+
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='POINTS']
+    th[data-col='POINTS'],
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='POINTS']
+    td[data-col='POINTS'],
+
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='COMMENTS']
+    th[data-col='COMMENTS'],
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='COMMENTS']
+    td[data-col='COMMENTS'],
+
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='CREATED_AT']
+    th[data-col='CREATED_AT'],
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='CREATED_AT']
+    td[data-col='CREATED_AT'] {
+    display: table-cell;
+  }
+
+  /* ===============================
+     COMMENT – columna del sort activo
+     =============================== */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
+    th[data-col='AUTHOR'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
+    td[data-col='AUTHOR'],
+
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
+    th[data-col='CREATED_AT'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
+    td[data-col='CREATED_AT'],
+
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
+    th[data-col='TITLE'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
+    td[data-col='TITLE'] {
+    display: table-cell;
+  }
+
+  /* ===============================
+     SORT PRINCIPAL → secundaria default
+     =============================== */
+
+  /* story: TITLE → POINTS */
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='TITLE']
+    th[data-col='POINTS'],
+  .listContainer__responsiveTable[data-type='story'][data-active-sort='TITLE']
+    td[data-col='POINTS'] {
+    display: table-cell;
+  }
+
+  /* comment: COMMENT_TEXT → TITLE (story title) */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+    th[data-col='TITLE'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+    td[data-col='TITLE'] {
+    display: table-cell;
+  }
+
+  /* ===============================
+     ACTION siempre visible
+     =============================== */
+  .listContainer__responsiveTable th[data-col='ACTION'],
+  .listContainer__responsiveTable td[data-col='ACTION'] {
+    display: table-cell;
+  }
+
+  /* ===============================
+     UX
+     =============================== */
+  .listContainer__cell {
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* =================================================
+   COMMENTS: columna complementaria cuando el sort
+   es la columna principal
+   ================================================= */
+@media (max-width: 640px) {
+  /* sort por COMMENT_TEXT → mostrar DATE */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+    th[data-col='CREATED_AT'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+    td[data-col='CREATED_AT'] {
+    display: table-cell;
+  }
+
+  /* sort por TITLE (story title) → mostrar DATE */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
+    th[data-col='CREATED_AT'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
+    td[data-col='CREATED_AT'] {
+    display: table-cell;
   }
 }

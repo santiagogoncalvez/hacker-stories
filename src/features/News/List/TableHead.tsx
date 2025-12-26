@@ -1,11 +1,18 @@
-import React from 'react';
-import { SortState, sort, Fields } from '../../../types/types';
+
+import { SortState, sort as SortType } from '../../../types/types';
 import CaretIcon from '../../../assets/caret.svg?react';
+
+type Field = {
+  key: string;
+  label: string;
+  value: string;
+  width: string;
+};
 
 type TableHeadProps = {
   sort: SortState;
-  onClick: (sortType: sort) => void;
-  fields: Fields;
+  onClick: (sortType: SortType) => void;
+  fields: Field[];
 };
 
 const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
@@ -13,53 +20,52 @@ const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
     <thead className="headTable">
       <tr>
         {fields.map((field) => {
-          if (field.key === 'ACTION') {
-            return (
-              <th key={field.key} scope="col" style={{ width: field.width }}>
-                <span
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    gap: '6px',
-                    height: '2.5rem',
-                  }}
-                >
+          const isActive = sort.sortType === field.value;
+
+          return (
+            <th
+              key={field.key}
+              scope="col"
+              style={{ width: field.width }}
+              data-col={field.key}
+              className={isActive ? 'activeSortColumn' : ''}
+            >
+              {field.key === 'ACTION' ? (
+                <span className="actionHead">
                   {field.label}
                   <div style={{ width: 18, height: 18 }} />
                 </span>
-              </th>
-            );
-          }
+              ) : (
+                <button
+                  type="button"
+                  className={`listContainer__headerButton ${
+                    isActive ? 'active' : ''
+                  }`}
+                  onClick={() => onClick(field.value as SortType)}
+                  aria-sort={
+                    isActive
+                      ? sort.isReverse
+                        ? 'descending'
+                        : 'ascending'
+                      : 'none'
+                  }
+                >
+                  {field.label}
 
-          return (
-            <th key={field.key} scope="col" style={{ width: field.width }}>
-              <button
-                type="button"
-                onClick={() => onClick(field.value as sort)}
-                style={{
-                  background: 'transparent',
-                  padding: 0,
-                  color:
-                    sort.sortType === field.value
-                      ? 'var(--secondary)'
-                      : 'var(--black)',
-                }}
-              >
-                {field.label}
-                {sort.sortType === field.value && (
-                  <CaretIcon
-                    width={13}
-                    height={13}
-                    style={{
-                      transform: sort.isReverse
-                        ? 'rotate(0deg)'
-                        : 'rotate(-180deg)',
-                    }}
-                  />
-                )}
-              </button>
+                  {isActive && (
+                    <CaretIcon
+                      width={13}
+                      height={13}
+                      className="caretIcon"
+                      style={{
+                        transform: sort.isReverse
+                          ? 'rotate(0deg)'
+                          : 'rotate(-180deg)',
+                      }}
+                    />
+                  )}
+                </button>
+              )}
             </th>
           );
         })}
@@ -68,4 +74,4 @@ const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
   );
 };
 
-export default React.memo(TableHead);
+export default TableHead;
