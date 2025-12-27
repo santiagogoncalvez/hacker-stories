@@ -8,6 +8,7 @@ import Comments from './pages/Comments';
 import "./styles/App.css";
 import Favorites from './pages/Favorites';
 import ScrollToTopButton from './components/ui/ScrollToTopButton';
+import NotFound from './pages/NotFound';
 
 const App = () => {
   useScrollToTopOnRouteChange();
@@ -24,7 +25,7 @@ const App = () => {
             <Route path="/comments" Component={Comments} />
             <Route path="/favourites" Component={Favorites} />
 
-            <Route path="*" Component={() => <h1>404</h1>} />
+            <Route path="*" Component={NotFound} />
           </Routes>
         </div>
       </StoriesProvider>

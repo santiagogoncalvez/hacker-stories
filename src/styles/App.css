@@ -684,7 +684,7 @@ body {
 .listContainer__cellInner {
   padding: 0.5rem;
 }
-.listContainer__cell{
+.listContainer__cell {
   /* display: flex; */
   /* flex-direction: column; */
 }
@@ -856,7 +856,24 @@ body {
 }
 .noResultsContent {
   max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
+.noResultsContent p,
+.noResultsContent h2 {
+  margin: 0;
+}
+
+/* El número gigante estilo Icons8 */
+.noResultsCode {
+  font-size: 4rem;
+  line-height:4rem;
+  margin: 0;
+  font-weight: 800;
+  color: var(--light-gray);
+}
+
 .noResultsTitle {
   margin: 0 0 12px;
   font-weight: 600;
@@ -878,7 +895,7 @@ body {
 .noResultsTips li {
   font-size: 0.9rem;
   color: var(--gray);
-  margin-bottom: 6px;
+  /* margin-bottom: 6px; */
 }
 .noResultsTips li::before {
   content: '•';
@@ -972,7 +989,7 @@ body {
 
   /* El botón de acción en el skeleton suele ir al final o desaparecer en tu diseño mobile */
   .story--skeleton .skeleton-button {
-    align-self: flex-end; 
+    align-self: flex-end;
   }
 }
 
@@ -981,7 +998,7 @@ body {
   .skeleton-title {
     height: 18px;
   }
-  
+
   .skeleton-row {
     gap: 8px;
   }
