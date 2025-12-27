@@ -946,6 +946,47 @@ body {
   border-radius: var(--boder-radius-app);
 }
 
+/* Media query para tablets/móviles (ajustado a tus breakpoints de 640px) */
+@media (max-width: 640px) {
+  .story--skeleton {
+    padding: 16px 12px;
+    flex-direction: column; /* Apilar título y metadatos */
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .skeleton-title {
+    width: 100%; /* Ocupa todo el ancho en móvil */
+    height: 20px;
+  }
+
+  .skeleton-row {
+    width: 100%;
+    flex-wrap: wrap; /* Permitir que los labels de los skeletons bajen de línea si no caben */
+    gap: 10px;
+  }
+
+  .skeleton-value {
+    width: 60px; /* Reducir un poco el tamaño visual */
+  }
+
+  /* El botón de acción en el skeleton suele ir al final o desaparecer en tu diseño mobile */
+  .story--skeleton .skeleton-button {
+    align-self: flex-end; 
+  }
+}
+
+/* Ajuste fino para móviles muy pequeños */
+@media (max-width: 420px) {
+  .skeleton-title {
+    height: 18px;
+  }
+  
+  .skeleton-row {
+    gap: 8px;
+  }
+}
+
 /* ======================================================
    Comment specific (kept)
 ====================================================== */
