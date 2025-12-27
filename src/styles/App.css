@@ -684,6 +684,10 @@ body {
 .listContainer__cellInner {
   padding: 0.5rem;
 }
+.listContainer__cell{
+  /* display: flex; */
+  /* flex-direction: column; */
+}
 
 /* keep any existing table margin rule */
 .listContainer table {

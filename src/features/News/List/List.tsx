@@ -9,6 +9,7 @@ import DisplayList from './DisplayList';
 import DisplayToggle from './DisplayToggle';
 import { ListProps, SortState, DisplayType } from '../../../types/types';
 import SearchMeta from './SearchMeta';
+import { NoSearchResults } from '../NoSearchResults';
 
 type ListType = 'story' | 'comment';
 const getListTypeFromPath = (pathname: string): ListType =>
@@ -49,7 +50,9 @@ const List = ({
           searchAction={searchAction}
           lastSearches={lastSearches}
           handleRemoveLastSearch={handleRemoveLastSearch}
-          placeholder={type === 'story'? "Search stories...": "Search comments..."}
+          placeholder={
+            type === 'story' ? 'Search stories...' : 'Search comments...'
+          }
         />
 
         <SortProps
@@ -71,12 +74,7 @@ const List = ({
       {stories.isLoading ? (
         <NewsSkeletonList />
       ) : stories.isNoResults && stories.hits.length === 0 ? (
-        <EmptySearchState
-          type={type}
-          sort={sort}
-          setSort={setSort}
-          display={display}
-        />
+        <NoSearchResults query={search} />
       ) : (
         <>
           <DisplayList

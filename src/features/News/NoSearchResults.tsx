@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 type NoSearchResultsProps = {
   query?: string;
 };
@@ -24,6 +26,14 @@ const NoSearchResults = ({ query }: NoSearchResultsProps) => {
           <li>Try different or more general keywords</li>
           <li>Use fewer filters</li>
         </ul>
+
+        {/* Botón de acción principal para volver al inicio */}
+        <div className="noResultsAction">
+          You could try exploring&nbsp;
+          <Link to="/" >
+          popular news
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -66,5 +76,4 @@ const NoFavoritesResults = ({
   );
 };
 
-
-export  {NoSearchResults, NoFavoritesResults};
+export { NoSearchResults, NoFavoritesResults };
