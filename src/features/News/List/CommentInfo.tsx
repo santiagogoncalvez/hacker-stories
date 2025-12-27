@@ -20,18 +20,27 @@ const CommentInfo = ({ item }: StoryInfoProps) => {
       <p className="storyLinkInfo commentText">{item.commentText}</p>
 
       {item.url ? (
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noreferrer"
-          className="storyLink"
-        >
-          Comment on: {item.title}
-        </a>
+        <span>
+          <span style={{ color: 'var(--gray)' }}> Comment on:</span> &nbsp;
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            className="storyLink"
+          >
+            {item.title}
+          </a>
+        </span>
       ) : (
-        <p style={{ fontSize: '1.2rem', fontWeight: '500' }}>
-          Comment on: {item.title}
-        </p>
+        <span>
+          <span>Comment on:</span>
+          &nbsp;
+          <p
+            style={{ display: 'inline', fontSize: '1.2rem', fontWeight: '500' }}
+          >
+            {item.title}
+          </p>
+        </span>
       )}
     </dl>
   );

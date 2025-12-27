@@ -53,11 +53,23 @@ const TableList = ({
                     data-col={field.key}
                   >
                     {/* COLUMNA TITLE (Híbrida) */}
-                    {field.key === 'TITLE' && (
-                      <a href={item.url} target="_blank" rel="noreferrer">
-                        {item.title}
-                      </a>
-                    )}
+                    {field.key === 'TITLE' &&
+                      (item.url ? (
+                        <a href={item.url} target="_blank" rel="noreferrer">
+                          {item.title}
+                        </a>
+                      ) : (
+                        <p
+                          style={{
+                            display: 'inline',
+                            fontSize: '1.2rem',
+                            fontWeight: '500',
+                            color: 'var(--gray)'
+                          }}
+                        >
+                          {item.title}
+                        </p>
+                      ))}
 
                     {/* COLUMNA COMMENT_TEXT */}
                     {field.key === 'COMMENT_TEXT' && (

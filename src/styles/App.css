@@ -238,7 +238,7 @@ body {
   flex-direction: column;
   position: relative;
   /* Mantenemos el header por encima del panel móvil */
-  z-index: 1001; 
+  z-index: 1001;
   background-color: var(--white);
 }
 
@@ -258,7 +258,7 @@ body {
   gap: 40px;
   padding: 16px 0px;
   background-color: var(--white);
-  min-height: 70px; 
+  min-height: 70px;
 }
 
 /* =========================
@@ -302,7 +302,9 @@ body {
   background-repeat: no-repeat;
   background-position: left bottom;
   background-size: 0% 2px;
-  transition: color 0.2s ease, background-size 0.25s ease;
+  transition:
+    color 0.2s ease,
+    background-size 0.25s ease;
 }
 
 .appNav-item:hover,
@@ -347,7 +349,7 @@ body {
   .appHeader {
     justify-content: space-between;
   }
-  
+
   .menuToggle {
     display: flex; /* Visible en móvil */
   }
@@ -362,14 +364,14 @@ body {
     height: calc(100vh - 70px);
     z-index: 1000;
     background-color: var(--white);
-    
+
     /* Evita bloquear clicks si hubiera algún residuo visual */
-    pointer-events: none; 
+    pointer-events: none;
   }
 
   /* Cuando React añade la clase .open */
   .appNav-container.open {
-    display: flex; 
+    display: flex;
     pointer-events: auto;
     border-top: 1px solid var(--light-gray);
   }
@@ -453,6 +455,7 @@ body {
   font-size: 1.2rem;
   font-weight: 500;
   max-width: 100%;
+  display: inline;
 }
 .storyLinkData .storyLink:hover {
   color: var(--light-primary);
@@ -469,9 +472,13 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: var(--gray);
   max-width: 100%;
   min-width: 0;
+  color: var(--gray);
+}
+
+.story .storyLinkInfo.commentText {
+  color: var(--black);
 }
 
 .storyLinkInfo div {
@@ -1077,7 +1084,7 @@ select:focus-visible,
   }
 
   .storyLinkInfo div {
-    flex-direction: column;
+    /* flex-direction: column; */
   }
   .storyLinkInfo div div {
     flex-direction: row;
@@ -1364,4 +1371,3 @@ button {
     text-overflow: ellipsis;
   }
 }
-
