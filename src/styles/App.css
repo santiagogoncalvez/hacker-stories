@@ -230,13 +230,16 @@ body {
 }
 
 /* =========================
-   Header / Navigation
+   Header / Navigation (General)
 ========================= */
 
 .appHeader-container {
   display: flex;
   flex-direction: column;
   position: relative;
+  /* Mantenemos el header por encima del panel móvil */
+  z-index: 1001; 
+  background-color: var(--white);
 }
 
 .appHeader-container a:hover {
@@ -252,25 +255,20 @@ body {
 .appHeader {
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
   gap: 40px;
   padding: 16px 0px;
   background-color: var(--white);
+  min-height: 70px; 
 }
 
 /* =========================
    Title
 ========================= */
 
-.appTitle {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--primary);
-}
-
 .appTitleLink h1 {
   font-size: 2rem;
   margin: 0;
+  color: var(--primary);
 }
 
 .appTitleLink:focus-visible {
@@ -281,11 +279,17 @@ body {
    Navigation (Desktop)
 ========================= */
 
+/* En escritorio siempre es visible y fluye con el header */
+.appNav-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
 .appNav {
   display: flex;
   align-items: center;
   gap: 24px;
-  position: relative;
 }
 
 .appNav-item {
@@ -294,19 +298,15 @@ body {
   font-weight: 500;
   color: var(--dark-gray);
   cursor: pointer;
-  background-color: var(--white);
   background-image: linear-gradient(var(--primary), var(--primary));
   background-repeat: no-repeat;
   background-position: left bottom;
   background-size: 0% 2px;
-  transition:
-    color 0.2s ease,
-    background-size 0.25s ease;
+  transition: color 0.2s ease, background-size 0.25s ease;
 }
 
 .appNav-item:hover,
-.appNav-item.active,
-.appNav-item:focus-visible {
+.appNav-item.active {
   color: var(--dark);
   background-size: 100% 2px;
 }
@@ -316,7 +316,7 @@ body {
 ========================= */
 
 .menuToggle {
-  display: none;
+  display: none; /* Oculto en escritorio */
   background: none;
   border: none;
   font-size: 1.6rem;
@@ -324,14 +324,12 @@ body {
   color: var(--dark);
   height: 2.5rem;
   width: 2.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .menuToggle:hover {
   background-color: transparent;
-}
-
-.menuToggle:focus-visible {
-  outline: var(--outline-focus-visible);
 }
 
 .menuToggle .menuToggleIcon {
@@ -342,50 +340,64 @@ body {
 }
 
 /* =========================
-   Mobile styles
+   Mobile styles (Media Query)
 ========================= */
 
 @media (max-width: 768px) {
+  .appHeader {
+    justify-content: space-between;
+  }
+  
   .menuToggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; /* Visible en móvil */
   }
 
-  /* Panel desplegable */
-  .appNav {
-    position: absolute;
-    top: 100%;
+  /* PANEL CONTENEDOR MÓVIL */
+  .appNav-container {
+    display: none; /* OCULTO POR DEFECTO EN MÓVIL */
+    position: fixed;
+    top: 5.5rem; /* Altura de tu header */
     left: 0;
     width: 100%;
+    height: calc(100vh - 70px);
+    z-index: 1000;
+    background-color: var(--white);
+    
+    /* Evita bloquear clicks si hubiera algún residuo visual */
+    pointer-events: none; 
+  }
 
+  /* Cuando React añade la clase .open */
+  .appNav-container.open {
+    display: flex; 
+    pointer-events: auto;
+    border-top: 1px solid var(--light-gray);
+  }
+
+  .appNav {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-
-    background-color: var(--white);
-
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease;
-    z-index: 100;
+    padding: 12px;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; /* Scroll interno si hay muchos links */
+    box-sizing: border-box;
   }
 
   .appNav.open {
-    max-height: 300px;
-    border-top: 1px solid var(--light-gray);
-    border-bottom: 1px solid var(--light-gray);
+    /* Tus márgenes específicos de diseño */
+    margin: calc((100vh / 25) * 1) calc((100vw / 25) * 1);
+    margin-top: 0;
+    max-width: 100vw;
   }
 
   .appNav-item {
-    width: 100%;
+    /* width: 100%; */
+    width: fit-content;
     padding: 16px 0px;
-    background-size: 0% 2px;
-  }
-
-  .appNav-item:hover,
-  .appNav-item.active {
-    background-size: 100% 2px;
+    font-size: 1.2rem;
+    background-position: left bottom;
   }
 }
 
@@ -559,10 +571,10 @@ body {
   /* padding: 0 0 0 12px !important; */
 }
 
-.sortProps__value-container input{
-  display: none !important;
+.sortProps__value-container input {
+  /* Si pongo el input en display none se elininan todos los eventos del select*/
+  /* display: none !important; */
 }
-
 
 .sortProps__value-container div {
   height: 2.5rem;
@@ -1250,16 +1262,16 @@ button {
   }
 
   /* ===============================
-     STORY – columna principal
+     COLUMNAS PRINCIPALES (SIEMPRE)
      =============================== */
+
+  /* STORY → TITLE */
   .listContainer__responsiveTable[data-type='story'] th[data-col='TITLE'],
   .listContainer__responsiveTable[data-type='story'] td[data-col='TITLE'] {
     display: table-cell;
   }
 
-  /* ===============================
-     COMMENT – columna principal
-     =============================== */
+  /* COMMENT → COMMENT_TEXT */
   .listContainer__responsiveTable[data-type='comment']
     th[data-col='COMMENT_TEXT'],
   .listContainer__responsiveTable[data-type='comment']
@@ -1268,8 +1280,9 @@ button {
   }
 
   /* ===============================
-     STORY – columna del sort activo
+     STORY → COLUMNA SECUNDARIA
      =============================== */
+
   .listContainer__responsiveTable[data-type='story'][data-active-sort='AUTHOR']
     th[data-col='AUTHOR'],
   .listContainer__responsiveTable[data-type='story'][data-active-sort='AUTHOR']
@@ -1289,29 +1302,7 @@ button {
     display: table-cell;
   }
 
-  /* ===============================
-     COMMENT – columna del sort activo
-     =============================== */
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
-    th[data-col='AUTHOR'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
-    td[data-col='AUTHOR'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
-    th[data-col='CREATED_AT'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
-    td[data-col='CREATED_AT'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
-    th[data-col='TITLE'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
-    td[data-col='TITLE'] {
-    display: table-cell;
-  }
-
-  /* ===============================
-     SORT PRINCIPAL → secundaria default
-     =============================== */
-
-  /* story: TITLE → POINTS */
+  /* STORY: sort TITLE → POINTS */
   .listContainer__responsiveTable[data-type='story'][data-active-sort='TITLE']
     th[data-col='POINTS'],
   .listContainer__responsiveTable[data-type='story'][data-active-sort='TITLE']
@@ -1319,16 +1310,44 @@ button {
     display: table-cell;
   }
 
-  /* comment: COMMENT_TEXT → TITLE (story title) */
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+  /* ===============================
+     COMMENT → COLUMNA SECUNDARIA
+     =============================== */
+
+  /* COMMENT: sort AUTHOR */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
+    th[data-col='AUTHOR'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='AUTHOR']
+    td[data-col='AUTHOR'] {
+    display: table-cell;
+  }
+
+  /* COMMENT: sort TITLE (story title) */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
     th[data-col='TITLE'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
     td[data-col='TITLE'] {
     display: table-cell;
   }
 
+  /* COMMENT: sort CREATED_AT */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
+    th[data-col='CREATED_AT'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='CREATED_AT']
+    td[data-col='CREATED_AT'] {
+    display: table-cell;
+  }
+
+  /* COMMENT: sort COMMENT_TEXT → DATE */
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+    th[data-col='CREATED_AT'],
+  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
+    td[data-col='CREATED_AT'] {
+    display: table-cell;
+  }
+
   /* ===============================
-     ACTION siempre visible
+     ACTION (SIEMPRE VISIBLE)
      =============================== */
   .listContainer__responsiveTable th[data-col='ACTION'],
   .listContainer__responsiveTable td[data-col='ACTION'] {
@@ -1343,27 +1362,5 @@ button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-}
-
-/* =================================================
-   COMMENTS: columna complementaria cuando el sort
-   es la columna principal
-   ================================================= */
-@media (max-width: 640px) {
-  /* sort por COMMENT_TEXT → mostrar DATE */
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
-    th[data-col='CREATED_AT'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='COMMENT_TEXT']
-    td[data-col='CREATED_AT'] {
-    display: table-cell;
-  }
-
-  /* sort por TITLE (story title) → mostrar DATE */
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
-    th[data-col='CREATED_AT'],
-  .listContainer__responsiveTable[data-type='comment'][data-active-sort='TITLE']
-    td[data-col='CREATED_AT'] {
-    display: table-cell;
   }
 }
