@@ -252,7 +252,7 @@ body {
 .appHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   gap: 40px;
   padding: 16px 0px;
   background-color: var(--white);
@@ -289,7 +289,7 @@ body {
 }
 
 .appNav-item {
-  padding: 6px 0 8px;
+  padding: 6px 0 6px;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--dark-gray);

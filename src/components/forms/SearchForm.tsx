@@ -26,30 +26,28 @@ export default function SearchForm({
     .filter((s) => typeof s === 'string' && s.trim() !== '')
     .slice(0, MAX_LAST_SEARCHES);
 
-  const [draft, setDraft] = useState(searchInit);
-  const userDraftRef = useRef(searchInit);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const lastSearchRef = useRef<string>(searchInit);
-
-  // Referencia para manipular el foco del input manualmente si es necesario
+  // 1. Creamos una referencia para el input HTML
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    setDraft(searchInit);
-    userDraftRef.current = searchInit;
-    setActiveIndex(null);
-    lastSearchRef.current = searchInit;
-  }, [searchInit]);
+  const userTypedValue = useRef(searchInit);
+  const lastSearchRef = useRef<string>(searchInit);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const store = Ariakit.useComboboxStore({
-    value: draft,
-    setValue: (value) => {
-      setDraft(value);
-      userDraftRef.current = value;
-      setActiveIndex(null);
+    defaultValue: searchInit,
+    setValue: (newValue) => {
+      if (mode === 'live' && activeIndex === null) {
+        executeSearch(newValue);
+      }
     },
-    autoSelect: false,
   });
+
+  useEffect(() => {
+    store.setValue(searchInit);
+    userTypedValue.current = searchInit;
+    lastSearchRef.current = searchInit;
+    setActiveIndex(null);
+  }, [searchInit, store]);
 
   const executeSearch = (value: string) => {
     const trimmed = value.trim();
@@ -58,26 +56,14 @@ export default function SearchForm({
     searchAction(trimmed);
   };
 
-  useEffect(() => {
-    if (mode === 'live' && activeIndex === null) {
-      executeSearch(draft);
-    }
-  }, [draft, mode, activeIndex]);
-
   // --- LÓGICA DE LIMPIEZA CORREGIDA ---
   const handleClearInput = () => {
-    // 1. Limpiar estados locales
-    setDraft('');
-    userDraftRef.current = '';
-    setActiveIndex(null);
-
-    // 2. Limpiar store de Ariakit
     store.setValue('');
-
-    // 3. Forzar apertura del popup (para mostrar historial)
+    userTypedValue.current = '';
+    setActiveIndex(null);
     store.setOpen(true);
 
-    // 4. Asegurar foco (por si acaso)
+    // 2. Forzamos el foco de vuelta al input
     inputRef.current?.focus();
 
     if (mode === 'live') {
@@ -85,50 +71,40 @@ export default function SearchForm({
     }
   };
 
-  const moveDown = () => {
-    if (items.length === 0) return;
-    if (activeIndex === null) {
-      setActiveIndex(0);
-    } else if (activeIndex < items.length - 1) {
-      setActiveIndex(activeIndex + 1);
-    } else {
-      setActiveIndex(null);
-    }
-  };
-
-  const moveUp = () => {
-    if (items.length === 0) return;
-    if (activeIndex === null) {
-      setActiveIndex(items.length - 1);
-    } else if (activeIndex > 0) {
-      setActiveIndex(activeIndex - 1);
-    } else {
-      setActiveIndex(null);
-    }
-  };
-
-  const resetToUserDraft = () => {
-    setActiveIndex(null);
-    setDraft(userDraftRef.current);
-  };
-
   const commitSearch = (value: string) => {
-    userDraftRef.current = value;
-    setDraft(value);
-    setActiveIndex(null);
     executeSearch(value);
     store.setOpen(false);
+    setActiveIndex(null);
   };
 
-  const displayedDraft =
-    activeIndex === null ? userDraftRef.current : items[activeIndex];
+  const moveSelection = (direction: 'up' | 'down') => {
+    if (items.length === 0) return;
+    let nextIndex: number | null = activeIndex;
+
+    if (direction === 'down') {
+      if (activeIndex === null) nextIndex = 0;
+      else if (activeIndex < items.length - 1) nextIndex = activeIndex + 1;
+      else nextIndex = null;
+    } else {
+      if (activeIndex === null) nextIndex = items.length - 1;
+      else if (activeIndex > 0) nextIndex = activeIndex - 1;
+      else nextIndex = null;
+    }
+
+    setActiveIndex(nextIndex);
+    store.setValue(
+      nextIndex !== null ? items[nextIndex] : userTypedValue.current,
+    );
+  };
+
+  const currentStoreValue = store.useState('value');
 
   return (
     <form
       className="searchForm"
       onSubmit={(e) => {
         e.preventDefault();
-        commitSearch(displayedDraft);
+        commitSearch(currentStoreValue);
       }}
       style={{ position: 'relative' }}
     >
@@ -142,52 +118,47 @@ export default function SearchForm({
         }}
       >
         <Ariakit.Combobox
-          ref={inputRef} // Vinculamos la ref
+          ref={inputRef} // 3. Conectamos la referencia al componente
           store={store}
           id="searchQuery"
           placeholder={placeholder}
-          value={displayedDraft}
+          onFocus={() => {
+            if (items.length > 0) {
+              store.setOpen(true);
+            }
+          }}
           onChange={(e) => {
-            const val = e.target.value;
-            setDraft(val);
-            userDraftRef.current = val;
+            userTypedValue.current = e.target.value;
             setActiveIndex(null);
           }}
           onKeyDown={(e) => {
             const isOpen = store.getState().open;
             if (e.key === 'ArrowDown') {
               e.preventDefault();
-              if (!isOpen) {
-                store.setOpen(true);
-                return;
-              }
-              moveDown();
+              if (!isOpen) store.setOpen(true);
+              else moveSelection('down');
             }
             if (e.key === 'ArrowUp') {
               e.preventDefault();
-              if (!isOpen) {
-                store.setOpen(true);
-                return;
-              }
-              moveUp();
+              if (!isOpen) store.setOpen(true);
+              else moveSelection('up');
             }
             if (e.key === 'Escape') {
               e.preventDefault();
-              resetToUserDraft();
+              store.setValue(userTypedValue.current);
+              setActiveIndex(null);
               store.setOpen(false);
             }
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              commitSearch(displayedDraft);
-            }
           }}
-          style={{ width: '100%', paddingRight: draft ? '40px' : '10px' }}
+          style={{
+            width: '100%',
+            paddingRight: currentStoreValue ? '40px' : '10px',
+          }}
         />
 
-        {/* Botón de cruz para limpiar */}
-        {draft && (
+        {currentStoreValue && (
           <CloseButton
-            // Usamos onMouseDown con preventDefault para evitar perder el foco del input
+            // 4. Mantenemos preventDefault, pero ahora inputRef.current.focus() asegura el comportamiento
             onMouseDown={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -218,6 +189,7 @@ export default function SearchForm({
               key={item}
               value={item}
               className="searchHistory-option"
+              focusOnHover
               data-active-item={activeIndex === index || undefined}
               onClick={() => commitSearch(item)}
             >
@@ -227,6 +199,8 @@ export default function SearchForm({
                   e.preventDefault();
                   e.stopPropagation();
                   handleRemoveLastSearch(item);
+                  // Opcional: Si quieres que al borrar un item del historial vuelva el foco al input
+                  // inputRef.current?.focus();
                 }}
                 size={18}
                 className="searchHistory-remove"
