@@ -167,7 +167,19 @@ export function useStories(initialSearch = '') {
     if (!dataType || !activeList) return;
 
     const params = new URLSearchParams(locationSearch);
-    const urlPage = getPageFromURL(params);
+    const rawUrlPage = getPageFromURL(params);
+
+    // 1. CORRECCIÓN SILENCIOSA: Si la página excede el límite (50)
+    const API_LIMIT = 49; // Algolia usa base 0, por lo que 50 páginas son 0-49
+    if (rawUrlPage > API_LIMIT) {
+      const newParams = new URLSearchParams(locationSearch);
+      newParams.set('page', API_LIMIT.toString());
+
+      // Reemplazamos la URL silenciosamente
+      setSearchParams(newParams, { replace: true });
+      return; // Salimos para que el siguiente ciclo con la URL corregida maneje la carga
+    }
+
     const {
       page: statePage,
       isLoading,
@@ -179,16 +191,12 @@ export function useStories(initialSearch = '') {
     if (isLoading || isLoadingMore || needsFetch) return;
 
     // CASO 1: URL pide una página mayor a la que tenemos.
-    // Necesitamos "alcanzar" a la URL incrementando paso a paso.
-    if (urlPage > statePage) {
+    if (rawUrlPage > statePage) {
       dispatch({ type: 'INCREMENT_PAGE', dataType });
     }
 
     // CASO 2: URL pide una página menor (Usuario presionó "Atrás").
-    // Reseteamos la lista. El reducer pondrá page=0 y needsFetch=true.
-    // Esto disparará una carga de la pág 0, reemplazando los hits viejos.
-    // Luego, si urlPage > 0, el efecto volverá a entrar en el Caso 1 hasta llegar al target.
-    else if (urlPage < statePage) {
+    else if (rawUrlPage < statePage) {
       dispatch({ type: 'RESET_LIST', dataType });
     }
   }, [
@@ -198,6 +206,7 @@ export function useStories(initialSearch = '') {
     activeList?.isLoading,
     activeList?.isLoadingMore,
     activeList?.needsFetch,
+    setSearchParams, // Añadido por buena práctica
   ]);
 
   /* ================= Reset on section switch ================= */
