@@ -39,12 +39,12 @@ const ALL_FIELDS: Record<string, Field> = {
   STORY_ASC: {
     key: 'STORY_ASC',
     label: 'Story title (A-Z)',
-    value: 'STORY_TITLE',
+    value: 'TITLE',
   },
   STORY_DESC: {
     key: 'STORY_DESC',
     label: 'Story title (Z-A)',
-    value: 'STORY_TITLE',
+    value: 'TITLE',
   },
 };
 

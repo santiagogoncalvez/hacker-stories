@@ -1,4 +1,3 @@
-// fields definitions kept here so TableList is generic
 export const TABLE_FIELDS = {
   story: [
     { key: 'TITLE', label: 'Title', value: 'TITLE', width: '15%' },
@@ -16,7 +15,8 @@ export const TABLE_FIELDS = {
     },
     { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '7%' },
     { key: 'CREATED_AT', label: 'Date', value: 'CREATED_AT', width: '7%' },
-    { key: 'STORY_TITLE', label: 'Story', value: 'TITLE', width: '10%' },
+    /* UNIFICADO: key 'TITLE' para que el CSS móvil lo reconozca siempre */
+    { key: 'TITLE', label: 'Title', value: 'TITLE', width: '10%' },
     { key: 'ACTION', label: 'Action', value: '', width: '5%' },
   ],
 };

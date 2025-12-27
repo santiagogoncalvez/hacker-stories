@@ -52,93 +52,51 @@ const TableList = ({
                     className="listContainer__cell"
                     data-col={field.key}
                   >
-                    {/* ===== TITLE ===== */}
-                    {field.key === 'TITLE' && type === 'story' && (
+                    {/* COLUMNA TITLE (Híbrida) */}
+                    {field.key === 'TITLE' && (
                       <a href={item.url} target="_blank" rel="noreferrer">
                         {item.title}
                       </a>
                     )}
 
-                    {field.key === 'TITLE' && type === 'comment' && (
-                      <a href={item.storyUrl} target="_blank" rel="noreferrer">
-                        {item.storyTitle}
-                      </a>
-                    )}
-
-                    {/* ===== COMMENT (solo columna COMMENT) ===== */}
+                    {/* COLUMNA COMMENT_TEXT */}
                     {field.key === 'COMMENT_TEXT' && (
                       <>
                         <span>
                           {isExpanded
                             ? item.commentText
-                            : item.commentText?.slice(
-                                0,
-                                COMMENT_PREVIEW_LENGTH,
-                              )}
+                            : item.commentText?.slice(0, 120)}
                         </span>
-
-                        {item.commentText &&
-                          item.commentText.length > COMMENT_PREVIEW_LENGTH && (
-                            <button
-                              type="button"
-                              className="commentExpandButton"
-                              onClick={() =>
-                                setExpandedId(isExpanded ? null : item.objectId)
-                              }
-                            >
-                              {isExpanded ? 'Collapse' : 'More'}
-                            </button>
-                          )}
+                        {item.commentText && item.commentText.length > 120 && (
+                          <button
+                            type="button"
+                            className="commentExpandButton"
+                            onClick={() =>
+                              setExpandedId(isExpanded ? null : item.objectId)
+                            }
+                          >
+                            {isExpanded ? 'Collapse' : 'More'}
+                          </button>
+                        )}
                       </>
                     )}
 
-                    {/* ===== COMMENTS ===== */}
+                    {/* COLUMNA AUTHOR */}
+                    {field.key === 'AUTHOR' && item.author}
+
+                    {/* COLUMNA POINTS */}
+                    {field.key === 'POINTS' && type === 'story' && item.points}
+
+                    {/* COLUMNA COMMENTS (Story only) */}
                     {field.key === 'COMMENTS' &&
                       type === 'story' &&
                       item.numComments}
 
-                    {field.key === 'COMMENTS' && type === 'comment' && (
-                      <>
-                        <span>
-                          {isExpanded
-                            ? item.commentText
-                            : item.commentText?.slice(
-                                0,
-                                COMMENT_PREVIEW_LENGTH,
-                              )}
-                        </span>
-
-                        {item.commentText &&
-                          item.commentText.length > COMMENT_PREVIEW_LENGTH && (
-                            <button
-                              type="button"
-                              className="commentExpandButton"
-                              onClick={() =>
-                                setExpandedId(isExpanded ? null : item.objectId)
-                              }
-                            >
-                              {isExpanded ? 'Collapse' : 'More'}
-                            </button>
-                          )}
-                      </>
-                    )}
-
-                    {/* ===== AUTHOR ===== */}
-                    {field.key === 'AUTHOR' && item.author}
-
-                    {/* ===== POINTS (solo stories) ===== */}
-                    {field.key === 'POINTS' && type === 'story' && item.points}
-
-                    {/* ===== CREATED AT ===== */}
+                    {/* COLUMNA CREATED_AT */}
                     {field.key === 'CREATED_AT' &&
                       formatUpdatedDate('', item.createdAtI)}
 
-                    {/* ===== STORY TITLE ===== */}
-                    {field.key === 'STORY_TITLE' && (
-                      <a href={item.url}>{item.title}</a>
-                    )}
-
-                    {/* ===== ACTION ===== */}
+                    {/* COLUMNA ACTION */}
                     {field.key === 'ACTION' && <FavouriteButton item={item} />}
                   </td>
                 ))}
