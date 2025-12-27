@@ -537,7 +537,7 @@ body {
 
 .sortProps {
   position: relative;
-  z-index: 10; /* Asegura que el menú quede por encima de otros elementos */
+  z-index: 1; /* Asegura que el menú quede por encima de otros elementos */
   width: 100%;
   max-width: 15rem;
   width: 100%;
@@ -575,7 +575,7 @@ body {
   align-items: center !important;
   justify-content: center;
   height: 2.5rem !important;
-  /* padding: 0 0 0 12px !important; */
+  padding: 0 0 0 2.5rem !important;
 }
 
 .sortProps__value-container input {

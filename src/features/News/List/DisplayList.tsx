@@ -16,6 +16,7 @@ const DisplayList = ({
   handleMoreStories,
   type,
 }: DLProps) => {
+  console.log(stories);
   if (stories.isLoading) return <NewsSkeletonList />;
 
   if (stories.isNoResults && stories.hits.length === 0) return null;
@@ -43,7 +44,7 @@ const DisplayList = ({
         />
       )}
 
-      {stories.hits.length > 0 && (
+      {stories.hits.length > 0 && stories.page < 49 &&(
         <EndContentElement stories={stories} handleMore={handleMoreStories} />
       )}
     </>
