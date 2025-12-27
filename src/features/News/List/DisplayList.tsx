@@ -16,7 +16,6 @@ const DisplayList = ({
   handleMoreStories,
   type,
 }: DLProps) => {
-  console.log(stories);
   if (stories.isLoading) return <NewsSkeletonList />;
 
   if (stories.isNoResults && stories.hits.length === 0) return null;
