@@ -1,3 +1,5 @@
+import { MAX_LAST_SEARCHES } from "../constants/stories";
+
 export const extractSearchTerm = (url: string) => {
   const formattedUrl = new URL(url);
   const search = formattedUrl.searchParams.get('query') || '';
@@ -16,16 +18,9 @@ export const extractTag = (url: string) => {
   return tag;
 };
 
-export const getLastSearches = (urls: string[]) => {
-  const formattedUrls = urls.map(extractSearchTerm);
-  const map = new Map();
-
-  for (const item of formattedUrls) {
-    if (item === '') continue;
-    const key = item.toLowerCase();
-    map.delete(key);
-    map.set(key, item);
-  }
-
-  return Array.from(map.values()).slice(-6, -1).reverse();
+export const computeLastSearches = (term: string, currentList: string[]) => {
+  const normalized = term.trim();
+  const lower = normalized.toLowerCase();
+  const filtered = currentList.filter((s) => s.toLowerCase() !== lower);
+  return [normalized, ...filtered].slice(0, MAX_LAST_SEARCHES);
 };

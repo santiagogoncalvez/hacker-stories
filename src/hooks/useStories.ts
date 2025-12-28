@@ -3,69 +3,16 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { storiesReducer } from '../reducers/storiesReducer';
 import { getAsyncStories } from '../services/getAsyncStories';
 import { getUrl } from '../constants/apiEndpoints';
-import { Story, ListState, StoriesState } from '../types/types';
-
-const MAX_LAST_SEARCHES = 6;
-const LAST_SEARCHES_KEY = 'hn:lastSearches';
-const SUPPORTED_DATA_TYPES = ['story', 'comment'] as const;
-type SupportedDataType = (typeof SUPPORTED_DATA_TYPES)[number];
-
-/* ================= Helpers fuera del componente ================= */
-
-const getLastSearchesFromStorage = (): string[] => {
-  try {
-    const raw = localStorage.getItem(LAST_SEARCHES_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-};
-
-const getPageFromURL = (searchParams: URLSearchParams): number => {
-  const p = searchParams.get('page');
-  const num = p ? parseInt(p, 10) : 0;
-  return isNaN(num) || num < 0 ? 0 : num;
-};
-
-const getDataType = (path: string): SupportedDataType | null => {
-  if (path === '/') return 'story';
-  if (path === '/comments') return 'comment';
-  return null;
-};
-
-const computeLastSearches = (term: string, currentList: string[]) => {
-  const normalized = term.trim();
-  const lower = normalized.toLowerCase();
-  const filtered = currentList.filter((s) => s.toLowerCase() !== lower);
-  return [normalized, ...filtered].slice(0, MAX_LAST_SEARCHES);
-};
-
-const emptyList: ListState = {
-  hits: [],
-  page: 0,
-  isLoading: false,
-  isLoadingMore: false,
-  isNoResults: false,
-  isError: false,
-  needsFetch: true,
-  dataType: null,
-  nbHits: 0,
-  nbPages: 0, // Campo para el total de páginas
-  processingTimeMs: 0,
-};
-
-const initialState: StoriesState = {
-  search: '',
-  searchByType: { story: '', comment: '' },
-  lastSearches: [],
-  lists: {
-    story: { ...emptyList, dataType: 'story' },
-    comment: { ...emptyList, dataType: 'comment' },
-    fallback: { ...emptyList, dataType: 'fallback' },
-  },
-};
+import { Story, StoriesState } from '../types/types';
+import {
+  emptyList,
+  initialState,
+  LAST_SEARCHES_KEY,
+  SUPPORTED_DATA_TYPES,
+} from '../constants/stories';
+import { getLastSearchesFromStorage } from '../utils/storageHelpers';
+import { getDataType, getPageFromURL } from '../utils/urlHelpers';
+import { computeLastSearches } from '../utils/searches';
 
 export function useStories(initialSearch = '') {
   const location = useLocation();

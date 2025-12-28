@@ -1,18 +1,29 @@
-export const stories = [
-  {
-    title: 'React',
-    url: 'https://react.dev/',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectId: 0,
+import { ListState, StoriesState } from "../types/types";
+
+export const MAX_LAST_SEARCHES = 6;
+export const LAST_SEARCHES_KEY = 'hn:lastSearches';
+export const SUPPORTED_DATA_TYPES = ['story', 'comment'] as const;
+export const emptyList: ListState = {
+  hits: [],
+  page: 0,
+  isLoading: false,
+  isLoadingMore: false,
+  isNoResults: false,
+  isError: false,
+  needsFetch: true,
+  dataType: null,
+  nbHits: 0,
+  nbPages: 0, // Campo para el total de páginas
+  processingTimeMs: 0,
+};
+
+export const initialState: StoriesState = {
+  search: '',
+  searchByType: { story: '', comment: '' },
+  lastSearches: [],
+  lists: {
+    story: { ...emptyList, dataType: 'story' },
+    comment: { ...emptyList, dataType: 'comment' },
+    fallback: { ...emptyList, dataType: 'fallback' },
   },
-  {
-    title: 'Redux',
-    url: 'https://redux.js.org/',
-    author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectId: 1,
-  },
-];
+};

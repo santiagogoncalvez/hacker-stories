@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { SUPPORTED_DATA_TYPES } from '../constants/stories';
 
 /* ================= Entidades de Datos ================= */
 
@@ -253,3 +254,5 @@ export interface ListResponse {
   /** Tiempo que tardó la API en procesar la solicitud (en milisegundos) */
   processingTimeMs: number;
 }
+
+export type SupportedDataType = (typeof SUPPORTED_DATA_TYPES)[number];
