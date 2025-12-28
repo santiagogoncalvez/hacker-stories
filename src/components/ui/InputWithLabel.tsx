@@ -1,16 +1,5 @@
 import { useEffect, useRef } from 'react';
-
-type InputWithLabelProps = {
-  id: string;
-  type?: string;
-  value: string;
-  placeholder: string;
-  isFocused?: boolean;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  children?: React.ReactNode;
-  onFocus: () => void;
-  onBlur: () => void;
-};
+import { InputWithLabelProps } from '../../types/types';
 
 const InputWithLabel = ({
   id,

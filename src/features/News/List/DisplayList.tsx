@@ -5,8 +5,6 @@ import EndContentElement from '../EndContentElement';
 import { TABLE_FIELDS } from '../../../constants/tableFields';
 import { DisplayListProps } from '../../../types/types';
 
-
-
 const DisplayList = ({
   stories,
   sort,
@@ -24,7 +22,7 @@ const DisplayList = ({
   return (
     <>
       {stories.hits.length > 0 && display === 'CARD' && (
-        <CommonList list={sortedList} onRemoveItem={onRemoveItem} type={type} />
+        <CommonList list={sortedList} type={type} />
       )}
 
       {stories.hits.length > 0 && display === 'LIST' && (
@@ -41,10 +39,13 @@ const DisplayList = ({
           type={type}
         />
       )}
-
-      {stories.hits.length > 0 && stories.page < 49 && (
-        <EndContentElement stories={stories} handleMore={handleMoreStories} />
-      )}
+      {console.log(stories)}
+      {stories.hits.length > 0 &&
+        stories.page < 49 &&
+        stories.page < stories.nbPages - 1 &&
+        stories.hits.length < stories.nbHits && (
+          <EndContentElement stories={stories} handleMore={handleMoreStories} />
+        )}
     </>
   );
 };

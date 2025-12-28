@@ -57,6 +57,7 @@ export interface ListState {
   needsFetch: boolean;
   dataType: string | null;
   nbHits: number;
+  nbPages: number;
   processingTimeMs: number;
 }
 
@@ -80,6 +81,7 @@ export type StoriesAction =
       hits: Story[];
       page: number;
       nbHits: number;
+      nbPages: number;
       processingTimeMs: number;
     }
   | { type: 'FETCH_FAILURE'; dataType: string }
@@ -138,4 +140,116 @@ export interface StoriesContextType {
   handleMoreStories: () => void;
   handleRemoveStory: (item: Story) => void;
   handleRemoveLastSearch: (term: string) => void;
+}
+
+export type SearchFormProps = {
+  searchInit?: string;
+  searchAction: (value: string) => void;
+  // Cambiado a no opcional si se usa en el render, o añadir validación
+  handleRemoveLastSearch: (value: string) => void;
+  lastSearches?: string[];
+  placeholder?: string;
+  mode?: 'button' | 'live';
+};
+
+export type InputWithLabelProps = {
+  id: string;
+  type?: string;
+  value: string;
+  placeholder: string;
+  isFocused?: boolean;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  children?: React.ReactNode;
+  onFocus: () => void;
+  onBlur: () => void;
+};
+
+type ScrollTarget = React.RefObject<HTMLElement | null> | 'body';
+
+export type ScrollToTopButtonProps = {
+  target?: ScrollTarget;
+  threshold?: number;
+};
+
+export type EmptyFavoritesStateProps = {
+  type?: 'story' | 'comment';
+};
+
+export type SkeletonListProps = {
+  items?: number;
+};
+
+export type NoSearchResultsProps = {
+  query?: string;
+};
+
+export type NoFavoritesResultsProps = {
+  filter?: 'story' | 'comment';
+  query?: string;
+};
+
+export interface CommonListProps {
+  list: Story[];
+  type: ListType;
+}
+
+export type ListType = 'story' | 'comment';
+
+export type FieldTableHead = {
+  key: string;
+  label: string;
+  value: string;
+  width: string;
+};
+
+export type TableHeadProps = {
+  sort: SortState;
+  onClick: (sortType: Sort) => void;
+  fields: FieldTableHead[];
+};
+
+export type FieldTable = {
+  key: string;
+  label: string;
+  value: string;
+  width: string;
+};
+
+export type TableListProps = {
+  list: Story[];
+  sort: SortState;
+  sortAction: (sortType: Sort) => void;
+  onRemoveItem: (item: Story) => void;
+  fields: FieldTable[];
+  type: 'story' | 'comment';
+};
+
+/**
+ * Define la estructura de los datos crudos que devuelve axios de la API.
+ */
+export interface ApiResponse {
+  hits: HNApiStory[];
+  page: number;
+  nbHits: number;
+  nbPages: number;
+  processingTimeMS: number;
+}
+
+/**
+ * Mapea los datos de la API a la estructura interna 'Story' de la aplicación.
+ */
+
+export interface ListResponse {
+  /** Array de historias o comentarios ya procesados y limpios */
+  hits: Story[];
+
+  /** El número de página actual (empezando desde 0) */
+  page: number;
+
+  /** El número total de resultados encontrados en la base de datos */
+  nbHits: number;
+  nbPages: number;
+
+  /** Tiempo que tardó la API en procesar la solicitud (en milisegundos) */
+  processingTimeMs: number;
 }

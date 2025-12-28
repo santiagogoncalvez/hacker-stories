@@ -1,7 +1,7 @@
 import RemoveIcon from '../../../assets/remove.svg?react';
 import StarIcon from '../../../assets/star.svg?react';
 import { Story } from '../../../types/types';
-import { useFavoritesContext } from '../../../context/favorites';
+import { useFavoritesContext } from '../../../hooks/useFavoritesContext';
 
 export const RemoveButton = ({ onClick }: { onClick: () => void }) => (
   <button

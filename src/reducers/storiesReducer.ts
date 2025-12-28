@@ -11,6 +11,7 @@ export type StoriesAction =
       hits: Story[];
       page: number;
       nbHits: number;
+      nbPages: number; // <--- Asegúrate de que esta línea esté presente
       processingTimeMs: number;
     }
   | { type: 'FETCH_FAILURE'; dataType: string }
@@ -88,6 +89,7 @@ export const storiesReducer = (
             isError: false,
             needsFetch: false,
             nbHits: action.nbHits,
+            nbPages: action.nbPages,
             processingTimeMs: action.processingTimeMs,
           },
         },

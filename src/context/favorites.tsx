@@ -1,12 +1,16 @@
-// FavoritesContext.tsx
-import { createContext, useContext } from 'react';
+import { createContext } from 'react';
 import { useFavorites } from '../hooks/useFavorites.tsx';
 
-const FavoritesContext = createContext<ReturnType<typeof useFavorites> | null>(
-  null,
-);
+// Solo exportamos el contexto para que el hook lo vea
+export const FavoritesContext = createContext<ReturnType<
+  typeof useFavorites
+> | null>(null);
 
-const FavoritesProvider = ({ children }: { children: React.ReactNode }) => {
+export const FavoritesProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const favorites = useFavorites();
   return (
     <FavoritesContext.Provider value={favorites}>
@@ -14,14 +18,3 @@ const FavoritesProvider = ({ children }: { children: React.ReactNode }) => {
     </FavoritesContext.Provider>
   );
 };
-
-const useFavoritesContext = () => {
-  const context = useContext(FavoritesContext);
-  if (!context)
-    throw new Error(
-      'useFavoritesContext must be used within a FavoritesProvider',
-    );
-  return context;
-};
-
-export { FavoritesProvider, useFavoritesContext };

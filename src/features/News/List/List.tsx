@@ -6,11 +6,10 @@ import SearchForm from '../../../components/forms/SearchForm';
 import NewsSkeletonList from '../NewsSkeletonList';
 import DisplayList from './DisplayList';
 import DisplayToggle from './DisplayToggle';
-import { ListProps, SortState, DisplayType } from '../../../types/types';
+import { ListProps, SortState, DisplayType, ListType } from '../../../types/types';
 import SearchMeta from './SearchMeta';
 import { NoSearchResults } from '../NoSearchResults';
 
-type ListType = 'story' | 'comment';
 const getListTypeFromPath = (pathname: string): ListType =>
   pathname.startsWith('/comments') ? 'comment' : 'story';
 

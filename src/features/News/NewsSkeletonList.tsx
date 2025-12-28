@@ -1,3 +1,5 @@
+import { SkeletonListProps } from "../../types/types";
+
 const StorySkeleton = () => {
   return (
     <li className="story story--skeleton">
@@ -34,11 +36,8 @@ const StorySkeleton = () => {
   );
 };
 
-type Props = {
-  items?: number;
-};
 
-const SkeletonList = ({ items = 6 }: Props) => {
+const SkeletonList = ({ items = 6 }: SkeletonListProps) => {
   return (
     <ul className="news news-skeleton">
       {Array.from({ length: items }).map((_, index) => (
@@ -48,10 +47,11 @@ const SkeletonList = ({ items = 6 }: Props) => {
   );
 };
 
-const NewsSkeletonList = ({ items = 6 }: Props) => (
+const NewsSkeletonList = ({ items = 6 }: SkeletonListProps) => (
   <div className="listContainer">
     {/* <ListControlsSkeleton /> */}
     <SkeletonList items={items} />
   </div>
 );
 export default NewsSkeletonList;
+

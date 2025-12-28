@@ -8,7 +8,7 @@ import SortProps from '../features/News/SortProps';
 import SearchForm from '../components/forms/SearchForm';
 import EmptyFavoritesState from '../features/Favorites/EmptyFavoritesState';
 import { sortActionList } from '../utils/sortActions';
-import { useFavoritesContext } from '../context/favorites';
+import { useFavoritesContext } from '../hooks/useFavoritesContext';
 import { NoFavoritesResults } from '../features/News/NoSearchResults';
 import { TABLE_FIELDS } from '../constants/tableFields';
 
@@ -115,6 +115,7 @@ const Favourites = () => {
               lastSearches={[]}
               placeholder="Filter favorites..."
               mode="live"
+              handleRemoveLastSearch={() => {}}
             />
 
             <SortProps
@@ -135,7 +136,6 @@ const Favourites = () => {
           ) : display === 'CARD' ? (
             <CommonList
               list={sortedList}
-              onRemoveItem={handleRemoveItem}
               type={filter}
             />
           ) : (

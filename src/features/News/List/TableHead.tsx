@@ -1,19 +1,7 @@
 
-import { SortState, Sort as SortType } from '../../../types/types';
+import { Sort as SortType, TableHeadProps } from '../../../types/types';
 import CaretIcon from '../../../assets/caret.svg?react';
 
-type Field = {
-  key: string;
-  label: string;
-  value: string;
-  width: string;
-};
-
-type TableHeadProps = {
-  sort: SortState;
-  onClick: (sortType: SortType) => void;
-  fields: Field[];
-};
 
 const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
   return (

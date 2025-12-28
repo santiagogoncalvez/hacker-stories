@@ -1,4 +1,4 @@
-import { HNApiStory, Story } from '../types/types';
+import { ApiResponse, HNApiStory, ListResponse, Story } from '../types/types';
 import axios from 'axios';
 import { extractTag } from '../utils/searches';
 import DOMPurify from 'dompurify';
@@ -15,33 +15,6 @@ const getPlainText = (html?: string): string => {
   return div.textContent || div.innerText || '';
 };
 
-/**
- * Define la estructura de los datos crudos que devuelve axios de la API.
- */
-interface ApiResponse {
-  hits: HNApiStory[];
-  page: number;
-  nbHits: number;
-  processingTimeMS: number;
-}
-
-/**
- * Mapea los datos de la API a la estructura interna 'Story' de la aplicación.
- */
-
-interface ListResponse {
-  /** Array de historias o comentarios ya procesados y limpios */
-  hits: Story[];
-
-  /** El número de página actual (empezando desde 0) */
-  page: number;
-
-  /** El número total de resultados encontrados en la base de datos */
-  nbHits: number;
-
-  /** Tiempo que tardó la API en procesar la solicitud (en milisegundos) */
-  processingTimeMs: number;
-}
 const mapData = (data: ApiResponse, dataType: string): ListResponse | null => {
   if (dataType === 'story') {
     return {
@@ -59,6 +32,7 @@ const mapData = (data: ApiResponse, dataType: string): ListResponse | null => {
       ),
       page: data.page,
       nbHits: data.nbHits,
+      nbPages: data.nbPages,
       processingTimeMs: data.processingTimeMS,
     };
   }
@@ -78,6 +52,7 @@ const mapData = (data: ApiResponse, dataType: string): ListResponse | null => {
       ),
       page: data.page,
       nbHits: data.nbHits,
+      nbPages: data.nbPages,
       processingTimeMs: data.processingTimeMS,
     };
   }
@@ -100,6 +75,7 @@ export const getAsyncStories = async ({
     const result = await axios.get<ApiResponse>(url);
     const data = result.data;
 
+    // console.log(mapData(data, extractTag(url)));
     return mapData(data, extractTag(url));
   } catch (error) {
     throw new Error('Error fetching news from Hacker News. ' + error);

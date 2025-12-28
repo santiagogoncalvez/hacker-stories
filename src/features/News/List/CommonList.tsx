@@ -2,6 +2,7 @@ import React from 'react';
 import { CommonListProps } from '../../../types/types';
 import Item from './Item';
 
+
 const CommonList = ({ list, type }: CommonListProps) => {
   return (
     <ul className="news">

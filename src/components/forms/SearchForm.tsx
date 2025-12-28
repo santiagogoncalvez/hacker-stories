@@ -2,18 +2,11 @@ import * as Ariakit from '@ariakit/react';
 import { useEffect, useRef, useState, MouseEvent } from 'react';
 import SearchIcon from '../../assets/search.svg?react';
 import CloseButton from '../ui/CloseButton';
+import { SearchFormProps } from '../../types/types';
 
 const MAX_LAST_SEARCHES = 5;
 
-type SearchFormProps = {
-  searchInit?: string;
-  searchAction: (value: string) => void;
-  // Cambiado a no opcional si se usa en el render, o añadir validación
-  handleRemoveLastSearch: (value: string) => void;
-  lastSearches?: string[];
-  placeholder?: string;
-  mode?: 'button' | 'live';
-};
+
 
 export default function SearchForm({
   searchInit = '',

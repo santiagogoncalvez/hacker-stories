@@ -1,24 +1,8 @@
 import { useState } from 'react';
-import { Story, SortState, Sort as SortType } from '../../../types/types';
+import { TableListProps } from '../../../types/types';
 import TableHead from './TableHead';
 import { FavouriteButton } from './ActionButtons';
 import { formatUpdatedDate } from '../../../utils/formatDate';
-
-type Field = {
-  key: string;
-  label: string;
-  value: string;
-  width: string;
-};
-
-type TableListProps = {
-  list: Story[];
-  sort: SortState;
-  sortAction: (sortType: SortType) => void;
-  onRemoveItem: (item: Story) => void;
-  fields: Field[];
-  type: 'story' | 'comment';
-};
 
 // const COMMENT_PREVIEW_LENGTH = 120;
 
@@ -64,7 +48,7 @@ const TableList = ({
                             display: 'inline',
                             fontSize: '1.2rem',
                             fontWeight: '500',
-                            color: 'var(--gray)'
+                            color: 'var(--gray)',
                           }}
                         >
                           {item.title}

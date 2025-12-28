@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
+import { NoFavoritesResultsProps, NoSearchResultsProps } from '../../types/types';
 
-type NoSearchResultsProps = {
-  query?: string;
-};
+
 
 const NoSearchResults = ({ query }: NoSearchResultsProps) => {
   return (
@@ -39,10 +38,7 @@ const NoSearchResults = ({ query }: NoSearchResultsProps) => {
   );
 };
 
-type NoFavoritesResultsProps = {
-  filter?: 'story' | 'comment';
-  query?: string;
-};
+
 
 const NoFavoritesResults = ({
   filter = 'story',

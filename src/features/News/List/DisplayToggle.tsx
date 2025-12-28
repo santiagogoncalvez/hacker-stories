@@ -1,7 +1,12 @@
 import React from 'react';
 import SquaresIcon from '../../../assets/squares.svg?react';
 import ListIcon from '../../../assets/list.svg?react';
-import { DisplayType, DisplayProps } from '../../../types/types';
+import { DisplayType } from '../../../types/types';
+
+interface DisplayProps {
+  display: DisplayType;
+  onClick: (type: DisplayType) => void;
+}
 
 const DisplayToggle = ({ display, onClick }: DisplayProps) => {
   return (

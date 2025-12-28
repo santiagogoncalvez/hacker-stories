@@ -1,9 +1,13 @@
-import { ItemProps } from '../../../types/types';
+import { FavouriteFilter, Story } from '../../../types/types';
 import StoryInfo from './StoryInfo';
 import CommentInfo from './CommentInfo';
 import { memo } from 'react';
 import { FavouriteButton } from './ActionButtons.tsx';
 
+interface ItemProps {
+  item: Story;
+  type: FavouriteFilter;
+}
 
 const Item = ({ item, type }: ItemProps) => {
 

@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import ArrowIcon from '../../assets/arrow.svg?react';
+import { ScrollToTopButtonProps } from '../../types/types';
 
-type ScrollTarget = React.RefObject<HTMLElement | null> | 'body';
-
-type ScrollToTopButtonProps = {
-  target?: ScrollTarget;
-  threshold?: number;
-};
 
 const ScrollToTopButton = ({
   target = 'body',
