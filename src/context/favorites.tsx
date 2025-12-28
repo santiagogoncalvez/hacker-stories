@@ -6,11 +6,7 @@ const FavoritesContext = createContext<ReturnType<typeof useFavorites> | null>(
   null,
 );
 
-export const FavoritesProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const FavoritesProvider = ({ children }: { children: React.ReactNode }) => {
   const favorites = useFavorites();
   return (
     <FavoritesContext.Provider value={favorites}>
@@ -19,7 +15,7 @@ export const FavoritesProvider = ({
   );
 };
 
-export const useFavoritesContext = () => {
+const useFavoritesContext = () => {
   const context = useContext(FavoritesContext);
   if (!context)
     throw new Error(
@@ -27,3 +23,5 @@ export const useFavoritesContext = () => {
     );
   return context;
 };
+
+export { FavoritesProvider, useFavoritesContext };

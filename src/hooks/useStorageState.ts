@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 
+// Definimos la estructura de nuestro Set serializado
+interface SerializedSet {
+  __type: 'Set';
+  value: unknown[];
+}
+
 function serialize(value: unknown) {
   if (value instanceof Set) {
     return { __type: 'Set', value: Array.from(value) };
@@ -7,14 +13,20 @@ function serialize(value: unknown) {
   return value;
 }
 
-function deserialize(value: unknown) {
+function deserialize(value: unknown): unknown {
+  // Comprobamos si es un objeto válido y tiene la marca __type
   if (
     typeof value === 'object' &&
     value !== null &&
     '__type' in value &&
-    (value as any).__type === 'Set'
+    'value' in value
   ) {
-    return new Set((value as any).value);
+    // Usamos un "Type Cast" seguro a nuestra interfaz en lugar de 'any'
+    const obj = value as unknown as SerializedSet;
+
+    if (obj.__type === 'Set' && Array.isArray(obj.value)) {
+      return new Set(obj.value);
+    }
   }
   return value;
 }
@@ -38,7 +50,7 @@ export function useStorageState<T>(
     try {
       localStorage.setItem(key, JSON.stringify(serialize(state)));
     } catch {
-      // manejo opcional
+      // Manejo de error silencioso o log
     }
   }, [key, state]);
 

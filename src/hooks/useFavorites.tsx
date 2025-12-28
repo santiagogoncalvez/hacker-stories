@@ -2,14 +2,22 @@ import { Story } from '../types/types';
 import { useStorageState } from './useStorageState';
 
 function useFavorites() {
+  // Tipamos el estado inicial como un array de Story
   const [favorites, setFavorites] = useStorageState<Story[]>('favorites', []);
 
-  const addFavorite = (item: Story) => setFavorites((prev) => [item, ...prev]);
+  const addFavorite = (item: Story) => {
+    // En lugar de usar (prev) => ..., pasamos el nuevo array directamente
+    const nextFavorites = [item, ...favorites];
+    setFavorites(nextFavorites);
+  };
 
-  const removeFavorite = (id: string) =>
-    setFavorites((prev) => prev.filter((f) => f.objectId !== id));
+  const removeFavorite = (id: string) => {
+    // Calculamos el filtro y pasamos el resultado
+    const nextFavorites = favorites.filter((f) => f.objectId !== id);
+    setFavorites(nextFavorites);
+  };
 
-  const isFavorite = (id: string) => {
+  const isFavorite = (id: string): boolean => {
     return favorites.some((f) => f.objectId === id);
   };
 
@@ -21,11 +29,12 @@ function useFavorites() {
     }
   };
 
-  const favoriteStories = favorites.filter((item) =>
+  // Selectores tipados
+  const favoriteStories: Story[] = favorites.filter((item) =>
     item.tags.includes('story'),
   );
 
-  const favoriteComments = favorites.filter((item) =>
+  const favoriteComments: Story[] = favorites.filter((item) =>
     item.tags.includes('comment'),
   );
 

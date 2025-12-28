@@ -3,6 +3,7 @@ import CommonList from './CommonList';
 import TableList from './TableList';
 import EndContentElement from '../EndContentElement';
 import { TABLE_FIELDS } from '../../../constants/tableFields';
+import { DisplayListProps } from '../../../types/types';
 
 
 
@@ -15,12 +16,10 @@ const DisplayList = ({
   onRemoveItem,
   handleMoreStories,
   type,
-}: DLProps) => {
+}: DisplayListProps) => {
   if (stories.isLoading) return <NewsSkeletonList />;
 
   if (stories.isNoResults && stories.hits.length === 0) return null;
-
-  
 
   return (
     <>
@@ -30,7 +29,7 @@ const DisplayList = ({
 
       {stories.hits.length > 0 && display === 'LIST' && (
         <TableList
-          list={sortedList as Story[]}
+          list={sortedList}
           sort={sort}
           onRemoveItem={onRemoveItem}
           sortAction={(sortType) => {
@@ -43,7 +42,7 @@ const DisplayList = ({
         />
       )}
 
-      {stories.hits.length > 0 && stories.page < 49 &&(
+      {stories.hits.length > 0 && stories.page < 49 && (
         <EndContentElement stories={stories} handleMore={handleMoreStories} />
       )}
     </>

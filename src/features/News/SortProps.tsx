@@ -3,6 +3,8 @@ import Select, {
   components,
   ValueContainerProps,
   StylesConfig,
+  DropdownIndicatorProps,
+  SingleValue,
 } from 'react-select';
 import { Field, SortPropsProps } from '../../types/types';
 import Caret from '../../assets/caret.svg?react';
@@ -36,16 +38,8 @@ const ALL_FIELDS: Record<string, Field> = {
   },
   DATE_DESC: { key: 'DATE_DESC', label: 'Newest', value: 'CREATED_AT' },
   DATE_ASC: { key: 'DATE_ASC', label: 'Oldest', value: 'CREATED_AT' },
-  STORY_ASC: {
-    key: 'STORY_ASC',
-    label: 'Story title (A-Z)',
-    value: 'TITLE',
-  },
-  STORY_DESC: {
-    key: 'STORY_DESC',
-    label: 'Story title (Z-A)',
-    value: 'TITLE',
-  },
+  STORY_ASC: { key: 'STORY_ASC', label: 'Story title (A-Z)', value: 'TITLE' },
+  STORY_DESC: { key: 'STORY_DESC', label: 'Story title (Z-A)', value: 'TITLE' },
 };
 
 const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
@@ -74,7 +68,7 @@ const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
 const CustomValueContainer = ({
   children,
   ...props
-}: ValueContainerProps<Field>) => (
+}: ValueContainerProps<Field, false>) => (
   <components.ValueContainer {...props}>
     <div
       style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
@@ -85,7 +79,9 @@ const CustomValueContainer = ({
   </components.ValueContainer>
 );
 
-const CustomDropdownIndicator = (props: any) => (
+const CustomDropdownIndicator = (
+  props: DropdownIndicatorProps<Field, false>,
+) => (
   <components.DropdownIndicator {...props}>
     <Caret
       width={12}
@@ -121,7 +117,7 @@ const SortProps = ({
     );
   };
 
-  const styles: StylesConfig<Field> = {
+  const styles: StylesConfig<Field, false> = {
     control: (base, state) => ({
       ...base,
       border: 'none',
@@ -165,7 +161,7 @@ const SortProps = ({
 
   return (
     <div className="sortProps">
-      <Select
+      <Select<Field, false>
         instanceId="sort-select-id"
         options={options}
         value={currentValue}
@@ -173,7 +169,7 @@ const SortProps = ({
         onMenuOpen={() => setMenuIsOpen(true)}
         onMenuClose={() => setMenuIsOpen(false)}
         isOptionSelected={isOptionSelected}
-        onChange={(opt) => {
+        onChange={(opt: SingleValue<Field>) => {
           if (opt) {
             onClick(opt.value, opt.key.endsWith('_DESC'));
             setMenuIsOpen(false);

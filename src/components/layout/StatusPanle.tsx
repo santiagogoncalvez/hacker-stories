@@ -1,7 +1,7 @@
-import { StoriesState } from '../types/types';
+import { ListState } from '../../types/types';
 // import Loader from './Loader';
 
-const StatusPanel = ({ stories }: { stories: StoriesState }) => {
+const StatusPanel = ({ stories }: { stories: ListState }) => {
   return (
     <>
       {/* {stories.isLoading && <Loader />} */}

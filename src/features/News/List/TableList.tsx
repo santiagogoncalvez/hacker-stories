@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Story, SortState, sort as SortType } from '../../../types/types';
+import { Story, SortState, Sort as SortType } from '../../../types/types';
 import TableHead from './TableHead';
 import { FavouriteButton } from './ActionButtons';
 import { formatUpdatedDate } from '../../../utils/formatDate';
@@ -20,7 +20,7 @@ type TableListProps = {
   type: 'story' | 'comment';
 };
 
-const COMMENT_PREVIEW_LENGTH = 120;
+// const COMMENT_PREVIEW_LENGTH = 120;
 
 const TableList = ({
   list,

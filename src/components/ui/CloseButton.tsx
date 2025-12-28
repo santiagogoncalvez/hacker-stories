@@ -1,11 +1,13 @@
+
 // components/common/CloseButton.tsx
-import React from 'react';
+import { MouseEvent } from 'react';
 import CrossIcon from '../../assets/cross.svg?react';
 
 interface CloseButtonProps {
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size?: number;
   className?: string;
+  onMouseDown?: (e: MouseEvent<HTMLElement>) => void;
+  onClick?: (e: MouseEvent<HTMLElement>) => void;
 }
 
 const CloseButton = ({
@@ -19,13 +21,15 @@ const CloseButton = ({
       type="button"
       className={`close-button ${className}`}
       onClick={(e) => {
-        e.stopPropagation(); // Evita que al borrar se active el click del padre (seleccionar búsqueda)
-        onClick(e);
+        e.stopPropagation(); 
+        // SOLUCIÓN: Usamos ?. para que solo se ejecute si onClick existe
+        onClick?.(e);
       }}
       onMouseDown={onMouseDown}
       aria-label="Eliminar"
     >
-      <CrossIcon widtgh={size} height={size} style={{ strokeWidth: '2' }} />
+      {/* Corregido: "widtgh" -> "width" */}
+      <CrossIcon width={size} height={size} style={{ strokeWidth: '2' }} />
     </button>
   );
 };

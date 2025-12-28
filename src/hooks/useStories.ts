@@ -1,13 +1,10 @@
 import { useEffect, useReducer, useRef } from 'react';
-import {
-  useLocation,
-  useSearchParams,
-  useNavigationType,
-} from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { storiesReducer } from '../reducers/storiesReducer';
+
 import { getAsyncStories } from '../services/getAsyncStories';
 import { getUrl } from '../constants/apiEndpoints';
-import { StoriesState, ListProps, Story } from '../types/types';
+import { Story, ListState } from '../types/types';
 
 const MAX_LAST_SEARCHES = 6; // Porque una búsqueda puede ser vacía y tienen que estar.
 const LAST_SEARCHES_KEY = 'hn:lastSearches';
@@ -16,6 +13,13 @@ const SUPPORTED_DATA_TYPES = ['story', 'comment'] as const;
 type SupportedDataType = (typeof SUPPORTED_DATA_TYPES)[number];
 
 /* ================= Helpers ================= */
+
+interface StoriesState {
+  search: string;
+  searchByType: Record<string, string>;
+  lastSearches: string[];
+  lists: Record<string, ListState>;
+}
 
 const getLastSearchesFromStorage = (): string[] => {
   try {
@@ -36,7 +40,7 @@ const getPageFromURL = (searchParams: URLSearchParams): number => {
 
 /* ================= Initial state ================= */
 
-const emptyList: ListProps = {
+const emptyList = {
   hits: [],
   page: 0,
   isLoading: false,
@@ -49,7 +53,7 @@ const emptyList: ListProps = {
   processingTimeMs: 0,
 };
 
-const initialState: StoriesState = {
+const initialState = {
   search: '',
   searchByType: {
     story: '',
@@ -73,10 +77,9 @@ const getDataType = (path: string): SupportedDataType | null => {
 
 export function useStories(initialSearch = '') {
   const location = useLocation();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const navigationType = useNavigationType(); // Podría usarse para optimizaciones, pero no es estrictamente necesario con esta lógica
+
   const { pathname, search: locationSearch } = location;
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const dataType = getDataType(pathname);
 
   // Read initial query from URL
@@ -214,19 +217,21 @@ export function useStories(initialSearch = '') {
   useEffect(() => {
     const prev = prevDataTypeRef.current;
 
-    // Reset simple si cambiamos de sección (story <-> comment)
+    // Comprobamos que 'prev' sea uno de los tipos soportados sin usar 'any'
+    const isSupportedPrev =
+      prev !== null &&
+      (SUPPORTED_DATA_TYPES as readonly string[]).includes(prev);
+
     if (
       prev &&
       dataType &&
       prev !== dataType &&
-      SUPPORTED_DATA_TYPES.includes(prev as any) &&
+      isSupportedPrev && // Usamos la validación segura aquí
       SUPPORTED_DATA_TYPES.includes(dataType)
     ) {
       const params = new URLSearchParams(window.location.search);
-      // Si la nueva URL no tiene query, reseteamos el search local
       if (!params.has('query')) {
         dispatch({ type: 'SET_SEARCH', dataType, payload: '' });
-        // Nota: El cambio de dataType dispara RESET_LIST en el siguiente effect
       }
     }
     prevDataTypeRef.current = dataType ?? null;
@@ -329,7 +334,7 @@ export function useStories(initialSearch = '') {
 
     const nextPage = activeList.page + 1;
 
-    setSearchParams((prev) => {
+    setSearchParams((prev: URLSearchParams) => {
       // 1. Capturamos el valor actual de query.
       // Si no existe, usamos cadena vacía '' para cumplir tu requisito anterior.
       const currentQuery = prev.get('query') ?? '';

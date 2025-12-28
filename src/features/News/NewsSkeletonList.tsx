@@ -1,32 +1,3 @@
-const SortPropsSkeleton = () => {
-  return (
-    <div className="sortProps sortProps--skeleton">
-      <div className="sortProps-openButton skeleton skeleton-sort-button">
-        <div className="skeleton skeleton-sort-text" />
-        <div className="skeleton skeleton-caret" />
-      </div>
-    </div>
-  );
-};
-
-const DisplaySkeleton = () => {
-  return (
-    <div className="display display--skeleton">
-      <div className="skeleton skeleton-display-button" />
-      <div className="skeleton skeleton-display-button" />
-    </div>
-  );
-};
-
-const ListControlsSkeleton = () => {
-  return (
-    <div className="listControls">
-      <SortPropsSkeleton />
-      <DisplaySkeleton />
-    </div>
-  );
-};
-
 const StorySkeleton = () => {
   return (
     <li className="story story--skeleton">

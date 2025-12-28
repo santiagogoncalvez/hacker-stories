@@ -1,12 +1,6 @@
-import { Story, sort } from '../types/types';
+import { Story, SortState, SortActions} from '../types/types'; // Asumo que 'Sort' empieza con mayúscula en tu archivo de tipos
 import { sortBy } from 'lodash';
 
-type SortActions = {
-  TITLE: (list: Story[]) => Story[];
-  AUTHOR: (list: Story[]) => Story[];
-  COMMENTS: (list: Story[]) => Story[];
-  POINTS: (list: Story[]) => Story[];
-};
 
 const sortActions: SortActions = {
   TITLE: (list: Story[]) =>
@@ -20,12 +14,15 @@ const sortActions: SortActions = {
   CREATED_AT: (list: Story[]) => sortBy(list, 'createdAtI'),
 };
 
-export function sortList(list: Story[], sort: sort) {
-  const action = sortActions[sort];
+// 2. Tipamos el parámetro 'sort'.
+// Usamos 'Sort['sortType']' para referirnos específicamente al string de la acción (e.g., 'TITLE')
+export function sortList(list: Story[], sortType: SortState['sortType']): Story[] {
+  const action = sortActions[sortType];
   return action ? action(list) : list;
 }
 
-export const sortActionList = (sort, list) => {
+// 3. Tipamos 'sortActionList' con el objeto Sort completo
+export const sortActionList = (sort: SortState, list: Story[]): Story[] => {
   return sort.isReverse
     ? sortList(list, sort.sortType).reverse()
     : sortList(list, sort.sortType);

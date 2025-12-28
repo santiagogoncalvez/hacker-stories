@@ -1,5 +1,5 @@
 import * as Ariakit from '@ariakit/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import SearchIcon from '../../assets/search.svg?react';
 import CloseButton from '../ui/CloseButton';
 
@@ -8,6 +8,7 @@ const MAX_LAST_SEARCHES = 5;
 type SearchFormProps = {
   searchInit?: string;
   searchAction: (value: string) => void;
+  // Cambiado a no opcional si se usa en el render, o añadir validación
   handleRemoveLastSearch: (value: string) => void;
   lastSearches?: string[];
   placeholder?: string;
@@ -26,16 +27,14 @@ export default function SearchForm({
     .filter((s) => typeof s === 'string' && s.trim() !== '')
     .slice(0, MAX_LAST_SEARCHES);
 
-  // 1. Creamos una referencia para el input HTML
   const inputRef = useRef<HTMLInputElement>(null);
-
   const userTypedValue = useRef(searchInit);
   const lastSearchRef = useRef<string>(searchInit);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const store = Ariakit.useComboboxStore({
     defaultValue: searchInit,
-    setValue: (newValue) => {
+    setValue: (newValue: string) => {
       if (mode === 'live' && activeIndex === null) {
         executeSearch(newValue);
       }
@@ -56,14 +55,11 @@ export default function SearchForm({
     searchAction(trimmed);
   };
 
-  // --- LÓGICA DE LIMPIEZA CORREGIDA ---
   const handleClearInput = () => {
     store.setValue('');
     userTypedValue.current = '';
     setActiveIndex(null);
     store.setOpen(true);
-
-    // 2. Forzamos el foco de vuelta al input
     inputRef.current?.focus();
 
     if (mode === 'live') {
@@ -102,7 +98,7 @@ export default function SearchForm({
   return (
     <form
       className="searchForm"
-      onSubmit={(e) => {
+      onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
         commitSearch(currentStoreValue);
       }}
@@ -118,7 +114,7 @@ export default function SearchForm({
         }}
       >
         <Ariakit.Combobox
-          ref={inputRef} // 3. Conectamos la referencia al componente
+          ref={inputRef}
           store={store}
           id="searchQuery"
           placeholder={placeholder}
@@ -127,11 +123,11 @@ export default function SearchForm({
               store.setOpen(true);
             }
           }}
-          onChange={(e) => {
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             userTypedValue.current = e.target.value;
             setActiveIndex(null);
           }}
-          onKeyDown={(e) => {
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
             const isOpen = store.getState().open;
             if (e.key === 'ArrowDown') {
               e.preventDefault();
@@ -158,8 +154,8 @@ export default function SearchForm({
 
         {currentStoreValue && (
           <CloseButton
-            // 4. Mantenemos preventDefault, pero ahora inputRef.current.focus() asegura el comportamiento
-            onMouseDown={(e) => {
+            // Tipado del MouseEvent
+            onMouseDown={(e: MouseEvent<HTMLElement>) => {
               e.preventDefault();
               e.stopPropagation();
               handleClearInput();
@@ -195,12 +191,11 @@ export default function SearchForm({
             >
               <div className="searchHistory-button">{item}</div>
               <CloseButton
-                onMouseDown={(e) => {
+                // Tipado del MouseEvent
+                onMouseDown={(e: MouseEvent<HTMLElement>) => {
                   e.preventDefault();
                   e.stopPropagation();
                   handleRemoveLastSearch(item);
-                  // Opcional: Si quieres que al borrar un item del historial vuelva el foco al input
-                  // inputRef.current?.focus();
                 }}
                 size={18}
                 className="searchHistory-remove"

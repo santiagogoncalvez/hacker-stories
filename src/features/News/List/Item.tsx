@@ -1,10 +1,11 @@
 import { ItemProps } from '../../../types/types';
 import StoryInfo from './StoryInfo';
 import CommentInfo from './CommentInfo';
-import { FavouriteButton } from './Actionbuttons';
 import { memo } from 'react';
+import { FavouriteButton } from './ActionButtons.tsx';
 
-const Item = ({ item, onRemoveItem, type }: ItemProps) => {
+
+const Item = ({ item, type }: ItemProps) => {
 
   return (
     <li className="story">

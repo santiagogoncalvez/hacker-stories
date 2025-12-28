@@ -1,5 +1,5 @@
 
-import { SortState, sort as SortType } from '../../../types/types';
+import { SortState, Sort as SortType } from '../../../types/types';
 import CaretIcon from '../../../assets/caret.svg?react';
 
 type Field = {

@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Story } from '../types/types';
+import { Story, SortState, FavouriteFilter } from '../types/types';
 import CommonList from '../features/News/List/CommonList';
 import Display from '../features/News/List/DisplayToggle';
 
@@ -11,8 +11,6 @@ import { sortActionList } from '../utils/sortActions';
 import { useFavoritesContext } from '../context/favorites';
 import { NoFavoritesResults } from '../features/News/NoSearchResults';
 import { TABLE_FIELDS } from '../constants/tableFields';
-
-type FavouriteFilter = 'story' | 'comment';
 
 const FavouritesFilter = ({
   value,
@@ -49,7 +47,7 @@ const Favourites = () => {
   const [filter, setFilter] = useState<FavouriteFilter>('story');
   const [display, setDisplay] = useState<'CARD' | 'LIST'>('CARD');
   const [search, setSearch] = useState<string>('');
-  const [sort, setSort] = useState({
+  const [sort, setSort] = useState<SortState>({
     sortType: 'POINTS',
     isReverse: true,
   });
@@ -116,7 +114,7 @@ const Favourites = () => {
               searchAction={setSearch}
               lastSearches={[]}
               placeholder="Filter favorites..."
-              mode='live'
+              mode="live"
             />
 
             <SortProps

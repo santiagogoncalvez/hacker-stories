@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { sortActionList } from '../../../utils/sortActions';
 import SortProps from '../SortProps';
 import SearchForm from '../../../components/forms/SearchForm';
-import EmptySearchState from '../EmptySearchState';
 import NewsSkeletonList from '../NewsSkeletonList';
 import DisplayList from './DisplayList';
 import DisplayToggle from './DisplayToggle';
@@ -66,8 +65,8 @@ const List = ({
       </div>
 
       <SearchMeta
-        nbHits={stories.nbHits}
-        processingTimeMs={stories.processingTimeMs}
+        nbHits={stories.nbHits || 0}
+        processingTimeMs={stories.processingTimeMs || 0}
         isLoading={stories.isLoading}
       />
 
