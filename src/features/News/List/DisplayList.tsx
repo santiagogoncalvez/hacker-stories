@@ -39,7 +39,6 @@ const DisplayList = ({
           type={type}
         />
       )}
-      {console.log(stories)}
       {stories.hits.length > 0 &&
         stories.page < 49 &&
         stories.page < stories.nbPages - 1 &&
