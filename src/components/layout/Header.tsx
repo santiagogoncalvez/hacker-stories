@@ -57,7 +57,7 @@ const Header = () => {
               onClick={closeMenu}
               className={`appNav-item ${location.pathname === '/' ? 'active' : ''}`}
             >
-              News
+              Stories
             </Link>
             <Link
               to="/comments"

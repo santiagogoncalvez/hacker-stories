@@ -26,7 +26,7 @@ const FavouritesFilter = ({
         className={value === 'story' ? 'active' : ''}
         onClick={() => onChange('story')}
       >
-        News
+        Stories
       </button>
 
       <button
