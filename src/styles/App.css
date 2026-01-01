@@ -575,12 +575,13 @@ body {
   align-items: center !important;
   justify-content: center;
   height: 2.5rem !important;
-  padding: 0 0 0 2.5rem !important;
+  /* padding: 0 0 0 2.5rem !important; */
 }
 
 .sortProps__value-container input {
   /* Si pongo el input en display none se elininan todos los eventos del select*/
   /* display: none !important; */
+  position: absolute;
 }
 
 .sortProps__value-container div {
