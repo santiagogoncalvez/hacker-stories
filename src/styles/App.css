@@ -1064,27 +1064,37 @@ body {
 }
 
 .favouritesFilter--segmented button {
-  padding: 6px 12px;
+  padding: 8px 16px; /* Un poco más de aire mejora el tap-target */
   border-radius: var(--boder-radius-app);
-  background: transparent;
-  border: none;
+  border: 1px solid var(--lighter-gray);
+  background-color: white; /* Base sólida para que el hover destaque */
+  background-color: #e8e8e8;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--dark-gray);
+  cursor: pointer;
+}
+
+/* ESTADO: HOVER (Pasar el ratón) */
+.favouritesFilter--segmented button:hover {
+  /* background-color: #f5f5f5;
+  border-color: var(--dark-gray);
+  color: var(--black); */
+    background-color: #e8e8e8;
+}
+
+/* ESTADO: ACTIVE (Seleccionado) */
+.favouritesFilter--segmented button.active {
+  background-color: var(--black); /* Cambio radical para indicar selección */
+  color: white; /* Texto en blanco para alto contraste */
+  border-color: var(--black);
+  /* Sombra opcional para dar sensación de "presionado" o resaltado */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 .favouritesFilter--segmented button:focus-visible {
   outline: var(--outline-focus-visible);
 }
-
-.favouritesFilter--segmented button:hover {
-  background-color: var(--lighter-gray);
-}
-.favouritesFilter--segmented button.active {
-  background-color: #e8e8e8;
-  color: var(--black);
-}
-
 .inlineIcon {
   display: inline-flex;
   align-items: center;
@@ -1160,6 +1170,7 @@ select:focus-visible,
   .listControls {
     /* justify-content: space-between; */
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
   }
