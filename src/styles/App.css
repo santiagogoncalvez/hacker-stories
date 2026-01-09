@@ -1115,7 +1115,7 @@ th {
 .favouritesFilter--segmented button {
   padding: 8px 16px; /* Un poco más de aire mejora el tap-target */
   border-radius: var(--boder-radius-app);
-  border: 1px solid var(--lighter-gray);
+  /* border: 1px solid var(--lighter-gray); */
   background-color: white; /* Base sólida para que el hover destaque */
   background-color: #e8e8e8;
   font-size: 0.9rem;
