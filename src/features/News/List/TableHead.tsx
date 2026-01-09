@@ -21,7 +21,7 @@ const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
               {field.key === 'ACTION' ? (
                 <span className="actionHead">
                   {field.label}
-                  <div style={{ width: 18, height: 18 }} />
+                  {/* <div style={{ width: 18, height: 18 }} /> */}
                 </span>
               ) : (
                 <button

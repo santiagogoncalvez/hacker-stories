@@ -1,10 +1,10 @@
 export const TABLE_FIELDS = {
   story: [
-    { key: 'TITLE', label: 'Title', value: 'TITLE', width: '15%' },
+    { key: 'TITLE', label: 'Title', value: 'TITLE', width: '10%' },
     { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '5%' },
     { key: 'COMMENTS', label: 'Comments', value: 'COMMENTS', width: '5%' },
-    { key: 'POINTS', label: 'Points', value: 'POINTS', width: '5%' },
-    { key: 'ACTION', label: 'Action', value: '', width: '5%' },
+    { key: 'POINTS', label: 'Points', value: 'POINTS', width: '4%' },
+    { key: 'ACTION', label: 'Action', value: '', width: '3%' },
   ],
   comment: [
     {
