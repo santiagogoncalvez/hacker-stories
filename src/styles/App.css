@@ -492,8 +492,12 @@ body {
 
 .storyLinkInfo div {
   display: flex;
+  flex-wrap: wrap;
   align-items: start;
-  gap: 26px;
+  column-gap: 26px;
+  row-gap: 8px;
+
+
 }
 .storyLinkInfo div div {
   display: flex;
@@ -1371,7 +1375,7 @@ button {
     rgba(255, 255, 255, 0.5) 60%,
     rgba(255, 255, 255, 0)
   );
-  animation: shimmer 2s infinite;
+  animation: shimmer 1.4s infinite;
 }
 
 @keyframes shimmer {
