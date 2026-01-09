@@ -142,8 +142,8 @@ const SortProps = ({
     }),
     singleValue: (base) => ({
       ...base,
-      color: 'var(--secondary)',
-      fontWeight: 500,
+      color: 'var(--black)',
+      fontWeight: 600,
       margin: '0 0 0 10px',
       position: 'static',
       transform: 'none',

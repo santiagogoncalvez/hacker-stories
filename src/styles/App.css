@@ -7,6 +7,8 @@
 :root {
   --boder-radius-app: 6px;
   --outline-focus-visible: 2px solid var(--gray);
+  --text-secondary: #666666;
+  --transition-button: background-color 0.1s ease;
 }
 body {
   margin-top: 0px !important;
@@ -73,6 +75,13 @@ body {
   border-radius: var(--boder-radius-app);
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
+  background-color: var(--dark-gray);
+
+  transition: var(--transition-button);
+}
+
+.searchControls-submitBt svg {
+  color: var(--white);
 }
 
 .searchControls-submitBt:focus-visible {
@@ -658,6 +667,8 @@ body {
   height: 2rem;
   width: 2rem;
   aspect-ratio: 1/1;
+
+  transition: var(--transition-button);
 }
 .display button:focus-visible {
   outline: var(--outline-focus-visible);
@@ -685,9 +696,8 @@ body {
 .listContainer__cellInner {
   padding: 0.5rem;
 }
-.listContainer__cell {
-  /* display: flex; */
-  /* flex-direction: column; */
+.listContainer__cell span{
+  min-height: 100%;
 }
 
 /* keep any existing table margin rule */
@@ -697,15 +707,15 @@ body {
 
 /* table links */
 .listContainer table a {
-  color: var(--primary);
   font-size: 1rem;
-  font-weight: 500;
+  /* font-weight: 500; */
   line-height: 1.3rem;
+  text-decoration: underline;
+  /* color: var(--black) !important; */
 }
 .listContainer table a:hover {
-  color: var(--light-primary);
+  /* color: var(--primary) !important; */
 }
-
 /* head table controls */
 .headTable button {
   display: flex;
@@ -716,6 +726,11 @@ body {
   background-color: transparent;
   color: var(--dark-gray);
   padding: 0;
+  font-weight: 500 !important;
+}
+
+th{
+  font-weight: 500 !important;
 }
 
 .headTable button:hover {
@@ -723,11 +738,11 @@ body {
 }
 
 .headTable button.active {
-  color: var(--secondary);
+  /* color: var(--light-primary); */
 }
 
 .headTable button .caretIcon {
-  color: var(--secondary);
+  color: var(--light-primary);
 }
 .headTable .ACTIONS:hover {
   cursor: initial !important;
@@ -758,13 +773,17 @@ body {
   margin: 0;
 }
 
+
 /* celdas base: keep td as table-cells */
 .listContainer__responsiveTable th,
 .listContainer__responsiveTable td {
-  padding: 0.5rem 0.75rem;
+  padding: 1.5rem 0.75rem;
   vertical-align: middle;
   box-sizing: border-box;
   overflow: hidden;
+
+  border-width: 1px !important;
+
 }
 
 /* internal element for truncation, but do not change td display */
@@ -795,7 +814,7 @@ body {
   cursor: pointer;
   margin-left: 6px;
   padding: 0;
-  color: var(--secondary);
+  /* color: var(--secondary); */
   font-size: 0.95rem;
 }
 
@@ -1017,23 +1036,47 @@ body {
   line-height: 1.45;
   word-break: break-word;
 }
+
 .commentExpandButton {
   background: none;
   border: none;
   cursor: pointer;
   margin-left: 4px;
   padding: 0;
-  color: var(--secondary);
-  font-size: 18px;
+  /* Cambio: Color neutro de base para no saturar */
+  color: var(--text-secondary);
+  /* Cambio: Un tamaño un poco más integrado al texto */
+  font-size: 15px; 
+  font-weight: 600;
   line-height: 1;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
 }
+
+.commentExpandButton:hover {
+  /* Cambio: Aquí es donde el color primario brilla */
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 .commentCollapseButton {
   background: none;
   border: none;
   cursor: pointer;
   margin-right: 8px;
-  color: var(--secondary);
+  padding: 0;
+  /* Estilo similar al expandir pero quizás más sutil */
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s ease;
 }
+
+.commentCollapseButton:hover {
+  /* Usamos el light-primary para una acción de "cerrar" 
+     que es menos prioritaria que la de "abrir" */
+  color: var(--light-primary);
+}
+
 .commentRowExpanded td {
   vertical-align: top;
 }
@@ -1444,4 +1487,14 @@ button {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.news a {
+  /* color: var(--black) !important; */
+  font-weight: 400;
+}
+
+.news a:hover {
+  text-decoration: underline !important ;
+  color: var(--primary) !important;
 }

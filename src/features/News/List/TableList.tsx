@@ -46,8 +46,8 @@ const TableList = ({
                         <p
                           style={{
                             display: 'inline',
-                            fontSize: '1.2rem',
-                            fontWeight: '500',
+                            fontSize: '1rem',
+                            fontWeight: '400',
                             color: 'var(--gray)',
                           }}
                         >
@@ -64,15 +64,17 @@ const TableList = ({
                             : item.commentText?.slice(0, 120)}
                         </span>
                         {item.commentText && item.commentText.length > 120 && (
-                          <button
-                            type="button"
-                            className="commentExpandButton"
-                            onClick={() =>
-                              setExpandedId(isExpanded ? null : item.objectId)
-                            }
-                          >
-                            {isExpanded ? 'Collapse' : 'More'}
-                          </button>
+                          <span>
+                            <button
+                              type="button"
+                              className="commentExpandButton"
+                              onClick={() =>
+                                setExpandedId(isExpanded ? null : item.objectId)
+                              }
+                            >
+                              {isExpanded ? 'Collapse' : '...More'}
+                            </button>
+                          </span>
                         )}
                       </>
                     )}

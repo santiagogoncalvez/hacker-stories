@@ -147,7 +147,7 @@ input:not([type]) {
   display: block;
   padding: 1rem;
   font-size: 1rem;
-  border: 2px solid var(--lighter-gray);
+  border: 1px solid var(--lighter-gray);
   color: var(--black);
   appearance: none;
   border-radius: var(--boder-radius);
@@ -186,7 +186,7 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: 0;
-  border: 2px solid var(--primary);
+  border: 1px solid var(--primary);
 }
 input:invalid,
 select:invalid,
