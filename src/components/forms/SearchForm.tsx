@@ -6,8 +6,6 @@ import { SearchFormProps } from '../../types/types';
 
 const MAX_LAST_SEARCHES = 5;
 
-
-
 export default function SearchForm({
   searchInit = '',
   searchAction,
@@ -62,8 +60,16 @@ export default function SearchForm({
 
   const commitSearch = (value: string) => {
     executeSearch(value);
-    store.setOpen(false);
-    setActiveIndex(null);
+
+    // Usamos setTimeout para "saltar" al final de la pila de ejecución.
+    // Esto asegura que se ejecute DESPUÉS de que Ariakit intente restaurar el foco.
+    setTimeout(() => {
+      store.setOpen(false);
+      setActiveIndex(null);
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
+    }, 0);
   };
 
   const moveSelection = (direction: 'up' | 'down') => {
