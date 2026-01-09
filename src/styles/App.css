@@ -696,7 +696,7 @@ body {
 .listContainer__cellInner {
   padding: 0.5rem;
 }
-.listContainer__cell span{
+.listContainer__cell span {
   min-height: 100%;
 }
 
@@ -724,12 +724,12 @@ body {
   flex-direction: row;
   gap: 6px;
   background-color: transparent;
-  color: var(--dark-gray);
+  color: var(--gray);
   padding: 0;
   font-weight: 500 !important;
 }
 
-th{
+th {
   font-weight: 500 !important;
 }
 
@@ -739,10 +739,11 @@ th{
 
 .headTable button.active {
   /* color: var(--light-primary); */
+  color: var(--black);
 }
 
 .headTable button .caretIcon {
-  color: var(--light-primary);
+  color: var(--black);
 }
 .headTable .ACTIONS:hover {
   cursor: initial !important;
@@ -755,6 +756,7 @@ th{
   flex-direction: row;
   gap: 6px;
   height: 2.5rem;
+  color: var(--gray);
 }
 
 /* wrapper allowing horizontal scroll to avoid breaking layout */
@@ -773,7 +775,6 @@ th{
   margin: 0;
 }
 
-
 /* celdas base: keep td as table-cells */
 .listContainer__responsiveTable th,
 .listContainer__responsiveTable td {
@@ -783,7 +784,6 @@ th{
   overflow: hidden;
 
   border-width: 1px !important;
-
 }
 
 /* internal element for truncation, but do not change td display */
@@ -888,7 +888,7 @@ th{
 /* El número gigante estilo Icons8 */
 .noResultsCode {
   font-size: 4rem;
-  line-height:4rem;
+  line-height: 4rem;
   margin: 0;
   font-weight: 800;
   color: var(--light-gray);
@@ -1046,10 +1046,12 @@ th{
   /* Cambio: Color neutro de base para no saturar */
   color: var(--text-secondary);
   /* Cambio: Un tamaño un poco más integrado al texto */
-  font-size: 15px; 
+  font-size: 15px;
   font-weight: 600;
   line-height: 1;
-  transition: color 0.2s ease, text-decoration 0.2s ease;
+  transition:
+    color 0.2s ease,
+    text-decoration 0.2s ease;
 }
 
 .commentExpandButton:hover {
@@ -1123,16 +1125,18 @@ th{
   /* background-color: #f5f5f5;
   border-color: var(--dark-gray);
   color: var(--black); */
-    background-color: #e8e8e8;
+  background-color: #e8e8e8;
 }
 
 /* ESTADO: ACTIVE (Seleccionado) */
 .favouritesFilter--segmented button.active {
-  background-color: var(--black); /* Cambio radical para indicar selección */
+  background-color: var(
+    --dark-gray
+  ); /* Cambio radical para indicar selección */
   color: white; /* Texto en blanco para alto contraste */
   border-color: var(--black);
   /* Sombra opcional para dar sensación de "presionado" o resaltado */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .favouritesFilter--segmented button:focus-visible {

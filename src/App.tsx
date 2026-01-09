@@ -9,16 +9,17 @@ import "./styles/App.css";
 import Favorites from './pages/Favorites';
 import ScrollToTopButton from './components/ui/ScrollToTopButton';
 import NotFound from './pages/NotFound';
+import { Toaster } from 'sonner';
 
 const App = () => {
   useScrollToTopOnRouteChange();
+  
 
   return (
     <FavoritesProvider>
       <StoriesProvider>
         <div className="app">
           <Header />
-          <ScrollToTopButton />
 
           <Routes>
             <Route path="/" Component={News} />
@@ -27,6 +28,9 @@ const App = () => {
 
             <Route path="*" Component={NotFound} />
           </Routes>
+
+          <ScrollToTopButton />
+          <Toaster position='top-right' />
         </div>
       </StoriesProvider>
     </FavoritesProvider>

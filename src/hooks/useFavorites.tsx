@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { Story } from '../types/types';
 import { useStorageState } from './useStorageState';
 
@@ -9,12 +10,14 @@ function useFavorites() {
     // En lugar de usar (prev) => ..., pasamos el nuevo array directamente
     const nextFavorites = [item, ...favorites];
     setFavorites(nextFavorites);
+    toast.success('Añadido a favoritos');
   };
 
   const removeFavorite = (id: string) => {
     // Calculamos el filtro y pasamos el resultado
     const nextFavorites = favorites.filter((f) => f.objectId !== id);
     setFavorites(nextFavorites);
+    toast.success('Eliminado de favoritos');
   };
 
   const isFavorite = (id: string): boolean => {
