@@ -61,15 +61,8 @@ export default function SearchForm({
   const commitSearch = (value: string) => {
     executeSearch(value);
 
-    // Usamos setTimeout para "saltar" al final de la pila de ejecución.
-    // Esto asegura que se ejecute DESPUÉS de que Ariakit intente restaurar el foco.
-    setTimeout(() => {
-      store.setOpen(false);
-      setActiveIndex(null);
-      if (inputRef.current) {
-        inputRef.current.blur();
-      }
-    }, 0);
+    store.setOpen(false);
+    setActiveIndex(null);
   };
 
   const moveSelection = (direction: 'up' | 'down') => {
