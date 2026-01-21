@@ -10,14 +10,14 @@ function useFavorites() {
     // En lugar de usar (prev) => ..., pasamos el nuevo array directamente
     const nextFavorites = [item, ...favorites];
     setFavorites(nextFavorites);
-    toast.success('Añadido a favoritos');
+    toast.success('Added to favorites');
   };
 
   const removeFavorite = (id: string) => {
     // Calculamos el filtro y pasamos el resultado
     const nextFavorites = favorites.filter((f) => f.objectId !== id);
     setFavorites(nextFavorites);
-    toast.success('Eliminado de favoritos');
+    toast.success('Removed from favorites');
   };
 
   const isFavorite = (id: string): boolean => {
