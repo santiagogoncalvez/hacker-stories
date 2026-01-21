@@ -63,6 +63,11 @@ export default function SearchForm({
 
     store.setOpen(false);
     setActiveIndex(null);
+
+    // ⚡ Despues de cerrar el popup, quitar el foco del input
+    setTimeout(() => {
+      inputRef.current?.blur();
+    }, 0);
   };
 
   const moveSelection = (direction: 'up' | 'down') => {
@@ -146,7 +151,6 @@ export default function SearchForm({
 
         {currentStoreValue && (
           <CloseButton
-            // Tipado del MouseEvent
             onMouseDown={(e: MouseEvent<HTMLElement>) => {
               e.preventDefault();
               e.stopPropagation();
@@ -183,7 +187,6 @@ export default function SearchForm({
             >
               <div className="searchHistory-button">{item}</div>
               <CloseButton
-                // Tipado del MouseEvent
                 onMouseDown={(e: MouseEvent<HTMLElement>) => {
                   e.preventDefault();
                   e.stopPropagation();
