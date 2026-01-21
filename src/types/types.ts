@@ -136,11 +136,7 @@ export type Field = {
 export interface StoriesContextType {
   stories: ListState | null;
   search: string;
-  lastSearches: string[];
-  searchAction: (term: string) => void;
   handleMoreStories: () => void;
-  handleRemoveStory: (item: Story) => void;
-  handleRemoveLastSearch: (term: string) => void;
 }
 
 export type SearchFormProps = {

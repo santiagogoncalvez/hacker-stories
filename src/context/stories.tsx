@@ -1,38 +1,53 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, ReactNode, useCallback, useMemo } from 'react';
 import { useStories } from '../hooks/useStories';
-import { StoriesContextType } from '../types/types';
-// import { StoriesContextType } from '../types/types';
+import { useStoryParams } from '../hooks/useStoryParams'; // Importamos el hook de URL
 
-
-
-// Inicializamos con el tipo o undefined
-export const StoriesContext = createContext<StoriesContextType | undefined>(
+export const StoriesContext = createContext(
   undefined,
 );
 
-export const StoriesProvider = ({ children }: { children: ReactNode }) => {
-  const {
-    stories,
-    search,
-    lastSearches,
-    searchAction,
-    handleMoreStories,
-    handleRemoveStory, // Este es el handleRemoveStory que disparaba el dispatch
-    handleRemoveLastSearch,
-  } = useStories('');
 
-  // El value ahora coincide perfectamente con StoriesContextType
-  const value: StoriesContextType = {
-    stories,
-    search,
-    lastSearches,
-    searchAction,
-    handleMoreStories,
-    handleRemoveStory,
-    handleRemoveLastSearch,
-  };
+interface StoriesProviderProps {
+  children: ReactNode;
+  query: string;
+  page: number;
+  dataType: string;
+}
+
+export const StoriesProvider = ({
+  children,
+  query,
+  page,
+  dataType,
+}: StoriesProviderProps) => {
+  // 1. Obtenemos las acciones de la URL
+  const { setPageAction } = useStoryParams();
+
+  // 2. Obtenemos la data (que reacciona a query/page/dataType)
+  const { stories, hasNextPage } = useStories({
+    query,
+    page,
+    dataType,
+  });
+
+  // 3. AHORA: El botón "More" solo actualiza la URL
+  const handleMoreStories = useCallback(() => {
+    if (hasNextPage) {
+      setPageAction(page + 1);
+    }
+  }, [hasNextPage, setPageAction, page]);
+
+  // Memorizamos el valor para evitar re-renders innecesarios de los consumidores
+  const value = useMemo(
+    () => ({
+      stories,
+      search: query,
+      handleMoreStories,
+    }),
+    [stories, query, handleMoreStories],
+  );
 
   return (
-    <StoriesContext.Provider value={value}>{children}</StoriesContext.Provider>
+    <StoriesContext value={value}>{children}</StoriesContext>
   );
 };

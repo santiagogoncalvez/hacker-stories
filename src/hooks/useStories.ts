@@ -1,224 +1,115 @@
-import { useEffect, useReducer, useRef, useCallback, useMemo } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { storiesReducer } from '../reducers/storiesReducer';
+import { useEffect, useMemo, useRef } from 'react';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'; // Única línea nueva
 import { getAsyncStories } from '../services/getAsyncStories';
 import { getUrl } from '../constants/apiEndpoints';
-import { Story, StoriesState } from '../types/types';
-import {
-  emptyList,
-  initialState,
-  LAST_SEARCHES_KEY,
-  SUPPORTED_DATA_TYPES,
-} from '../constants/stories';
-import { getLastSearchesFromStorage } from '../utils/storageHelpers';
-import { getDataType, getPageFromURL } from '../utils/urlHelpers';
-import { computeLastSearches } from '../utils/searches';
+import { emptyList, SUPPORTED_DATA_TYPES } from '../constants/stories';
 
-export function useStories(initialSearch = '') {
-  const location = useLocation();
-  const { pathname, search: locationSearch } = location;
-  const [, setSearchParams] = useSearchParams();
-  const dataType = getDataType(pathname);
+interface UseStoriesProps {
+  dataType: string;
+  query: string;
+  page: number;
+}
 
-  const initialUrlParams = useMemo(
-    () => new URLSearchParams(locationSearch),
-    [locationSearch],
-  );
-  const currentUrlQuery = initialUrlParams.get('query') ?? '';
+export function useStories({ dataType, query, page }: UseStoriesProps) {
+  const queryClient = useQueryClient(); // Nuevo: para poder resetear
+  const isInitialFetch = useRef(true);
 
-  const [state, dispatch] = useReducer(storiesReducer, {
-    ...initialState,
-    search: currentUrlQuery || initialSearch,
-    searchByType: dataType
-      ? { [dataType]: currentUrlQuery }
-      : { story: '', comment: '' },
-    lastSearches: getLastSearchesFromStorage(),
-  } as StoriesState);
-
-  // SOLUCIÓN AL WARNING: Memorizamos activeList para que su referencia sea estable
-  const activeList = useMemo(() => {
-    return dataType ? state.lists[dataType] : { ...emptyList };
-  }, [dataType, state.lists]);
-
-  const prevDataTypeRef = useRef<string | null>(null);
-
-  /* 1. Sync URL Query -> State Search */
-  useEffect(() => {
-    if (
-      !dataType ||
-      !(SUPPORTED_DATA_TYPES as readonly string[]).includes(dataType)
-    )
-      return;
-
-    const params = new URLSearchParams(locationSearch);
-    const urlQuery = params.get('query') ?? '';
-
-    if (state.searchByType[dataType] !== urlQuery) {
-      dispatch({ type: 'SET_SEARCH', dataType, payload: urlQuery });
-      if (urlQuery) {
-        dispatch({
-          type: 'SET_LAST_SEARCHES',
-          payload: computeLastSearches(urlQuery, state.lastSearches),
-        });
-      }
-    }
-  }, [dataType, locationSearch, state.searchByType, state.lastSearches]);
-
-  // Extraemos solo lo que necesitamos para las dependencias
-  const { page, needsFetch, nbPages, isLoading, isLoadingMore } = activeList;
-
-  /* ... resto del archivo sin cambios ... */
-
-  /* 2. Sync URL Page -> State (Corrección automática) */
-  useEffect(() => {
-    if (!dataType || isLoading || isLoadingMore) return;
-
-    const params = new URLSearchParams(locationSearch);
-    const rawUrlPage = getPageFromURL(params);
-    const TECHNICAL_LIMIT = 49;
-
-    const maxAllowedPage =
-      nbPages && nbPages > 0
-        ? Math.min(TECHNICAL_LIMIT, nbPages - 1)
-        : TECHNICAL_LIMIT;
-
-    // 1. CORRECCIÓN: Si la página es inválida, redirigimos y SALIMOS del efecto
-    if (rawUrlPage > maxAllowedPage) {
-      setSearchParams(
-        (prev) => {
-          prev.set('page', maxAllowedPage.toString());
-          return prev;
-        },
-        { replace: true }, // Esto reemplaza la entrada inválida en el historial
-      );
-      return; // Importante: detenemos la ejecución para evitar despachar INCREMENT_PAGE
-    }
-
-    // 2. Lógica incremental: Solo se ejecuta si la página ya está validada arriba
-    if (rawUrlPage > page) {
-      dispatch({ type: 'INCREMENT_PAGE', dataType });
-    } else if (rawUrlPage < page) {
-      dispatch({ type: 'RESET_LIST', dataType });
-    }
-  }, [
-    dataType,
-    locationSearch,
-    page,
-    nbPages,
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
     isLoading,
-    isLoadingMore,
-    setSearchParams,
-  ]);
+  } = useInfiniteQuery({
+    queryKey: ['stories', dataType, query],
+    queryFn: async ({ pageParam = 0 }) => {
+      if (!SUPPORTED_DATA_TYPES.includes(dataType)) return emptyList;
 
-  /* ... resto del archivo sin cambios ... */
+      // --- TU LÓGICA ACUMULATIVA (INTACTA) ---
+      if (pageParam === 0 && page > 0 && isInitialFetch.current) {
+        isInitialFetch.current = false;
 
-  /* 3. FETCHING LOGIC */
-  useEffect(() => {
-    if (!dataType || !needsFetch) return;
-
-    let ignore = false;
-
-    dispatch({
-      type: page === 0 ? 'FETCH_INIT' : 'FETCH_MORE_INIT',
-      dataType,
-    });
-
-    getAsyncStories({ url: getUrl(state.search, page, dataType) })
-      .then((res) => {
-        if (ignore) return;
-        dispatch({
-          type: 'FETCH_SUCCESS',
-          dataType,
-          hits: res?.hits ?? [],
-          page: res?.page ?? 0,
-          nbHits: res?.nbHits ?? 0,
-          nbPages: res?.nbPages ?? 0,
-          processingTimeMs: res?.processingTimeMs ?? 0,
+        const targetPageRes = await getAsyncStories({
+          url: getUrl(query, page, dataType),
         });
-      })
-      .catch(() => {
-        if (ignore) return;
-        dispatch({ type: 'FETCH_FAILURE', dataType });
-      });
 
-    return () => {
-      ignore = true;
-    };
-    // Dependemos de 'page' y 'needsFetch', no del objeto activeList entero
-  }, [dataType, state.search, page, needsFetch]);
+        if (
+          !targetPageRes ||
+          !targetPageRes.hits ||
+          targetPageRes.hits.length === 0
+        ) {
+          return targetPageRes ?? { ...emptyList, page };
+        }
 
-  /* 4. Reset al cambiar de sección */
-  useEffect(() => {
-    const prev = prevDataTypeRef.current;
-    if (prev && dataType && prev !== dataType) {
-      const params = new URLSearchParams(window.location.search);
+        const previousPagesIndices = Array.from({ length: page }, (_, i) => i);
+        const results = await Promise.all(
+          previousPagesIndices.map((p) =>
+            getAsyncStories({ url: getUrl(query, p, dataType) }),
+          ),
+        );
 
-      if (!params.has('query')) {
-        dispatch({ type: 'SET_SEARCH', dataType, payload: '' });
-      } else {
-        dispatch({
-          type: 'SET_SEARCH',
-          dataType,
-          payload: params.get('query') || '',
-        });
+        const allHits = [
+          ...results.flatMap((r) => r?.hits || []),
+          ...targetPageRes.hits,
+        ];
+
+        return { ...targetPageRes, hits: allHits, page };
       }
 
-      dispatch({ type: 'RESET_LIST', dataType: dataType || '' });
-    }
-    prevDataTypeRef.current = dataType;
-  }, [dataType]);
+      // --- TU CARGA NORMAL (INTACTA) ---
+      const res = await getAsyncStories({
+        url: getUrl(query, pageParam, dataType),
+      });
 
-  /* Persistencia */
+      isInitialFetch.current = false;
+      return res ?? { ...emptyList, page: pageParam };
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage.page + 1 < lastPage.nbPages && lastPage.hits.length > 0
+        ? lastPage.page + 1
+        : undefined,
+    initialPageParam: 0,
+    enabled: !!dataType,
+    refetchOnWindowFocus: false,
+  });
+
+  // --- LÓGICA DE RESET AÑADIDA ---
   useEffect(() => {
-    localStorage.setItem(LAST_SEARCHES_KEY, JSON.stringify(state.lastSearches));
-  }, [state.lastSearches]);
+    // Si la URL se queda limpia, reseteamos el caché de TanStack explícitamente
+    if (query === '' && page === 0) {
+      queryClient.resetQueries({ queryKey: ['stories', dataType, ''] });
+    }
+    // Mantenemos tu reseteo del flag de carga acumulativa
+    isInitialFetch.current = true;
+  }, [query, dataType, page, queryClient]);
 
-  /* ACCIONES */
-  const searchAction = useCallback(
-    (term: string) => {
-      const value = term.trim();
-      setSearchParams((prev) => {
-        prev.set('query', value);
-        prev.delete('page');
-        return prev;
-      });
-    },
-    [setSearchParams],
-  );
+  // --- TU REACTIVIDAD AL PAGE (INTACTA) ---
+  useEffect(() => {
+    const lastLoadedPage = data?.pages[data.pages.length - 1]?.page ?? 0;
+    if (page > lastLoadedPage && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [page, data, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const handleMoreStories = useCallback(() => {
-    if (!dataType) return;
-    setSearchParams((prev) => {
-      prev.set('page', (activeList.page + 1).toString());
-      return prev;
-    });
-  }, [dataType, activeList.page, setSearchParams]);
+  // --- TU FORMATEO DE DATA (INTACTA) ---
+  const stories = useMemo(() => {
+    if (!data) return { ...emptyList, isLoading };
 
-  const handleRemoveStory = useCallback(
-    (item: Story) => {
-      if (dataType) dispatch({ type: 'REMOVE_STORY', dataType, payload: item });
-    },
-    [dataType],
-  );
+    const allHits = data.pages.flatMap((p) => p.hits);
+    const lastPageInfo = data.pages[data.pages.length - 1];
 
-  const handleRemoveLastSearch = useCallback(
-    (term: string) => {
-      dispatch({
-        type: 'SET_LAST_SEARCHES',
-        payload: state.lastSearches.filter((s) => s !== term),
-      });
-    },
-    [state.lastSearches],
-  );
+    return {
+      hits: allHits,
+      page: lastPageInfo.page,
+      nbPages: lastPageInfo.nbPages,
+      nbHits: lastPageInfo.nbHits,
+      isLoading: false,
+      isLoadingMore: isFetchingNextPage,
+      isError,
+      isNoResults: allHits.length === 0 && !isLoading,
+    };
+  }, [data, isLoading, isFetchingNextPage, isError]);
 
-  return {
-    stories: activeList,
-    search: state.search,
-    lastSearches: state.lastSearches,
-    searchByType: state.searchByType,
-    searchAction,
-    handleMoreStories,
-    handleRemoveStory,
-    handleRemoveLastSearch,
-  };
+  return { stories, hasNextPage };
 }

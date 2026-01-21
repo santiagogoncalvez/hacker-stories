@@ -21,11 +21,11 @@ const DisplayList = ({
 
   return (
     <>
-      {stories.hits.length > 0 && display === 'CARD' && (
+      {!stories.isNoResults && display === 'CARD' && (
         <CommonList list={sortedList} type={type} />
       )}
 
-      {stories.hits.length > 0 && display === 'LIST' && (
+      {!stories.isNoResults && display === 'LIST' && (
         <TableList
           list={sortedList}
           sort={sort}
@@ -39,7 +39,7 @@ const DisplayList = ({
           type={type}
         />
       )}
-      {stories.hits.length > 0 &&
+      {!stories.isNoResults &&
         stories.page < 49 &&
         stories.page < stories.nbPages - 1 &&
         stories.hits.length < stories.nbHits && (

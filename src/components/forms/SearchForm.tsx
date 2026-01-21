@@ -3,17 +3,33 @@ import { useEffect, useRef, useState, MouseEvent } from 'react';
 import SearchIcon from '../../assets/search.svg?react';
 import CloseButton from '../ui/CloseButton';
 import { SearchFormProps } from '../../types/types';
-
-const MAX_LAST_SEARCHES = 5;
+import { useStoryParams } from '../../hooks/useStoryParams';
+import { LAST_SEARCHES_KEY } from '../../constants/stories';
+import { computeLastSearches } from '../../utils/searches';
 
 export default function SearchForm({
-  searchInit = '',
-  searchAction,
-  handleRemoveLastSearch,
-  lastSearches = [],
   placeholder = 'Search...',
   mode = 'button',
-}: SearchFormProps) {
+}: Partial<SearchFormProps>) {
+  // 1. Conexión con la URL
+  const { query: searchInit, searchAction } = useStoryParams();
+
+  // 2. Gestión interna del historial
+  const [lastSearches, setLastSearches] = useState<string[]>(() => {
+    const saved = localStorage.getItem(LAST_SEARCHES_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const handleRemoveLastSearch = (term: string) => {
+    setLastSearches((prev) => {
+      const next = prev.filter((s) => s !== term);
+      localStorage.setItem(LAST_SEARCHES_KEY, JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // --- Lógica original del Form preservada ---
+  const MAX_LAST_SEARCHES = 5;
   const items = lastSearches
     .filter((s) => typeof s === 'string' && s.trim() !== '')
     .slice(0, MAX_LAST_SEARCHES);
@@ -43,7 +59,16 @@ export default function SearchForm({
     const trimmed = value.trim();
     if (trimmed === lastSearchRef.current) return;
     lastSearchRef.current = trimmed;
+
+    // 3. Ejecutar búsqueda y guardar historial
     searchAction(trimmed);
+    if (trimmed) {
+      setLastSearches((prev) => {
+        const next = computeLastSearches(trimmed, prev);
+        localStorage.setItem(LAST_SEARCHES_KEY, JSON.stringify(next));
+        return next;
+      });
+    }
   };
 
   const handleClearInput = () => {
@@ -60,11 +85,8 @@ export default function SearchForm({
 
   const commitSearch = (value: string) => {
     executeSearch(value);
-
     store.setOpen(false);
     setActiveIndex(null);
-
-    // ⚡ Despues de cerrar el popup, quitar el foco del input
     setTimeout(() => {
       inputRef.current?.blur();
     }, 0);

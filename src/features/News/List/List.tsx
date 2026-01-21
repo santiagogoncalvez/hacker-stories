@@ -6,7 +6,12 @@ import SearchForm from '../../../components/forms/SearchForm';
 import NewsSkeletonList from '../NewsSkeletonList';
 import DisplayList from './DisplayList';
 import DisplayToggle from './DisplayToggle';
-import { ListProps, SortState, DisplayType, ListType } from '../../../types/types';
+import {
+  ListProps,
+  SortState,
+  DisplayType,
+  ListType,
+} from '../../../types/types';
 import SearchMeta from './SearchMeta';
 import { NoSearchResults } from '../NoSearchResults';
 
@@ -18,9 +23,6 @@ const List = ({
   search,
   handleMoreStories,
   onRemoveItem,
-  searchAction,
-  lastSearches,
-  handleRemoveLastSearch,
 }: ListProps) => {
   const { pathname } = useLocation();
   const type = getListTypeFromPath(pathname);
@@ -44,10 +46,6 @@ const List = ({
     <section className="listContainer">
       <div className="listControls">
         <SearchForm
-          searchInit={search}
-          searchAction={searchAction}
-          lastSearches={lastSearches}
-          handleRemoveLastSearch={handleRemoveLastSearch}
           placeholder={
             type === 'story' ? 'Search stories...' : 'Search comments...'
           }

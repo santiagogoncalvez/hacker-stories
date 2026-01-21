@@ -1,6 +1,5 @@
 import Header from './components/layout/Header';
 import News from './pages/News';
-import { StoriesProvider } from './context/stories';
 import { FavoritesProvider } from './context/favorites';
 import { Route, Routes } from 'react-router-dom';
 import { useScrollToTopOnRouteChange } from './hooks/useScrollToTopOnRouteChange';
@@ -17,7 +16,6 @@ const App = () => {
 
   return (
     <FavoritesProvider>
-      <StoriesProvider>
         <div className="app">
           <Header />
 
@@ -32,7 +30,6 @@ const App = () => {
           <ScrollToTopButton />
           <Toaster position='top-right' />
         </div>
-      </StoriesProvider>
     </FavoritesProvider>
   );
 };
