@@ -1,15 +1,15 @@
 import React from 'react';
-import { StoryInfoProps } from '../../../types/types';
+import { Story } from '../../../types/types';
 import ProfileIcon from '../../../assets/author.svg?react';
 import CommentsIcon from '../../../assets/comments.svg?react';
 import CaretUnfillIcon from '../../../assets/caret-unfill.svg?react';
 import { formatUpdatedDate } from '../../../utils/formatDate';
 
-const StoryInfo = ({ item }: StoryInfoProps) => {
+const StoryInfo = ({ item }: { item: Story }) => {
   const fields = [
-    { key: 'AUTHOR', value: item.author, Icon: ProfileIcon },
-    { key: 'numComments', value: item.numComments, Icon: CommentsIcon },
     { key: 'POINTS', value: item.points, Icon: CaretUnfillIcon },
+    { key: 'numComments', value: item.numComments, Icon: CommentsIcon },
+    { key: 'AUTHOR', value: item.author, Icon: ProfileIcon },
   ];
 
   return (

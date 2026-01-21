@@ -38,6 +38,8 @@ body {
   align-items: end;
   width: 100%;
   justify-content: space-between;
+  /* border: 1px solid var(--light-gray); */
+  /* border-radius: var(--boder-radius-app); */
 }
 
 /* .searchForm div:first-of-type{
@@ -59,11 +61,21 @@ body {
   gap: 10px;
   height: 2.5rem;
   padding: 0.5rem 3rem 0.5rem 1.25rem;
+  border: 1px solid var(--light-gray);
+  border-right: 0px;
   border-radius: var(--boder-radius-app) !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
   width: 100%;
   min-width: 0;
+}
+
+#searchQuery:focus {
+  border-right: 1px solid var(--primary);
+  border-top: 1px solid var(--primary);
+  border-bottom: 1px solid var(--primary);
+  border-left: 1px solid var(--primary);
+
 }
 
 .searchControls-submitBt {
@@ -72,11 +84,13 @@ body {
   align-items: center;
   height: 2.5rem;
   width: 2.5rem;
+  border: 1px solid var(--light-gray);
+  border-left: 0px;
   border-radius: var(--boder-radius-app);
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
   background-color: var(--dark-gray);
-
+  /* z-index: -1; */
   transition: var(--transition-button);
 }
 
@@ -496,8 +510,6 @@ body {
   align-items: start;
   column-gap: 26px;
   row-gap: 8px;
-
-
 }
 .storyLinkInfo div div {
   display: flex;
@@ -554,6 +566,9 @@ body {
   width: 100%;
   max-width: 15rem;
   width: 100%;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--boder-radius-app) !important;
+  background-color: rgb(250, 250, 250) !important;
 }
 
 .sortProps-select-container {
@@ -562,9 +577,8 @@ body {
 
 /* El botón principal (Control) */
 .sortProps__control {
-  background-color: rgb(250, 250, 250) !important;
-  border: 1px solid #e8e8e8 !important;
-  border-radius: var(--boder-radius-app) !important;
+  /* border: 1px solid #e8e8e8 !important; */
+  /* border-radius: var(--boder-radius-app) !important; */
   height: 2.5rem !important;
   min-height: 2.5rem !important;
   display: flex !important;
@@ -650,7 +664,7 @@ body {
 .display {
   width: fit-content;
   height: fit-content;
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--light-gray);
   background-color: rgb(250, 250, 250);
   border-radius: var(--boder-radius-app);
   display: flex;
