@@ -110,12 +110,10 @@ const Favourites = () => {
           {/* CONTROLS */}
           <div className="listControls">
             <SearchForm
-              searchInit={search}
-              searchAction={setSearch}
-              lastSearches={[]}
+              searchActionLive={setSearch}
+              searchInitLive={search}
               placeholder="Filter favorites..."
               mode="live"
-              handleRemoveLastSearch={() => {}}
             />
 
             <SortProps
@@ -134,10 +132,7 @@ const Favourites = () => {
           {!hasSearchResults ? (
             <NoFavoritesResults filter={filter} query={search} />
           ) : display === 'CARD' ? (
-            <CommonList
-              list={sortedList}
-              type={filter}
-            />
+            <CommonList list={sortedList} type={filter} />
           ) : (
             <TableList
               list={sortedList}

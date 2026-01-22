@@ -10,11 +10,12 @@ import { computeLastSearches } from '../../utils/searches';
 export default function SearchForm({
   placeholder = 'Search...',
   mode = 'button',
-}: Partial<SearchFormProps>) {
-  // 1. Conexión con la URL
+  searchActionLive,
+  searchInitLive,
+}: SearchFormProps) {
   const { query: searchInit, searchAction } = useStoryParams();
+  const effectiveInit = mode === 'live' ? (searchInitLive ?? '') : searchInit;
 
-  // 2. Gestión interna del historial
   const [lastSearches, setLastSearches] = useState<string[]>(() => {
     const saved = localStorage.getItem(LAST_SEARCHES_KEY);
     return saved ? JSON.parse(saved) : [];
@@ -28,19 +29,19 @@ export default function SearchForm({
     });
   };
 
-  // --- Lógica original del Form preservada ---
   const MAX_LAST_SEARCHES = 5;
   const items = lastSearches
     .filter((s) => typeof s === 'string' && s.trim() !== '')
     .slice(0, MAX_LAST_SEARCHES);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const userTypedValue = useRef(searchInit);
-  const lastSearchRef = useRef<string>(searchInit);
+  const formRef = useRef<HTMLFormElement>(null); // Referencia al form para el click outside
+  const userTypedValue = useRef(effectiveInit);
+  const lastSearchRef = useRef<string>(effectiveInit);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const store = Ariakit.useComboboxStore({
-    defaultValue: searchInit,
+    defaultValue: effectiveInit,
     setValue: (newValue: string) => {
       if (mode === 'live' && activeIndex === null) {
         executeSearch(newValue);
@@ -48,20 +49,45 @@ export default function SearchForm({
     },
   });
 
+  // NUEVO: Listener para cerrar cuando se clickea fuera o se pierde el foco de la ventana
   useEffect(() => {
-    store.setValue(searchInit);
-    userTypedValue.current = searchInit;
-    lastSearchRef.current = searchInit;
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        store.setOpen(false);
+      }
+    };
+
+    const handleWindowBlur = () => {
+      store.setOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('blur', handleWindowBlur);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('blur', handleWindowBlur);
+    };
+  }, [store]);
+
+  useEffect(() => {
+    store.setValue(effectiveInit);
+    userTypedValue.current = effectiveInit;
+    lastSearchRef.current = effectiveInit;
     setActiveIndex(null);
-  }, [searchInit, store]);
+  }, [effectiveInit, store]);
 
   const executeSearch = (value: string) => {
     const trimmed = value.trim();
     if (trimmed === lastSearchRef.current) return;
     lastSearchRef.current = trimmed;
 
-    // 3. Ejecutar búsqueda y guardar historial
-    searchAction(trimmed);
+    if (mode === 'live' && searchActionLive) {
+      searchActionLive(trimmed);
+    } else {
+      searchAction(trimmed);
+    }
+
     if (trimmed) {
       setLastSearches((prev) => {
         const next = computeLastSearches(trimmed, prev);
@@ -77,19 +103,14 @@ export default function SearchForm({
     setActiveIndex(null);
     store.setOpen(true);
     inputRef.current?.focus();
-
-    if (mode === 'live') {
-      executeSearch('');
-    }
+    if (mode === 'live') executeSearch('');
   };
 
   const commitSearch = (value: string) => {
     executeSearch(value);
     store.setOpen(false);
     setActiveIndex(null);
-    setTimeout(() => {
-      inputRef.current?.blur();
-    }, 0);
+    setTimeout(() => inputRef.current?.blur(), 0);
   };
 
   const moveSelection = (direction: 'up' | 'down') => {
@@ -116,6 +137,7 @@ export default function SearchForm({
 
   return (
     <form
+      ref={formRef}
       className="searchForm"
       onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
@@ -138,9 +160,7 @@ export default function SearchForm({
           id="searchQuery"
           placeholder={placeholder}
           onFocus={() => {
-            if (items.length > 0) {
-              store.setOpen(true);
-            }
+            if (items.length > 0) store.setOpen(true);
           }}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             userTypedValue.current = e.target.value;
@@ -192,11 +212,12 @@ export default function SearchForm({
         <SearchIcon width={18} height={18} />
       </button>
 
-      {items.length > 0 && (
+      {items.length > 0 && mode === 'button' && (
         <Ariakit.ComboboxPopover
           store={store}
           portal={false}
           className="searchHistory"
+          hideOnInteractOutside={true} // Refuerzo de Ariakit
         >
           {items.map((item, index) => (
             <Ariakit.ComboboxItem

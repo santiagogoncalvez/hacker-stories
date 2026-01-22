@@ -1,9 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NoFavoritesResultsProps, NoSearchResultsProps } from '../../types/types';
 
 
 
+
 const NoSearchResults = ({ query }: NoSearchResultsProps) => {
+  const location = useLocation();
+
   return (
     <div className="noResultsCard" role="status" aria-live="polite">
       <div className="noResultsContent">
@@ -29,9 +32,7 @@ const NoSearchResults = ({ query }: NoSearchResultsProps) => {
         {/* Botón de acción principal para volver al inicio */}
         <div className="noResultsAction">
           You could try exploring&nbsp;
-          <Link to="/" >
-          popular news
-          </Link>
+          {location.pathname === '/' ? <Link to="/">Stories</Link> : <Link to="/comments">Comments</Link>}
         </div>
       </div>
     </div>

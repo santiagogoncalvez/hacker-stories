@@ -140,11 +140,9 @@ export interface StoriesContextType {
 }
 
 export type SearchFormProps = {
-  searchInit?: string;
-  searchAction: (value: string) => void;
+  searchInitLive?: string;
+  searchActionLive?: (value: string) => void;
   // Cambiado a no opcional si se usa en el render, o añadir validación
-  handleRemoveLastSearch: (value: string) => void;
-  lastSearches?: string[];
   placeholder?: string;
   mode?: 'button' | 'live';
 };

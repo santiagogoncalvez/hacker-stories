@@ -46,7 +46,7 @@ html {
 }
 body {
   padding: 0;
-  margin: calc((100vh / 25) * 1) calc((100vw / 25) * 1);
+  /* margin: calc((100vh / 25) * 1) calc((100vw / 25) * 1); */
   background-color: var(--white);
   color: var(--black);
   caret-color: var(--black);
