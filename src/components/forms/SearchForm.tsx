@@ -84,10 +84,12 @@ export default function SearchForm({
 
     if (mode === 'live' && searchActionLive) {
       searchActionLive(trimmed);
+      return;
     } else {
       searchAction(trimmed);
     }
 
+    // Esta parte solo se ejecutará si NO es modo live
     if (trimmed) {
       setLastSearches((prev) => {
         const next = computeLastSearches(trimmed, prev);
@@ -158,6 +160,7 @@ export default function SearchForm({
           ref={inputRef}
           store={store}
           id="searchQuery"
+          className={mode === 'live' ? 'live' : ''}
           placeholder={placeholder}
           onFocus={() => {
             if (items.length > 0) store.setOpen(true);
@@ -204,13 +207,15 @@ export default function SearchForm({
         )}
       </div>
 
-      <button
-        type="submit"
-        className="searchControls-submitBt"
-        aria-label="Search"
-      >
-        <SearchIcon width={18} height={18} />
-      </button>
+      {mode === 'button' && (
+        <button
+          type="submit"
+          className="searchControls-submitBt"
+          aria-label="Search"
+        >
+          <SearchIcon width={18} height={18} />
+        </button>
+      )}
 
       {items.length > 0 && mode === 'button' && (
         <Ariakit.ComboboxPopover
