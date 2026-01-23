@@ -1,9 +1,13 @@
 import React from 'react';
-import { StoryInfoProps } from '../../../types/types';
 import ProfileIcon from '../../../assets/author.svg?react';
 import { formatUpdatedDate } from '../../../utils/formatDate';
+import { Story } from '../../../types/types';
 
-const CommentInfo = ({ item }: StoryInfoProps) => {
+interface Props {
+  item: Story;
+}
+
+const CommentInfo = ({ item }: Props) => {
   return (
     <dl className="storyLinkInfo">
       <div>

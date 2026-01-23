@@ -1,12 +1,14 @@
 # 📰 Hacker Stories
 
 **Hacker Stories** es un cliente avanzado de Hacker News desarrollado con React.  
-El proyecto parte de la base del libro *The Road to React*, y fue extendido significativamente con nuevas funcionalidades, mejoras de arquitectura y foco en experiencia de usuario y rendimiento.
+El proyecto parte de la base del libro _The Road to React_, y fue extendido significativamente con nuevas funcionalidades, mejoras de arquitectura y foco en experiencia de usuario y rendimiento.
 
 ## 🚀 Demo en vivo
+
 👉 https://hackerstories-dev.web.app
 
 ## ✨ Funcionalidades
+
 - Búsqueda, filtrado y ordenamiento de noticias
 - Scroll infinito con carga progresiva
 - Persistencia de favoritos
@@ -16,10 +18,12 @@ El proyecto parte de la base del libro *The Road to React*, y fue extendido sign
 - Manejo de estados de carga, errores y fallbacks para una UX fluida
 
 ## 🧪 Testing
+
 - Tests unitarios e integrales con **Vitest**
 - Validación de lógica, renderizado y flujos principales de la aplicación
 
 ## 🛠 Tecnologías utilizadas
+
 - React
 - TypeScript
 - React Router
@@ -28,12 +32,14 @@ El proyecto parte de la base del libro *The Road to React*, y fue extendido sign
 - Vite
 
 ## 🏗 Arquitectura y enfoque
+
 - Separación clara de responsabilidades
 - Manejo de estado asíncrono con TanStack Query
 - Componentes reutilizables y tipado estricto
 - Optimización de renders y experiencia de usuario
 
 ## 🎯 Objetivo del proyecto
+
 Consolidar conocimientos de React moderno construyendo una aplicación real, escalable y mantenible, incorporando buenas prácticas de arquitectura, testing y UX.
 
 ---

@@ -10,7 +10,6 @@ interface ItemProps {
 }
 
 const Item = ({ item, type }: ItemProps) => {
-
   return (
     <li className="story">
       <div className="storyLink">

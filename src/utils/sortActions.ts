@@ -1,8 +1,7 @@
-import { Story, SortState, SortActions} from '../types/types'; // Asumo que 'Sort' empieza con mayúscula en tu archivo de tipos
+import { Story, SortState } from '../types/types'; // Asumo que 'Sort' empieza con mayúscula en tu archivo de tipos
 import { sortBy } from 'lodash';
 
-
-const sortActions: SortActions = {
+const sortActions = {
   TITLE: (list: Story[]) =>
     sortBy(list, (item) => item.title?.toLowerCase() ?? ''),
   AUTHOR: (list: Story[]) =>
@@ -16,7 +15,10 @@ const sortActions: SortActions = {
 
 // 2. Tipamos el parámetro 'sort'.
 // Usamos 'Sort['sortType']' para referirnos específicamente al string de la acción (e.g., 'TITLE')
-export function sortList(list: Story[], sortType: SortState['sortType']): Story[] {
+export function sortList(
+  list: Story[],
+  sortType: SortState['sortType'],
+): Story[] {
   const action = sortActions[sortType];
   return action ? action(list) : list;
 }

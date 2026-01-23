@@ -49,9 +49,10 @@ export default function SearchForm({
     },
   });
 
-  // NUEVO: Listener para cerrar cuando se clickea fuera o se pierde el foco de la ventana
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+    const handleClickOutside = (
+      event: globalThis.MouseEvent | globalThis.TouchEvent,
+    ) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
         store.setOpen(false);
       }
@@ -61,11 +62,14 @@ export default function SearchForm({
       store.setOpen(false);
     };
 
+    // 2. Usamos mousedown y touchstart para cubrir móviles
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
     window.addEventListener('blur', handleWindowBlur);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
       window.removeEventListener('blur', handleWindowBlur);
     };
   }, [store]);

@@ -1,4 +1,4 @@
-import { LAST_SEARCHES_KEY } from "../constants/stories";
+import { LAST_SEARCHES_KEY } from '../constants/stories';
 
 export const getLastSearchesFromStorage = (): string[] => {
   try {

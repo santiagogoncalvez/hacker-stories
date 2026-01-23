@@ -1,11 +1,8 @@
-import { createContext, ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 import { useStories } from '../hooks/useStories';
 import { useStoryParams } from '../hooks/useStoryParams'; // Importamos el hook de URL
-
-export const StoriesContext = createContext(
-  undefined,
-);
-
+import { StoriesContext } from './createStoriesContext';
+import { StoriesContextType } from '../types/types';
 
 interface StoriesProviderProps {
   children: ReactNode;
@@ -48,6 +45,8 @@ export const StoriesProvider = ({
   );
 
   return (
-    <StoriesContext value={value}>{children}</StoriesContext>
+    <StoriesContext value={value as StoriesContextType}>
+      {children}
+    </StoriesContext>
   );
 };

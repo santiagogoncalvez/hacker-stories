@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import { NoFavoritesResultsProps, NoSearchResultsProps } from '../../types/types';
-
-
-
+import {
+  NoFavoritesResultsProps,
+  NoSearchResultsProps,
+} from '../../types/types';
 
 const NoSearchResults = ({ query }: NoSearchResultsProps) => {
   const location = useLocation();
@@ -32,14 +32,16 @@ const NoSearchResults = ({ query }: NoSearchResultsProps) => {
         {/* Botón de acción principal para volver al inicio */}
         <div className="noResultsAction">
           You could try exploring&nbsp;
-          {location.pathname === '/' ? <Link to="/">Stories</Link> : <Link to="/comments">Comments</Link>}
+          {location.pathname === '/' ? (
+            <Link to="/">Stories</Link>
+          ) : (
+            <Link to="/comments">Comments</Link>
+          )}
         </div>
       </div>
     </div>
   );
 };
-
-
 
 const NoFavoritesResults = ({
   filter = 'story',

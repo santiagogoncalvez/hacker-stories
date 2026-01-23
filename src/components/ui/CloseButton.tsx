@@ -1,4 +1,3 @@
-
 // components/common/CloseButton.tsx
 import { MouseEvent } from 'react';
 import CrossIcon from '../../assets/cross.svg?react';
@@ -21,7 +20,7 @@ const CloseButton = ({
       type="button"
       className={`close-button ${className}`}
       onClick={(e) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         // SOLUCIÓN: Usamos ?. para que solo se ejecute si onClick existe
         onClick?.(e);
       }}

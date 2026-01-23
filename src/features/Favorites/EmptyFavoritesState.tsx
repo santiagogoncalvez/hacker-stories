@@ -1,8 +1,6 @@
 import StarIcon from '../../assets/star.svg?react';
 import { EmptyFavoritesStateProps } from '../../types/types';
 
-
-
 const EmptyFavoritesState = ({ type }: EmptyFavoritesStateProps) => {
   const title =
     type === 'comment'

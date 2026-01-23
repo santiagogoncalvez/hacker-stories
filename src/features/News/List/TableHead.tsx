@@ -1,7 +1,5 @@
-
 import { Sort as SortType, TableHeadProps } from '../../../types/types';
 import CaretIcon from '../../../assets/caret.svg?react';
-
 
 const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
   return (

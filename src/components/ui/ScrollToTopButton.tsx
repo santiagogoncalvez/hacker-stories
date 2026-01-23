@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import ArrowIcon from '../../assets/arrow.svg?react';
 import { ScrollToTopButtonProps } from '../../types/types';
 
-
 const ScrollToTopButton = ({
   target = 'body',
   threshold = 300,
@@ -54,7 +53,7 @@ const ScrollToTopButton = ({
       onClick={scrollToTop}
       aria-label="Scroll to top"
     >
-      <ArrowIcon className='arrowIcon' />
+      <ArrowIcon className="arrowIcon" />
     </button>
   );
 };

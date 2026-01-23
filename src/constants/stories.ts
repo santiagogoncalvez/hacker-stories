@@ -1,4 +1,4 @@
-import { ListState, StoriesState } from "../types/types";
+import { ListState, StoriesState } from '../types/types';
 
 export const MAX_LAST_SEARCHES = 6;
 export const LAST_SEARCHES_KEY = 'hn:lastSearches';

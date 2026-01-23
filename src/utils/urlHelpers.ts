@@ -1,4 +1,4 @@
-import { SupportedDataType } from "../types/types";
+import { SupportedDataType } from '../types/types';
 
 export const getPageFromURL = (searchParams: URLSearchParams): number => {
   const p = searchParams.get('page');

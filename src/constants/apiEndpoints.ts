@@ -12,4 +12,3 @@ export const API_ENDPOINT_LAST_STORIES =
 
 export const getUrl = (searchTerm: string, page: number, dataType: string) =>
   `${API_BASE}${API_SEARCH}?${PARAM_TAG}${dataType}&${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
-

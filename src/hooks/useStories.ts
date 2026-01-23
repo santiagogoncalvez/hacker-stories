@@ -24,7 +24,12 @@ export function useStories({ dataType, query, page }: UseStoriesProps) {
   } = useInfiniteQuery({
     queryKey: ['stories', dataType, query],
     queryFn: async ({ pageParam = 0 }) => {
-      if (!SUPPORTED_DATA_TYPES.includes(dataType)) return emptyList;
+      if (
+        !SUPPORTED_DATA_TYPES.includes(
+          dataType as (typeof SUPPORTED_DATA_TYPES)[number],
+        )
+      )
+        return emptyList;
 
       // --- TU LÓGICA ACUMULATIVA (INTACTA) ---
       if (pageParam === 0 && page > 0 && isInitialFetch.current) {

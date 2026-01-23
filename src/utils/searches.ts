@@ -1,4 +1,4 @@
-import { MAX_LAST_SEARCHES } from "../constants/stories";
+import { MAX_LAST_SEARCHES } from '../constants/stories';
 
 export const extractSearchTerm = (url: string) => {
   const formattedUrl = new URL(url);

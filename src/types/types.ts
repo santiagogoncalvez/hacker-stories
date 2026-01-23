@@ -100,11 +100,8 @@ export type DisplayType = 'CARD' | 'LIST';
 export type ListProps = {
   stories: ListState;
   search: string;
-  searchAction: (searchTerm: string, dataType?: string) => void;
-  onRemoveItem: (item: Story) => void;
   handleMoreStories: () => void;
-  lastSearches: string[];
-  handleRemoveLastSearch: (term: string) => void;
+  onRemoveItem: (item: Story) => void;
 };
 
 export interface DisplayListProps {

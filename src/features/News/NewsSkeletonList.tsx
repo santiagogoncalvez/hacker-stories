@@ -1,4 +1,4 @@
-import { SkeletonListProps } from "../../types/types";
+import { SkeletonListProps } from '../../types/types';
 
 const StorySkeleton = () => {
   return (
@@ -36,7 +36,6 @@ const StorySkeleton = () => {
   );
 };
 
-
 const SkeletonList = ({ items = 6 }: SkeletonListProps) => {
   return (
     <ul className="news news-skeleton">
@@ -54,4 +53,3 @@ const NewsSkeletonList = ({ items = 6 }: SkeletonListProps) => (
   </div>
 );
 export default NewsSkeletonList;
-
