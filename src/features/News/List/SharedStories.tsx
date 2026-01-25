@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import StatusPanel from '../layout/StatusPanle.tsx';
-import List from '../../features/News/List/List.tsx';
-import { useStoriesContext } from '../../hooks/useStoriesContext';
-import { useFavoritesContext } from '../../hooks/useFavoritesContext';
-import { StoriesProvider } from '../../context/stories.tsx';
-import { useStoryParams } from '../../hooks/useStoryParams';
+import StatusPanel from '../../../components/layout/StatusPanel.tsx';
+import List from './List.tsx';
+import { useStoriesContext } from '../../../hooks/useStoriesContext.tsx';
+import { useFavoritesContext } from '../../../hooks/useFavoritesContext.ts';
+import { StoriesProvider } from '../../../context/stories.tsx';
+import { useStoryParams } from '../../../hooks/useStoryParams.ts';
 
 const SharedStoriesContent = () => {
   const {

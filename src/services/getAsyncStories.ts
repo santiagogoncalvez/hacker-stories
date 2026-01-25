@@ -15,7 +15,7 @@ const getPlainText = (html?: string): string => {
   return div.textContent || div.innerText || '';
 };
 
-const mapData = (data: ApiResponse, dataType: string): ListResponse | null => {
+export const mapData = (data: ApiResponse, dataType: string): ListResponse | null => {
   if (dataType === 'story') {
     return {
       hits: data.hits.map(

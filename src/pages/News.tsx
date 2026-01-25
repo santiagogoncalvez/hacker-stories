@@ -1,4 +1,4 @@
-import SharedStories from '../components/shared/SharedStories';
+import SharedStories from '../features/News/List/SharedStories';
 
 const News = () => {
   return <SharedStories />;
