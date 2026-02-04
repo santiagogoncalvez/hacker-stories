@@ -19,14 +19,14 @@ const SearchMeta = ({
       </div>
     );
   }
-
+  // console.log(processingTimeMs);
   return (
     <div className="searchMeta">
       <span className="searchMeta-count">
-        {nbHits.toLocaleString()} resultados
+        {nbHits.toLocaleString()} results
       </span>
       <span className="searchMeta-time">
-        ({processingTimeMs / 1000} segundos)
+        ({parseFloat((processingTimeMs / 1000).toFixed(3))} seconds)
       </span>
     </div>
   );

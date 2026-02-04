@@ -60,7 +60,7 @@ const List = ({
 
         <DisplayToggle display={display} onClick={(d) => setDisplay(d)} />
       </div>
-
+      
       <SearchMeta
         nbHits={stories.nbHits || 0}
         processingTimeMs={stories.processingTimeMs || 0}

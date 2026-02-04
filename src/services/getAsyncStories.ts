@@ -75,7 +75,6 @@ export const getAsyncStories = async ({
     const result = await axios.get<ApiResponse>(url);
     const data = result.data;
 
-    // console.log(mapData(data, extractTag(url)));
     return mapData(data, extractTag(url));
   } catch (error) {
     throw new Error('Error fetching news from Hacker News. ' + error);

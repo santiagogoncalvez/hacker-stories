@@ -109,6 +109,7 @@ export function useStories({ dataType, query, page }: UseStoriesProps) {
       page: lastPageInfo.page,
       nbPages: lastPageInfo.nbPages,
       nbHits: lastPageInfo.nbHits,
+      processingTimeMs: lastPageInfo.processingTimeMs,
       isLoading: false,
       isLoadingMore: isFetchingNextPage,
       isError,
