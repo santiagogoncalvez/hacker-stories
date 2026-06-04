@@ -1,7 +1,8 @@
-import { Sort as SortType, TableHeadProps } from '../../../types/types';
+import {  TableHeadProps } from '../../../types/types';
 import CaretIcon from '../../../assets/caret.svg?react';
 
 const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
+  console.log(onClick);
   return (
     <thead className="headTable">
       <tr>
@@ -22,19 +23,17 @@ const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
                   {/* <div style={{ width: 18, height: 18 }} /> */}
                 </span>
               ) : (
-                <button
-                  type="button"
-                  className={`listContainer__headerButton ${
-                    isActive ? 'active' : ''
-                  }`}
-                  onClick={() => onClick(field.value as SortType)}
-                  aria-sort={
-                    isActive
-                      ? sort.isReverse
-                        ? 'descending'
-                        : 'ascending'
-                      : 'none'
-                  }
+                <p
+                // type="button"
+                className={`listContainer__headerButton`}
+                // onClick={() => onClick(field.value as SortType)}
+                // aria-sort={
+                //   isActive
+                //     ? sort.isReverse
+                //       ? 'descending'
+                //       : 'ascending'
+                //     : 'none'
+                // }
                 >
                   {field.label}
 
@@ -50,7 +49,7 @@ const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
                       }}
                     />
                   )}
-                </button>
+                </p>
               )}
             </th>
           );

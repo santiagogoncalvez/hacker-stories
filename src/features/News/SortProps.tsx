@@ -38,31 +38,15 @@ const ALL_FIELDS: Record<string, Field> = {
   },
   DATE_DESC: { key: 'DATE_DESC', label: 'Newest', value: 'CREATED_AT' },
   DATE_ASC: { key: 'DATE_ASC', label: 'Oldest', value: 'CREATED_AT' },
+  DATE: { key: 'DATE', label: 'Date', value: 'DATE' },
   STORY_ASC: { key: 'STORY_ASC', label: 'Story title (A-Z)', value: 'TITLE' },
   STORY_DESC: { key: 'STORY_DESC', label: 'Story title (Z-A)', value: 'TITLE' },
+  RELEVANCE: { key: 'RELEVANCE', label: 'Relevance', value: 'RELEVANCE' },
 };
 
 const FIELDS_BY_TYPE: Record<'story' | 'comment', Field[]> = {
-  story: [
-    ALL_FIELDS.POINTS_DESC,
-    ALL_FIELDS.POINTS_ASC,
-    ALL_FIELDS.COMMENTS_DESC,
-    ALL_FIELDS.COMMENTS_ASC,
-    ALL_FIELDS.TITLE_ASC,
-    ALL_FIELDS.TITLE_DESC,
-    ALL_FIELDS.AUTHOR_ASC,
-    ALL_FIELDS.AUTHOR_DESC,
-  ],
-  comment: [
-    ALL_FIELDS.COMMENT_ASC,
-    ALL_FIELDS.COMMENT_DESC,
-    ALL_FIELDS.AUTHOR_ASC,
-    ALL_FIELDS.AUTHOR_DESC,
-    ALL_FIELDS.DATE_DESC,
-    ALL_FIELDS.DATE_ASC,
-    ALL_FIELDS.STORY_ASC,
-    ALL_FIELDS.STORY_DESC,
-  ],
+  story: [ALL_FIELDS.RELEVANCE, ALL_FIELDS.DATE],
+  comment: [ALL_FIELDS.RELEVANCE, ALL_FIELDS.DATE],
 };
 
 const CustomValueContainer = ({
@@ -103,17 +87,21 @@ const SortProps = ({
   type = 'story',
   onClick,
 }: SortPropsProps) => {
+  // console.log("render Sort Props");
+  // console.log('render Sort Props sort value: ', sort);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const options = FIELDS_BY_TYPE[type];
-  const direction = sort.isReverse ? 'DESC' : 'ASC';
+  // const direction = sort.isReverse ? 'DESC' : 'ASC';
 
   const currentValue = options.find(
-    (f) => f.value === sort.sortType && f.key.endsWith(`_${direction}`),
+    (f) => f.value === sort.sortType
+      // && f.key.endsWith(`_${direction}`),
   );
 
   const isOptionSelected = (option: Field) => {
     return (
-      option.value === sort.sortType && option.key.endsWith(`_${direction}`)
+      option.value === sort.sortType
+      // && option.key.endsWith(`_${direction}`)
     );
   };
 

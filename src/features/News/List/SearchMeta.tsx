@@ -19,7 +19,7 @@ const SearchMeta = ({
       </div>
     );
   }
-  // console.log(processingTimeMs);
+
   return (
     <div className="searchMeta">
       <span className="searchMeta-count">

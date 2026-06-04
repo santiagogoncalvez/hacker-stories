@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { sortActionList } from '../../../utils/sortActions';
 import SortProps from '../SortProps';
@@ -8,12 +8,15 @@ import DisplayList from './DisplayList';
 import DisplayToggle from './DisplayToggle';
 import {
   ListProps,
-  SortState,
   DisplayType,
   ListType,
+  Sort,
+  SortState,
 } from '../../../types/types';
 import SearchMeta from './SearchMeta';
 import { NoSearchResults } from '../NoSearchResults';
+import { useStoriesContext } from '../../../hooks/useStoriesContext';
+import { useStoryParams } from '../../../hooks/useStoryParams';
 
 const getListTypeFromPath = (pathname: string): ListType =>
   pathname.startsWith('/comments') ? 'comment' : 'story';
@@ -27,20 +30,25 @@ const List = ({
   const { pathname } = useLocation();
   const type = getListTypeFromPath(pathname);
 
-  const [sort, setSort] = useState<SortState>(() => ({
-    sortType: type === 'story' ? 'POINTS' : 'COMMENT_TEXT',
-    isReverse: type === 'story',
-  }));
+  const { handleSortChange } = useStoriesContext();
+  const { sort, setSortAction } = useStoryParams();
 
-  useEffect(() => {
-    setSort({
-      sortType: type === 'story' ? 'POINTS' : 'COMMENT_TEXT',
-      isReverse: type === 'story',
-    });
-  }, [type]);
-
-  const sortedList = sortActionList(sort, stories.hits);
+  const sortedList =
+    sort !== 'DATE' && sort !== 'RELEVANCE'
+      ? sortActionList(
+          {
+            sortType: sort,
+            isReverse: false,
+          },
+          stories.hits,
+        )
+      : stories.hits;
   const [display, setDisplay] = useState<DisplayType>('CARD');
+
+  const handleChangeSort = (sortType: Sort) => {
+    // setSort({ sortType, isReverse });
+    handleSortChange(sortType);
+  };
 
   return (
     <section className="listContainer">
@@ -53,14 +61,17 @@ const List = ({
 
         <SortProps
           type={type}
-          sort={sort}
+          sort={{
+            sortType: sort,
+            isReverse: false,
+          }}
           label="Sort by"
-          onClick={(sortType, isReverse) => setSort({ sortType, isReverse })}
+          onClick={handleChangeSort}
         />
 
         <DisplayToggle display={display} onClick={(d) => setDisplay(d)} />
       </div>
-      
+
       <SearchMeta
         nbHits={stories.nbHits || 0}
         processingTimeMs={stories.processingTimeMs || 0}
@@ -76,8 +87,13 @@ const List = ({
           <DisplayList
             type={type}
             stories={stories}
-            sort={sort}
-            setSort={setSort}
+            sort={{
+              sortType: sort,
+              isReverse: false,
+            }}
+            setSort={(sort: SortState) => {
+              setSortAction(sort.sortType);
+            }}
             display={display}
             sortedList={sortedList}
             onRemoveItem={onRemoveItem}

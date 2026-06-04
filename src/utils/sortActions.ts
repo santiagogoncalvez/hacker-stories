@@ -11,6 +11,10 @@ const sortActions = {
   COMMENT_TEXT: (list: Story[]) =>
     sortBy(list, (item) => item.commentText?.toLowerCase() ?? ''),
   CREATED_AT: (list: Story[]) => sortBy(list, 'createdAtI'),
+  DATE: (list: Story[]) => sortBy(list, 'createdAtI').reverse(),
+  RELEVANCE: (list: Story[]) => sortBy(list, 'points').reverse(),
+
+
 };
 
 // 2. Tipamos el parámetro 'sort'.

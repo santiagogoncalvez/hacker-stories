@@ -30,10 +30,21 @@ const Header = () => {
     };
   }, [isOpen]);
 
+  const handleClick = (to: string) => {
+    closeMenu();
+    window.scrollTo({ top: 0, behavior: to === location.pathname ? "smooth" : "instant" });
+  };
+
   return (
     <header className="appHeader-container">
       <div className="appHeader">
-        <Link to="/" className="appTitleLink" onClick={closeMenu}>
+        <Link
+          to="/"
+          className="appTitleLink"
+          onClick={() => {
+            handleClick('/');
+          }}
+        >
           <h1>HS</h1>
         </Link>
 
@@ -54,21 +65,27 @@ const Header = () => {
           <nav className={`appNav ${isOpen ? 'open' : ''}`}>
             <Link
               to="/"
-              onClick={closeMenu}
+              onClick={() => {
+                handleClick('/');
+              }}
               className={`appNav-item ${location.pathname === '/' ? 'active' : ''}`}
             >
               Stories
             </Link>
             <Link
               to="/comments"
-              onClick={closeMenu}
+              onClick={() => {
+                handleClick('/comments');
+              }}
               className={`appNav-item ${location.pathname === '/comments' ? 'active' : ''}`}
             >
               Comments
             </Link>
             <Link
               to="/favourites"
-              onClick={closeMenu}
+              onClick={() => {
+                handleClick('/favourites');
+              }}
               className={`appNav-item ${location.pathname === '/favourites' ? 'active' : ''}`}
             >
               Favourites

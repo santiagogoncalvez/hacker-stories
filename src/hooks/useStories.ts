@@ -3,14 +3,16 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'; // Ún
 import { getAsyncStories } from '../services/getAsyncStories';
 import { getUrl } from '../constants/apiEndpoints';
 import { emptyList, SUPPORTED_DATA_TYPES } from '../constants/stories';
+import { Sort } from '../types/types';
 
 interface UseStoriesProps {
   dataType: string;
   query: string;
   page: number;
+  sort: Sort;
 }
 
-export function useStories({ dataType, query, page }: UseStoriesProps) {
+export function useStories({ dataType, query, page, sort }: UseStoriesProps) {
   const queryClient = useQueryClient(); // Nuevo: para poder resetear
   const isInitialFetch = useRef(true);
 
@@ -22,7 +24,7 @@ export function useStories({ dataType, query, page }: UseStoriesProps) {
     isError,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: ['stories', dataType, query],
+    queryKey: ['stories', dataType, query, sort],
     queryFn: async ({ pageParam = 0 }) => {
       if (
         !SUPPORTED_DATA_TYPES.includes(
@@ -36,7 +38,7 @@ export function useStories({ dataType, query, page }: UseStoriesProps) {
         isInitialFetch.current = false;
 
         const targetPageRes = await getAsyncStories({
-          url: getUrl(query, page, dataType),
+          url: getUrl(query, page, dataType, sort),
         });
 
         if (
@@ -50,7 +52,7 @@ export function useStories({ dataType, query, page }: UseStoriesProps) {
         const previousPagesIndices = Array.from({ length: page }, (_, i) => i);
         const results = await Promise.all(
           previousPagesIndices.map((p) =>
-            getAsyncStories({ url: getUrl(query, p, dataType) }),
+            getAsyncStories({ url: getUrl(query, p, dataType, sort) }),
           ),
         );
 
@@ -64,7 +66,7 @@ export function useStories({ dataType, query, page }: UseStoriesProps) {
 
       // --- TU CARGA NORMAL (INTACTA) ---
       const res = await getAsyncStories({
-        url: getUrl(query, pageParam, dataType),
+        url: getUrl(query, pageParam, dataType, sort),
       });
 
       isInitialFetch.current = false;

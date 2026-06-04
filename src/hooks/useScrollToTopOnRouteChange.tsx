@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export function useScrollToTopOnRouteChange() {
+type ScrollBehavior = 'auto' | 'smooth';
+
+export function useScrollToTopOnRouteChange(
+  behavior: ScrollBehavior = 'auto',
+  enabled = true,
+) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Solo se ejecutará cuando el pathname cambie (ej: de / a /comments)
+    if (!enabled) return;
+
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'auto',
+      behavior,
     });
-  }, [pathname]); // 👈 Eliminamos 'search' y 'hash'
+  }, [pathname, behavior, enabled]);
 }

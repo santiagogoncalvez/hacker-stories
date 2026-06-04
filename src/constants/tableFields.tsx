@@ -7,16 +7,16 @@ export const TABLE_FIELDS = {
     { key: 'ACTION', label: 'Action', value: '', width: '3%' },
   ],
   comment: [
+    { key: 'TITLE', label: 'Title', value: 'TITLE', width: '10%' },
+    { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '7%' },
     {
       key: 'COMMENT_TEXT',
       label: 'Comment',
       value: 'COMMENT_TEXT',
       width: '15%',
     },
-    { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '7%' },
     { key: 'CREATED_AT', label: 'Date', value: 'CREATED_AT', width: '7%' },
     /* UNIFICADO: key 'TITLE' para que el CSS móvil lo reconozca siempre */
-    { key: 'TITLE', label: 'Title', value: 'TITLE', width: '10%' },
     { key: 'ACTION', label: 'Action', value: '', width: '5%' },
   ],
 };

@@ -53,6 +53,7 @@ describe('useStories', () => {
           dataType: 'story',
           query: 'react',
           page: 0,
+          sort: "RELEVANCE"
         }),
       { wrapper: createWrapper() },
     );
@@ -88,6 +89,7 @@ describe('useStories', () => {
           dataType: 'story',
           query: 'react',
           page,
+          sort: "RELEVANCE"
         }),
       {
         wrapper: createWrapper(),
@@ -125,6 +127,7 @@ describe('useStories', () => {
           dataType: 'story',
           query,
           page: 0,
+          sort: "RELEVANCE"
         }),
       {
         wrapper: createWrapper(),
@@ -157,6 +160,7 @@ describe('useStories', () => {
           dataType: 'story',
           query: 'react',
           page: 0,
+          sort:"RELEVANCE"
         }),
       { wrapper: createWrapper() },
     );

@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import { SUPPORTED_DATA_TYPES } from '../constants/stories';
 
 /* ================= Entidades de Datos ================= */
@@ -40,7 +39,7 @@ export type Sort =
   | 'COMMENTS'
   | 'POINTS'
   | 'COMMENT_TEXT'
-  | 'CREATED_AT';
+  | 'CREATED_AT' | "RELEVANCE" | "DATE";
 
 export type SortState = {
   sortType: Sort;
@@ -77,14 +76,14 @@ export type StoriesAction =
   | { type: 'FETCH_INIT'; dataType: string }
   | { type: 'FETCH_MORE_INIT'; dataType: string }
   | {
-      type: 'FETCH_SUCCESS';
-      dataType: string;
-      hits: Story[];
-      page: number;
-      nbHits: number;
-      nbPages: number;
-      processingTimeMs: number;
-    }
+    type: 'FETCH_SUCCESS';
+    dataType: string;
+    hits: Story[];
+    page: number;
+    nbHits: number;
+    nbPages: number;
+    processingTimeMs: number;
+  }
   | { type: 'FETCH_FAILURE'; dataType: string }
   | { type: 'RESET_LIST'; dataType: string }
   | { type: 'INCREMENT_PAGE'; dataType: string }
@@ -107,7 +106,10 @@ export type ListProps = {
 export interface DisplayListProps {
   stories: ListState;
   sort: SortState;
-  setSort: Dispatch<SetStateAction<SortState>>;
+  setSort: ({
+    sortType,
+    isReverse
+  }: { sortType: Sort, isReverse: boolean }) => void;
   display: DisplayType;
   sortedList: Story[];
   onRemoveItem: (item: Story) => void;
@@ -134,6 +136,7 @@ export interface StoriesContextType {
   stories: ListState | null;
   search: string;
   handleMoreStories: () => void;
+  handleSortChange: (sort: string) => void
 }
 
 export type SearchFormProps = {

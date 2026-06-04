@@ -1,8 +1,7 @@
-import { useMemo, useState, useEffect } from 'react';
-import { Story, SortState, FavouriteFilter } from '../types/types';
+import { useMemo, useState } from 'react';
+import { Story, FavouriteFilter, SortState } from '../types/types';
 import CommonList from '../features/News/List/CommonList';
 import Display from '../features/News/List/DisplayToggle';
-
 import TableList from '../features/News/List/TableList';
 import SortProps from '../features/News/SortProps';
 import SearchForm from '../components/forms/SearchForm';
@@ -11,6 +10,7 @@ import { sortActionList } from '../utils/sortActions';
 import { useFavoritesContext } from '../hooks/useFavoritesContext';
 import { NoFavoritesResults } from '../features/News/NoSearchResults';
 import { TABLE_FIELDS } from '../constants/tableFields';
+import { useStoryParams } from '../hooks/useStoryParams';
 
 const FavouritesFilter = ({
   value,
@@ -43,23 +43,32 @@ const FavouritesFilter = ({
 const Favourites = () => {
   const { favorites, removeFavorite } = useFavoritesContext();
 
-  /* UI state */
+  const {
+    sort: sortParam,
+    setSortAction,
+    query: queryParam,
+    searchLiveAction,
+  } = useStoryParams();
+
   const [filter, setFilter] = useState<FavouriteFilter>('story');
   const [display, setDisplay] = useState<'CARD' | 'LIST'>('CARD');
-  const [search, setSearch] = useState<string>('');
-  const [sort, setSort] = useState<SortState>({
-    sortType: 'POINTS',
-    isReverse: true,
-  });
+
+  // 🔥 fuente única de verdad del sort UI
+  const sort: SortState = useMemo(() => {
+    return {
+      sortType: sortParam,
+      isReverse: sortParam === 'CREATED_AT' ? true : false,
+    };
+  }, [sortParam]);
 
   /* 1️⃣ Filter by type */
   const filteredByType = useMemo(() => {
     return favorites.filter((item) => item.tags.includes(filter));
   }, [favorites, filter]);
 
-  /* 2️⃣ Search (blindado) */
+  /* 2️⃣ Search */
   const filteredBySearch = useMemo(() => {
-    const query = search.trim().toLowerCase();
+    const query = queryParam.trim().toLowerCase();
     if (!query) return filteredByType;
 
     return filteredByType.filter(
@@ -68,25 +77,24 @@ const Favourites = () => {
         item.author?.toLowerCase().includes(query) ||
         item.commentText?.toLowerCase().includes(query),
     );
-  }, [filteredByType, search]);
+  }, [filteredByType, queryParam]);
 
   /* 3️⃣ Sort */
   const sortedList = useMemo(() => {
     return sortActionList(sort, filteredBySearch);
   }, [filteredBySearch, sort]);
 
-  /* Reset sort inválido al cambiar filtro */
-  useEffect(() => {
-    if (filter === 'comment') {
-      setSort({ sortType: 'CREATED_AT', isReverse: true });
-    }
+  /* Reset al cambiar filtro */
+  // useEffect(() => {
+  //   setSearch('');
 
-    if (filter === 'story') {
-      setSort({ sortType: 'POINTS', isReverse: true });
-    }
-
-    setSearch('');
-  }, [filter]);
+  //   // reset de sort según tipo
+  //   if (filter === 'story') {
+  //     setSortAction('POINTS');
+  //   } else {
+  //     setSortAction('CREATED_AT');
+  //   }
+  // }, [filter, setSortAction]);
 
   const handleRemoveItem = (item: Story) => {
     removeFavorite(item.objectId);
@@ -99,10 +107,16 @@ const Favourites = () => {
     <section className="listContainer">
       {/* FILTER (siempre visible mientras haya favoritos globales) */}
       <div className="filterControls">
-        <FavouritesFilter value={filter} onChange={setFilter} />
+        <FavouritesFilter
+          value={filter}
+          onChange={(value: FavouriteFilter) => {
+            if (value === filter) return;
+            setSortAction('RELEVANCE');
+            setFilter(value);
+          }}
+        />
       </div>
 
-      {/* 🔴 NO hay favoritos de este tipo */}
       {!hasFavoritesOfType ? (
         <EmptyFavoritesState type={filter} />
       ) : (
@@ -110,8 +124,8 @@ const Favourites = () => {
           {/* CONTROLS */}
           <div className="listControls">
             <SearchForm
-              searchActionLive={setSearch}
-              searchInitLive={search}
+              searchActionLive={searchLiveAction}
+              searchInitLive={queryParam}
               placeholder="Filter favorites..."
               mode="live"
             />
@@ -119,30 +133,22 @@ const Favourites = () => {
             <SortProps
               sort={sort}
               label="Sort by"
-              onClick={(sortType, isReverse) =>
-                setSort({ sortType, isReverse })
-              }
+              onClick={(sortType) => setSortAction(sortType)}
               type={filter}
             />
 
             <Display display={display} onClick={setDisplay} />
           </div>
 
-          {/* 🟡 Hay favoritos del tipo, pero el search no encontró nada */}
           {!hasSearchResults ? (
-            <NoFavoritesResults filter={filter} query={search} />
+            <NoFavoritesResults filter={filter} query={queryParam} />
           ) : display === 'CARD' ? (
             <CommonList list={sortedList} type={filter} />
           ) : (
             <TableList
               list={sortedList}
               sort={sort}
-              sortAction={(sortType) => {
-                const isReverse =
-                  sort.sortType === sortType ? !sort.isReverse : false;
-
-                setSort({ sortType, isReverse });
-              }}
+              sortAction={(sortType) => setSortAction(sortType)}
               onRemoveItem={handleRemoveItem}
               type={filter}
               fields={TABLE_FIELDS[filter]}

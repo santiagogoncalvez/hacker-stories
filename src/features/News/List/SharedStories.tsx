@@ -1,10 +1,7 @@
-import { useEffect } from 'react';
 import StatusPanel from '../../../components/layout/StatusPanel.tsx';
 import List from './List.tsx';
 import { useStoriesContext } from '../../../hooks/useStoriesContext.tsx';
 import { useFavoritesContext } from '../../../hooks/useFavoritesContext.ts';
-import { StoriesProvider } from '../../../context/stories.tsx';
-import { useStoryParams } from '../../../hooks/useStoryParams.ts';
 
 const SharedStoriesContent = () => {
   const {
@@ -30,18 +27,10 @@ const SharedStoriesContent = () => {
 };
 
 const SharedStories = () => {
-  const { dataType, query, page } = useStoryParams();
-
-  // Reset al cambiar de sección (ej: de Story a Comment)
-  useEffect(() => {
-    // Solo reseteamos si entramos a una sección limpia o cambiamos tipo
-    // pero NO cuando cambia la query o la page dentro de la misma sección
-  }, [dataType]);
+  
 
   return (
-    <StoriesProvider query={query} page={page} dataType={dataType}>
       <SharedStoriesContent />
-    </StoriesProvider>
   );
 };
 

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import SharedStories from './SharedStories';
 import { FavoritesProvider } from '../../../context/favorites';
+import { StoriesProvider } from '../../../context/stories';
 
 
 // Evita errores de fechas (Intl)
@@ -40,7 +41,9 @@ const renderSharedStories = () => {
     <MemoryRouter>
       <QueryClientProvider client={queryClient}>
         <FavoritesProvider>
-          <SharedStories />
+          <StoriesProvider query="" page={0} dataType="story">
+            <SharedStories />
+          </StoriesProvider>
         </FavoritesProvider>
       </QueryClientProvider>
     </MemoryRouter>,

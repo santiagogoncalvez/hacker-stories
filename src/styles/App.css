@@ -22,6 +22,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 25px;
+  position: relative;
+  padding: 16px;
 }
 
 .app h1 {
@@ -62,12 +64,17 @@ body {
   height: 2.5rem;
   padding: 0.5rem 3rem 0.5rem 1.25rem;
   border: 1px solid var(--light-gray);
-  border-right: 0px;
+  /* border-right: 0px; */
   border-radius: var(--boder-radius-app) !important;
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
   width: 100%;
   min-width: 0;
+  background-color: var(--white);
+}
+
+#searchQuery::placeholder {
+  color: var(--muted);
 }
 
 #searchQuery.live {
@@ -93,13 +100,13 @@ body {
   border-radius: var(--boder-radius-app);
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
-  background-color: var(--dark-gray);
+  background-color: var(--white);
   /* z-index: -1; */
   transition: var(--transition-button);
 }
 
 .searchControls-submitBt svg {
-  color: var(--white);
+  color: var(--dark-gray);
 }
 
 .searchControls-submitBt:focus-visible {
@@ -169,7 +176,7 @@ body {
   border-radius: var(--boder-radius-app);
   /* max-height: 300px; */
   overflow: auto;
-  box-shadow: 0px 0px 10px rgb(220, 220, 220);
+  /* box-shadow: 0px 0px 10px rgb(220, 220, 220); */
   list-style: none;
   margin: 0;
   padding: 0;
@@ -262,11 +269,23 @@ body {
 
 .appHeader-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   position: relative;
   /* Mantenemos el header por encima del panel móvil */
   z-index: 1001;
   background-color: var(--white);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.routes-container {
+  padding-top: 80px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .appHeader-container a:hover {
@@ -283,9 +302,12 @@ body {
   display: flex;
   align-items: center;
   gap: 40px;
-  padding: 16px 0px;
+  padding: 16px 16px;
   background-color: var(--white);
   min-height: 70px;
+  width: 100%;
+  max-width: 100%;
+  width: 800px;
 }
 
 /* =========================
@@ -458,7 +480,7 @@ body {
   padding: 6px;
   width: fit-content;
   height: fit-content;
-  background-color: rgb(250, 250, 250);
+  background-color: var(--white);
   border: 1px solid #e8e8e8;
   border-radius: var(--boder-radius-app);
   display: flex;
@@ -501,7 +523,7 @@ body {
   gap: 8px;
   max-width: 100%;
   min-width: 0;
-  color: var(--gray);
+  color: var(--dark-gray);
 }
 
 .story .storyLinkInfo.commentText {
@@ -572,7 +594,7 @@ body {
   width: 100%;
   border: 1px solid var(--light-gray);
   border-radius: var(--boder-radius-app) !important;
-  background-color: rgb(250, 250, 250) !important;
+  background-color: var(--white) !important;
 }
 
 .sortProps-select-container {
@@ -636,7 +658,7 @@ body {
 .sortProps__menu {
   border: 1px solid #e8e8e8 !important;
   border-radius: var(--boder-radius-app) !important;
-  box-shadow: 0px 0px 10px rgb(220, 220, 220) !important;
+  box-shadow: 0px 0px 10px rgba(220, 220, 220, 0) !important;
   overflow: hidden;
   margin-top: 4px !important;
 }
@@ -660,7 +682,7 @@ body {
 }
 
 .sortProps__option--is-selected {
-  background-color: #e8e8e8 !important;
+  background-color: var(--light-gray) !important;
   color: var(--black) !important;
 }
 
@@ -669,7 +691,7 @@ body {
   width: fit-content;
   height: fit-content;
   border: 1px solid var(--light-gray);
-  background-color: rgb(250, 250, 250);
+  background-color: var(--white);
   border-radius: var(--boder-radius-app);
   display: flex;
   align-items: center;
@@ -700,7 +722,7 @@ body {
   background-color: var(--lighter-gray);
 }
 .display button.active {
-  background-color: #e8e8e8;
+  background-color: var(--light-gray);
 }
 
 /* ======================================================
@@ -778,7 +800,7 @@ th {
   flex-direction: row;
   gap: 6px;
   height: 2.5rem;
-  color: var(--gray);
+  /* color: var(--gray); */
 }
 
 /* wrapper allowing horizontal scroll to avoid breaking layout */
@@ -873,9 +895,9 @@ th {
   gap: 8px;
   font-weight: 500;
   background-color: transparent;
-  color: var(--light-primary);
+  color: var(--black);
   border-radius: var(--boder-radius-app);
-  border: 1px solid var(--light-primary);
+  border: 1px solid var(--light-gray);
   transition: transform 0.2s ease;
 }
 .moreButton:hover {
@@ -1134,8 +1156,7 @@ th {
   padding: 8px 16px; /* Un poco más de aire mejora el tap-target */
   border-radius: var(--boder-radius-app);
   /* border: 1px solid var(--lighter-gray); */
-  background-color: white; /* Base sólida para que el hover destaque */
-  background-color: #e8e8e8;
+  background-color: var(--light-gray);
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--dark-gray);
@@ -1205,6 +1226,14 @@ select:focus-visible,
     padding: 12px;
     box-sizing: border-box;
   }
+
+  .routes-container {
+    padding-top: 80px;
+  }
+
+  .appHeader {
+    padding: 12px;
+  }
   .story {
     /* padding: 16px 12px;  */
     /* flex-direction: column; */
@@ -1264,6 +1293,10 @@ select:focus-visible,
   .app {
     padding: 8px;
   }
+
+  .appHeader {
+    padding: 8px;
+  }
   .story {
     /* padding: 10px; */
     gap: 8px;
@@ -1297,7 +1330,7 @@ button {
   font-size: 1.25rem;
   font-weight: bold;
 
-  border: 1px solid #828181;
+  border: 1px solid var(--light-gray);
   border-radius: var(--boder-radius-app);
   background: var(--white);
   color: inherit;
@@ -1307,14 +1340,13 @@ button {
   padding: 0;
 
   transition:
-    opacity 0.2s ease,
     transform 0.2s ease;
 }
 
 .scrollToTopBtn .arrowIcon {
   width: 25px;
   height: 25px;
-  color: #828181;
+  color: var(--black);
   transform: rotate(-135deg);
   transition: transform 0.2s ease;
   stroke-width: 1.5;
@@ -1322,14 +1354,14 @@ button {
 
 .scrollToTopBtn:hover {
   opacity: 1;
-  border: 1px solid var(--light-primary);
+  /* border: 1px solid var(--light-primary); */
   transform: translateY(-2px);
   background-color: var(--white);
 }
 
 .scrollToTopBtn:hover .arrowIcon {
   transform: rotate(-180deg);
-  color: var(--light-primary);
+  /* color: var(--light-primary); */
 }
 
 .searchMeta {
@@ -1349,7 +1381,7 @@ button {
 }
 
 .searchMeta-time {
-  color: var(--gray);
+  color: var(--dark-gray);
   font-weight: 400;
 }
 
@@ -1523,4 +1555,8 @@ button {
 .news a:hover {
   text-decoration: underline !important ;
   color: var(--primary) !important;
+}
+
+.listContainer__headerButton{
+  margin: 0px;
 }

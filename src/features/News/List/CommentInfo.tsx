@@ -25,7 +25,7 @@ const CommentInfo = ({ item }: Props) => {
 
       {item.url ? (
         <span>
-          <span style={{ color: 'var(--gray)' }}> Comment on:</span> &nbsp;
+          <span style={{ color: 'var(--dark-gray)' }}> Comment on:</span> &nbsp;
           <a
             href={item.url}
             target="_blank"

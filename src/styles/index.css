@@ -14,11 +14,12 @@
   --white: #fdfdfd;
   --dark-gray: #343334;
   --gray: #616060;
-  --light-gray: #dbdbdb;
-  --lighter-gray: #f6f6f6;
+  --muted: #d8d8d8;
+  --light-gray: #f1f1f1;
+  --lighter-gray: #fafafa;
   --font-sans-serif:
-    system-ui, -apple-system, segoe ui, roboto, ubuntu, helvetica, cantarell,
-    noto sans, sans-serif;
+    'Inter Variable', system-ui, -apple-system, segoe ui, roboto, ubuntu,
+    helvetica, cantarell, noto sans, sans-serif;
   --font-monospace:
     menlo, monaco, lucida console, liberation mono, dejavu sans mono,
     bitstream vera sans mono, courier new, monospace, serif;
@@ -151,10 +152,13 @@ input:not([type]) {
   color: var(--black);
   appearance: none;
   border-radius: var(--boder-radius);
-  background-color: var(--lighter-gray);
+  background-color: var(--white);
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+
+
+
 select {
   display: block;
   padding: 1rem;
@@ -219,7 +223,7 @@ button {
   input[type='button']:hover,
   button:hover {
     cursor: pointer;
-    background-color: var(--light-primary);
+    background-color: var(--lighter-gray);
   }
 }
 button:focus-visible,
