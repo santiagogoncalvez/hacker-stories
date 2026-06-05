@@ -17,8 +17,8 @@ export const FavouriteButton = ({ item }: { item: Story }) => {
     >
       <StarIcon
         className="removeIcon"
-        width={22}
-        height={22}
+        width={16}
+        height={16}
         style={{ fill: favorite ? '#343334' : 'none' }}
       />
     </button>

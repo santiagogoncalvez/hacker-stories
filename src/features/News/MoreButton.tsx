@@ -9,7 +9,7 @@ const MoreButton = ({ onClick }: { onClick: () => void }) => {
         title="More news"
         onClick={() => onClick()}
       >
-        More {<ArrowIcon width={15} height={15} />}
+        More {<ArrowIcon width={16} height={16} />}
       </button>
     </div>
   );

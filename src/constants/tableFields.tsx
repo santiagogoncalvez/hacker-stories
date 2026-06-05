@@ -4,6 +4,7 @@ export const TABLE_FIELDS = {
     { key: 'AUTHOR', label: 'Author', value: 'AUTHOR', width: '5%' },
     { key: 'COMMENTS', label: 'Comments', value: 'COMMENTS', width: '5%' },
     { key: 'POINTS', label: 'Points', value: 'POINTS', width: '4%' },
+    { key: 'CREATED_AT', label: 'Date', value: 'CREATED_AT', width: '7%' },
     { key: 'ACTION', label: 'Action', value: '', width: '3%' },
   ],
   comment: [

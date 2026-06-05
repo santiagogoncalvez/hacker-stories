@@ -16,14 +16,14 @@ const DisplayToggle = ({ display, onClick }: DisplayProps) => {
         type="button"
         onClick={() => onClick('CARD' as DisplayType)}
       >
-        <SquaresIcon width={25} height={25} />
+        <SquaresIcon width={20} height={20} />
       </button>
       <button
         className={display === 'LIST' ? 'active' : ''}
         type="button"
         onClick={() => onClick('LIST' as DisplayType)}
       >
-        <ListIcon width={25} height={25} />
+        <ListIcon width={20} height={20} />
       </button>
     </div>
   );

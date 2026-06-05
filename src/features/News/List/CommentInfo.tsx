@@ -13,7 +13,7 @@ const CommentInfo = ({ item }: Props) => {
       <div>
         <div>
           <dt className="label">
-            <ProfileIcon width={20} height={20} />
+            <ProfileIcon width={16} height={16} />
           </dt>
           <dd>{item.author}</dd>
         </div>

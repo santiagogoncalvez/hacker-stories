@@ -18,7 +18,7 @@ const StoryInfo = ({ item }: { item: Story }) => {
         {fields.map(({ key, value, Icon }) => (
           <div key={key}>
             <dt className="label">
-              <Icon width={20} height={20} />
+              <Icon width={16} height={16} />
             </dt>
             <dd>{value}</dd>
           </div>

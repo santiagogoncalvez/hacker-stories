@@ -28,7 +28,7 @@ const EmptyFavoritesState = ({ type }: EmptyFavoritesStateProps) => {
           <li className="noResultsTip">
             Click the star icon{' '}
             <span className="inlineIcon" aria-hidden="true">
-              <StarIcon width={15} height={15} />
+              <StarIcon width={16} height={16} />
             </span>{' '}
             to save your favourites
           </li>

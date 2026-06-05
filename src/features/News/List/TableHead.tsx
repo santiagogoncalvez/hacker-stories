@@ -39,8 +39,8 @@ const TableHead = ({ sort, onClick, fields }: TableHeadProps) => {
 
                   {isActive && (
                     <CaretIcon
-                      width={13}
-                      height={13}
+                      width={12}
+                      height={12}
                       className="caretIcon"
                       style={{
                         transform: sort.isReverse

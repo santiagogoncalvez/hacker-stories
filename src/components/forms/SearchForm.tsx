@@ -217,7 +217,7 @@ export default function SearchForm({
           className="searchControls-submitBt"
           aria-label="Search"
         >
-          <SearchIcon width={18} height={18} />
+          <SearchIcon width={20} height={20} />
         </button>
       )}
 

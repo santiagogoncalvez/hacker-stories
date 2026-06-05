@@ -36,10 +36,10 @@
   font-family: var(--font-sans-serif);
 }
 html {
-  font-size: calc(16px + ((100vw - 600px) / 250));
+  /* font-size: calc(16px + ((100vw - 600px) / 250)); */
   padding: 0;
   text-decoration-skip-ink: 'auto';
-  line-height: 1.953rem;
+  /* line-height: 1.953rem; */
   margin: auto;
   min-height: 100%;
   overflow-x: hidden;
@@ -147,7 +147,7 @@ input[type='tel'],
 input:not([type]) {
   display: block;
   padding: 1rem;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   border: 1px solid var(--lighter-gray);
   color: var(--black);
   appearance: none;
@@ -162,7 +162,7 @@ input:not([type]) {
 select {
   display: block;
   padding: 1rem;
-  font-size: 1em;
+  /* font-size: 1em; */
   border: 2px solid var(--lighter-gray);
   border-radius: var(--boder-radius);
   color: var(--black);
@@ -173,9 +173,9 @@ select {
 }
 textarea {
   display: block;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   padding: 1rem;
-  line-height: 1rem;
+  /* line-height: 1rem; */
   color: var(--black);
   border-radius: var(--boder-radius);
   border: 2px solid var(--lighter-gray);
@@ -207,7 +207,7 @@ input[type='reset'],
 input[type='button'],
 button {
   padding: 0.5rem 1.25rem;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   border: 0;
   border-radius: var(--boder-radius);
   color: var(--lighter-gray);
@@ -247,7 +247,7 @@ th,
 td {
   vertical-align: top;
   border-bottom: 2px solid var(--light-gray);
-  line-height: 15px;
+  /* line-height: 15px; */
   padding: 15px;
 }
 th {

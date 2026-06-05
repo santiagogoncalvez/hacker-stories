@@ -104,59 +104,61 @@ const Favourites = () => {
   const hasSearchResults = sortedList.length > 0;
 
   return (
-    <section className="listContainer">
-      {/* FILTER (siempre visible mientras haya favoritos globales) */}
-      <div className="filterControls">
-        <FavouritesFilter
-          value={filter}
-          onChange={(value: FavouriteFilter) => {
-            if (value === filter) return;
-            setSortAction('RELEVANCE');
-            setFilter(value);
-          }}
-        />
-      </div>
+    <div className="home">
+      <section className="listContainer">
+        {/* FILTER (siempre visible mientras haya favoritos globales) */}
+        <div className="filterControls">
+          <FavouritesFilter
+            value={filter}
+            onChange={(value: FavouriteFilter) => {
+              if (value === filter) return;
+              setSortAction('RELEVANCE');
+              setFilter(value);
+            }}
+          />
+        </div>
 
-      {!hasFavoritesOfType ? (
-        <EmptyFavoritesState type={filter} />
-      ) : (
-        <>
-          {/* CONTROLS */}
-          <div className="listControls">
-            <SearchForm
-              searchActionLive={searchLiveAction}
-              searchInitLive={queryParam}
-              placeholder="Filter favorites..."
-              mode="live"
-            />
+        {!hasFavoritesOfType ? (
+          <EmptyFavoritesState type={filter} />
+        ) : (
+          <>
+            {/* CONTROLS */}
+            <div className="listControls">
+              <SearchForm
+                searchActionLive={searchLiveAction}
+                searchInitLive={queryParam}
+                placeholder="Filter favorites..."
+                mode="live"
+              />
 
-            <SortProps
-              sort={sort}
-              label="Sort by"
-              onClick={(sortType) => setSortAction(sortType)}
-              type={filter}
-            />
+              <SortProps
+                sort={sort}
+                label="Sort by"
+                onClick={(sortType) => setSortAction(sortType)}
+                type={filter}
+              />
 
-            <Display display={display} onClick={setDisplay} />
-          </div>
+              <Display display={display} onClick={setDisplay} />
+            </div>
 
-          {!hasSearchResults ? (
-            <NoFavoritesResults filter={filter} query={queryParam} />
-          ) : display === 'CARD' ? (
-            <CommonList list={sortedList} type={filter} />
-          ) : (
-            <TableList
-              list={sortedList}
-              sort={sort}
-              sortAction={(sortType) => setSortAction(sortType)}
-              onRemoveItem={handleRemoveItem}
-              type={filter}
-              fields={TABLE_FIELDS[filter]}
-            />
-          )}
-        </>
-      )}
-    </section>
+            {!hasSearchResults ? (
+              <NoFavoritesResults filter={filter} query={queryParam} />
+            ) : display === 'CARD' ? (
+              <CommonList list={sortedList} type={filter} />
+            ) : (
+              <TableList
+                list={sortedList}
+                sort={sort}
+                sortAction={(sortType) => setSortAction(sortType)}
+                onRemoveItem={handleRemoveItem}
+                type={filter}
+                fields={TABLE_FIELDS[filter]}
+              />
+            )}
+          </>
+        )}
+      </section>
+    </div>
   );
 };
 

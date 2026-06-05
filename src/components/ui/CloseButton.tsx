@@ -28,7 +28,7 @@ const CloseButton = ({
       aria-label="Eliminar"
     >
       {/* Corregido: "widtgh" -> "width" */}
-      <CrossIcon width={size} height={size} style={{ strokeWidth: '2' }} />
+      <CrossIcon width={size} height={size} style={{ strokeWidth: '1.5' }} />
     </button>
   );
 };

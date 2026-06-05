@@ -17,6 +17,7 @@ import SearchMeta from './SearchMeta';
 import { NoSearchResults } from '../NoSearchResults';
 import { useStoriesContext } from '../../../hooks/useStoriesContext';
 import { useStoryParams } from '../../../hooks/useStoryParams';
+import { StoriesTableSkeleton } from '../NewsSkeletonTable';
 
 const getListTypeFromPath = (pathname: string): ListType =>
   pathname.startsWith('/comments') ? 'comment' : 'story';
@@ -59,17 +60,19 @@ const List = ({
           }
         />
 
-        <SortProps
-          type={type}
-          sort={{
-            sortType: sort,
-            isReverse: false,
-          }}
-          label="Sort by"
-          onClick={handleChangeSort}
-        />
+        <div className="listControls-container">
+          <SortProps
+            type={type}
+            sort={{
+              sortType: sort,
+              isReverse: false,
+            }}
+            label="Sort by"
+            onClick={handleChangeSort}
+          />
 
-        <DisplayToggle display={display} onClick={(d) => setDisplay(d)} />
+          <DisplayToggle display={display} onClick={(d) => setDisplay(d)} />
+        </div>
       </div>
 
       <SearchMeta
@@ -79,7 +82,9 @@ const List = ({
       />
 
       {stories.isLoading ? (
-        <NewsSkeletonList />
+        <>
+          {display === 'CARD' ? <NewsSkeletonList /> : <StoriesTableSkeleton />}
+        </>
       ) : stories.isNoResults && stories.hits.length === 0 ? (
         <NoSearchResults query={search} />
       ) : (

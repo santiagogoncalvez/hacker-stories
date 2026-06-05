@@ -61,8 +61,8 @@ const Header = () => {
         </button>
 
         {/* El CSS maneja el display: none/flex mediante la clase .open solo en mobile */}
-        <div className={`appNav-container ${isOpen ? 'open' : ''}`}>
-          <nav className={`appNav ${isOpen ? 'open' : ''}`}>
+        <div className={`appNav-container `}>
+          <nav className={`appNav `}>
             <Link
               to="/"
               onClick={() => {
