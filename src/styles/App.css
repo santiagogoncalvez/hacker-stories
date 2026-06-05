@@ -1059,19 +1059,20 @@ th {
   width: 50px;
 }
 .skeleton-button {
-  width: 42px;
-  height: 42px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--boder-radius-app);
 }
 
 /* Media query para tablets/móviles (ajustado a tus breakpoints de 640px) */
 @media (max-width: 640px) {
-  .story--skeleton {
+  /* .story--skeleton {
     padding: 16px 12px;
-    flex-direction: column; /* Apilar título y metadatos */
+    flex-direction: row;
     align-items: flex-start;
+    justify-content: start;
     gap: 16px;
-  }
+  } */
 
   .skeleton-title {
     width: 100%; /* Ocupa todo el ancho en móvil */
@@ -1090,7 +1091,7 @@ th {
 
   /* El botón de acción en el skeleton suele ir al final o desaparecer en tu diseño mobile */
   .story--skeleton .skeleton-button {
-    align-self: flex-end;
+    /* align-self: flex-end; */
   }
 }
 
