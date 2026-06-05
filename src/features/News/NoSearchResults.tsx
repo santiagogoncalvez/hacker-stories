@@ -52,7 +52,7 @@ const NoFavoritesResults = ({
   return (
     <div className="noResultsCard" role="status" aria-live="polite">
       <div className="noResultsContent">
-        <h2 className="noResultsTitle">No favourites found</h2>
+        <h2 className="noResultsTitle">No favorites found</h2>
 
         {query ? (
           <p className="noResultsDescription">
@@ -68,7 +68,7 @@ const NoFavoritesResults = ({
         <ul className="noResultsTips">
           <li>Try switching between News and Comments</li>
           <li>Remove or change filters</li>
-          <li>Add favourites from the main list</li>
+          <li>Add favorites from the main list</li>
         </ul>
       </div>
     </div>

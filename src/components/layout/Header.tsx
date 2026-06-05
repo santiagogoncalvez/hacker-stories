@@ -82,13 +82,13 @@ const Header = () => {
               Comments
             </Link>
             <Link
-              to="/favourites"
+              to="/favorites"
               onClick={() => {
-                handleClick('/favourites');
+                handleClick('/favorites');
               }}
-              className={`appNav-item ${location.pathname === '/favourites' ? 'active' : ''}`}
+              className={`appNav-item ${location.pathname === '/favorites' ? 'active' : ''}`}
             >
-              Favourites
+              Favorites
             </Link>
           </nav>
         </div>

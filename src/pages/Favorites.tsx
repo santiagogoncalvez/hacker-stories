@@ -12,7 +12,7 @@ import { NoFavoritesResults } from '../features/News/NoSearchResults';
 import { TABLE_FIELDS } from '../constants/tableFields';
 import { useStoryParams } from '../hooks/useStoryParams';
 
-const FavouritesFilter = ({
+const FavoritesFilter = ({
   value,
   onChange,
 }: {
@@ -20,7 +20,7 @@ const FavouritesFilter = ({
   onChange: (value: FavouriteFilter) => void;
 }) => {
   return (
-    <div className="favouritesFilter--segmented">
+    <div className="favoritesFilter--segmented">
       <button
         type="button"
         className={value === 'story' ? 'active' : ''}
@@ -40,7 +40,7 @@ const FavouritesFilter = ({
   );
 };
 
-const Favourites = () => {
+const Favorites = () => {
   const { favorites, removeFavorite } = useFavoritesContext();
 
   const {
@@ -108,7 +108,7 @@ const Favourites = () => {
       <section className="listContainer">
         {/* FILTER (siempre visible mientras haya favoritos globales) */}
         <div className="filterControls">
-          <FavouritesFilter
+          <FavoritesFilter
             value={filter}
             onChange={(value: FavouriteFilter) => {
               if (value === filter) return;
@@ -131,14 +131,16 @@ const Favourites = () => {
                 mode="live"
               />
 
-              <SortProps
-                sort={sort}
-                label="Sort by"
-                onClick={(sortType) => setSortAction(sortType)}
-                type={filter}
-              />
+              <div className="listControls-container">
+                <SortProps
+                  sort={sort}
+                  label="Sort by"
+                  onClick={(sortType) => setSortAction(sortType)}
+                  type={filter}
+                />
 
-              <Display display={display} onClick={setDisplay} />
+                <Display display={display} onClick={setDisplay} />
+              </div>
             </div>
 
             {!hasSearchResults ? (
@@ -162,4 +164,4 @@ const Favourites = () => {
   );
 };
 
-export default Favourites;
+export default Favorites;

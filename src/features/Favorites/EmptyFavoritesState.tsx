@@ -7,14 +7,14 @@ const EmptyFavoritesState = ({ type }: EmptyFavoritesStateProps) => {
       ? 'No favourite comments yet'
       : type === 'story'
         ? 'No favourite stories yet'
-        : 'No favourites yet';
+        : 'No favorites yet';
 
   const description =
     type === 'comment'
-      ? 'You haven’t added any comments to your favourites.'
+      ? 'You haven’t added any comments to your favorites.'
       : type === 'story'
-        ? 'You haven’t added any stories to your favourites.'
-        : 'You haven’t added anything to your favourites yet.';
+        ? 'You haven’t added any stories to your favorites.'
+        : 'You haven’t added anything to your favorites yet.';
 
   return (
     <div className="noResultsCard" role="status" aria-live="polite">
@@ -30,7 +30,7 @@ const EmptyFavoritesState = ({ type }: EmptyFavoritesStateProps) => {
             <span className="inlineIcon" aria-hidden="true">
               <StarIcon width={16} height={16} />
             </span>{' '}
-            to save your favourites
+            to save your favorites
           </li>
           <li>Come back later to find them here</li>
         </ul>

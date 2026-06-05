@@ -10,9 +10,9 @@ export const FavouriteButton = ({ item }: { item: Story }) => {
   return (
     <button
       className="removeButton"
-      aria-label={favorite ? 'Remove from favourites' : 'Add to favourites'}
+      aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
       onClick={() => toggleFavorite(item)}
-      title={favorite ? 'Remove from favourites' : 'Add to favourites'}
+      title={favorite ? 'Remove from favorites' : 'Add to favorites'}
       type="button"
     >
       <StarIcon

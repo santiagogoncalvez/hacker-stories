@@ -30,25 +30,25 @@ describe('FavouriteButton', () => {
     vi.clearAllMocks();
   });
 
-  it('renders button to add to favourites when item is not favorite', () => {
+  it('renders button to add to favorites when item is not favorite', () => {
     isFavoriteMock.mockReturnValue(false);
 
     render(<FavouriteButton item={mockStory} />);
 
     const button = screen.getByRole('button', {
-      name: /add to favourites/i,
+      name: /add to favorites/i,
     });
 
     expect(button).toBeTruthy();
   });
 
-  it('renders button to remove from favourites when item is favorite', () => {
+  it('renders button to remove from favorites when item is favorite', () => {
     isFavoriteMock.mockReturnValue(true);
 
     render(<FavouriteButton item={mockStory} />);
 
     const button = screen.getByRole('button', {
-      name: /remove from favourites/i,
+      name: /remove from favorites/i,
     });
 
     expect(button).toBeTruthy();

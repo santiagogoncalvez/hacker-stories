@@ -24,7 +24,7 @@ const App = () => {
             <Routes>
               <Route path="/" Component={News} />
               <Route path="/comments" Component={Comments} />
-              <Route path="/favourites" Component={Favorites} />
+              <Route path="/favorites" Component={Favorites} />
 
               <Route path="*" Component={NotFound} />
             </Routes>
