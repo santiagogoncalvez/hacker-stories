@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Story, FavouriteFilter, SortState } from '../types/types';
 import CommonList from '../features/News/List/CommonList';
-import Display from '../features/News/List/DisplayToggle';
+// import Display from '../features/News/List/DisplayToggle';
 import TableList from '../features/News/List/TableList';
 import SortProps from '../features/News/SortProps';
 import SearchForm from '../components/forms/SearchForm';
@@ -51,7 +51,7 @@ const Favorites = () => {
   } = useStoryParams();
 
   const [filter, setFilter] = useState<FavouriteFilter>('story');
-  const [display, setDisplay] = useState<'CARD' | 'LIST'>('CARD');
+  const [display] = useState<'CARD' | 'LIST'>('CARD');
 
   // 🔥 fuente única de verdad del sort UI
   const sort: SortState = useMemo(() => {
@@ -139,7 +139,7 @@ const Favorites = () => {
                   type={filter}
                 />
 
-                <Display display={display} onClick={setDisplay} />
+                {/* <Display display={display} onClick={setDisplay} /> */}
               </div>
             </div>
 

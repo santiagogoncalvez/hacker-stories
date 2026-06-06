@@ -1033,7 +1033,7 @@ th {
   height: fit-content;
 }
 .skeleton-title {
-  height: 32px;
+  height: 18px;
   width: 400px;
 }
 .story--skeleton .storyLinkInfo {
@@ -1049,7 +1049,7 @@ th {
 }
 .skeleton-label {
   height: 14px;
-  width: 70px;
+  width: 60px;
 }
 .skeleton-value {
   height: 14px;
@@ -1086,7 +1086,7 @@ th {
   }
 
   .skeleton-value {
-    width: 60px; /* Reducir un poco el tamaño visual */
+    width: 80px; /* Reducir un poco el tamaño visual */
   }
 
   /* El botón de acción en el skeleton suele ir al final o desaparecer en tu diseño mobile */

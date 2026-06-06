@@ -5,7 +5,7 @@ import SortProps from '../SortProps';
 import SearchForm from '../../../components/forms/SearchForm';
 import NewsSkeletonList from '../NewsSkeletonList';
 import DisplayList from './DisplayList';
-import DisplayToggle from './DisplayToggle';
+// import DisplayToggle from './DisplayToggle';
 import {
   ListProps,
   DisplayType,
@@ -44,7 +44,7 @@ const List = ({
           stories.hits,
         )
       : stories.hits;
-  const [display, setDisplay] = useState<DisplayType>('CARD');
+  const [display] = useState<DisplayType>('CARD');
 
   const handleChangeSort = (sortType: Sort) => {
     // setSort({ sortType, isReverse });
@@ -71,7 +71,7 @@ const List = ({
             onClick={handleChangeSort}
           />
 
-          <DisplayToggle display={display} onClick={(d) => setDisplay(d)} />
+          {/* <DisplayToggle display={display} onClick={(d) => setDisplay(d)} /> */}
         </div>
       </div>
 
